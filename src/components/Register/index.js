@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {Button} from 'react-native-paper';
+import { View, Text, StyleSheet } from 'react-native';
+import { Button } from 'react-native-paper';
 
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-const Register = ({navigation}) => {
+const Register = ({ navigation }) => {
   const dispatch = useDispatch();
 
   return (

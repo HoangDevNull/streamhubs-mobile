@@ -1,15 +1,12 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {Button} from 'react-native-paper';
+import { View, Text, StyleSheet } from 'react-native';
+import { Button, withTheme } from 'react-native-paper';
 
-import {useDispatch} from 'react-redux';
-import {saveLoginInfo} from '../../redux/actions/auth';
-import {CommonActions} from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { saveLoginInfo } from '../../redux/actions/user';
 
-const Login = ({navigation}) => {
+const Login = ({ navigation, theme }) => {
   const dispatch = useDispatch();
-  console.log({navigation});
-
   const handleLogin = () => {
     dispatch(
       saveLoginInfo({
@@ -19,16 +16,11 @@ const Login = ({navigation}) => {
         userProfile: {},
       }),
     );
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 1,
-        routes: [{name: 'Home'}],
-      }),
-    );
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <Text> Login screen</Text>
       <Button mode="contained" onPress={handleLogin}>
         Login
@@ -45,4 +37,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default withTheme(Login);

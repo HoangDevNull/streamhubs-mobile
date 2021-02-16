@@ -1,15 +1,11 @@
 import React from 'react';
-import {Platform, StatusBar, StyleSheet, View} from 'react-native';
-import {
-  DefaultTheme,
-  DarkTheme,
-  Provider as PaperProvider,
-} from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
 
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 
 import store from './src/redux';
 import Routes from './src/routes';
+import CustomPaperTheme from './src/components/common/CustomPaperTheme';
 
 const styles = StyleSheet.create({
   container: {
@@ -18,14 +14,12 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
-  const isDarkModeOn = true;
   return (
     <Provider store={store}>
       <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <PaperProvider theme={isDarkModeOn ? DarkTheme : DefaultTheme}>
-          <Routes theme={isDarkModeOn ? 'dark' : 'light'} />
-        </PaperProvider>
+        <CustomPaperTheme>
+          <Routes />
+        </CustomPaperTheme>
       </View>
     </Provider>
   );
