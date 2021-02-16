@@ -2,36 +2,13 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {Button} from 'react-native-paper';
 
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {saveLoginInfo} from '../../redux/actions/auth';
 import {CommonActions} from '@react-navigation/native';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-export default React.memo(({navigation}) => {
-  const {auth} = useSelector((state) => state);
+const Login = ({navigation}) => {
   const dispatch = useDispatch();
-
-  console.log({auth});
-  const goToHomePage = React.useCallback(() => {
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 1,
-        routes: [{name: 'Home'}],
-      }),
-    );
-  }, [navigation]);
-
-  React.useEffect(() => {
-    (async () => {
-      const info = await AsyncStorage.getItem('auth');
-      console.log({info});
-      if (info) {
-        dispatch(saveLoginInfo(JSON.parse(info)));
-        goToHomePage();
-      }
-    })();
-  }, [navigation, dispatch, goToHomePage]);
+  console.log({navigation});
 
   const handleLogin = () => {
     dispatch(
@@ -42,7 +19,12 @@ export default React.memo(({navigation}) => {
         userProfile: {},
       }),
     );
-    goToHomePage();
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 1,
+        routes: [{name: 'Home'}],
+      }),
+    );
   };
 
   return (
@@ -53,7 +35,7 @@ export default React.memo(({navigation}) => {
       </Button>
     </View>
   );
-});
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -62,3 +44,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default Login;

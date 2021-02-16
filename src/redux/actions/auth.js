@@ -14,3 +14,12 @@ export const saveLoginInfo = (payload) => {
     });
   };
 };
+
+export const logout = () => {
+  return async () => {
+    await AsyncStorage.removeItem('auth');
+    return {
+      type: LOGOUT,
+    };
+  };
+};

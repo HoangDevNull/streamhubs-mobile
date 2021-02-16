@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
-  const isDarkModeOn = false;
+  const isDarkModeOn = true;
   return (
     <Provider store={store}>
       <View style={styles.container}>
