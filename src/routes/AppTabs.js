@@ -6,7 +6,7 @@ import Home from '../components/Home';
 
 export default () => {
   return (
-    <TabNavigator.Navigator initialRouteName="Album" activeColor="#F44336">
+    <TabNavigator.Navigator initialRouteName="Home">
       <TabNavigator.Screen name="Home" component={Home} />
     </TabNavigator.Navigator>
   );

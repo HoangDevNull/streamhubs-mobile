@@ -8,18 +8,18 @@ import {
   Keyboard,
   Dimensions,
 } from 'react-native';
-import {TextInput} from 'react-native-gesture-handler';
+import { TextInput } from 'react-native-gesture-handler';
 
-import {NodePlayerView} from 'react-native-nodemediaclient';
+import { NodePlayerView } from 'react-native-nodemediaclient';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
-const PreviewScreen = ({navigation}) => {
+const PreviewScreen = ({ navigation }) => {
   const [streamName, setStreamName] = React.useState('stream');
   let player = React.useRef(null);
 
   const startPreview = () => {
-    console.log({streamName, player});
+    console.log({ streamName, player });
     player.start();
   };
 
@@ -31,7 +31,7 @@ const PreviewScreen = ({navigation}) => {
     <TouchableWithoutFeedback onPress={handleCloseKeyboard}>
       <View style={styles.root}>
         <NodePlayerView
-          style={{width, height: 300, backgroundColor: '#333'}}
+          style={{ width, height: 300, backgroundColor: '#333' }}
           inputUrl={'rtmp://192.168.1.8/live/stream'}
           scaleMode={'ScaleAspectFill'}
           bufferTime={300}

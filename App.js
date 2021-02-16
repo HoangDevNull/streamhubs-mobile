@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 
 import store from './src/redux';
 import Routes from './src/routes';
-import CustomPaperTheme from './src/components/common/CustomPaperTheme';
+import CustomPaperTheme from './src/theme';
 
 const styles = StyleSheet.create({
   container: {

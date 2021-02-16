@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, Text, StyleSheet, Button} from 'react-native';
+import { View, Text, StyleSheet, Button } from 'react-native';
 
-const StreamScreen = ({navigation: router}) => {
+const StreamScreen = ({ navigation: router }) => {
   return (
     <View style={styles.root}>
       <Text>StreamScreen</Text>
