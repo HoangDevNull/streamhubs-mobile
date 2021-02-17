@@ -1,10 +1,8 @@
 import * as React from 'react';
-import { StyleSheet, View, Dimensions } from 'react-native';
-import { Appbar, withTheme } from 'react-native-paper';
+import { StyleSheet } from 'react-native';
+import { Appbar, withTheme, IconButton } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
-const { width } = Dimensions.get('window');
 const Header = ({ theme }) => {
   const _handleBack = () => console.log('Back');
 
@@ -14,19 +12,21 @@ const Header = ({ theme }) => {
   return (
     <Appbar.Header
       style={[styles.root, { backgroundColor: theme.colors.background }]}>
-      <View style={styles.leftAction}>
-        <Appbar.Action
-          icon={({ size }) => (
-            <EvilIcons
-              name="chevron-left"
-              size={size + 3}
-              color={theme.colors.text}
-            />
-          )}
-          onPress={_handleBack}
-        />
-      </View>
-
+      <Appbar.Content
+        title={
+          <IconButton
+            icon={() => (
+              <Ionicons
+                name="chevron-back"
+                size={24}
+                color={theme.colors.text}
+              />
+            )}
+            size={24}
+            onPress={_handleBack}
+          />
+        }
+      />
       <Appbar.Action
         icon={({ size, color }) => (
           <Ionicons name="search-outline" size={size} color={color} />
@@ -47,10 +47,6 @@ export default withTheme(Header);
 
 const styles = StyleSheet.create({
   root: {
-    width: width,
     elevation: 0,
-  },
-  leftAction: {
-    flex: 1,
   },
 });
