@@ -14,7 +14,7 @@ import Header from '../common/Header';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../redux/actions/user';
 
-const Home = ({ navigation, theme }) => {
+const Discover = ({ navigation, theme }) => {
   const dispatch = useDispatch();
 
   const handleLogout = () => {
@@ -29,21 +29,14 @@ const Home = ({ navigation, theme }) => {
           { backgroundColor: theme.colors.background },
         ]}>
         <Surface>
-          <Button mode="contained" onPress={handleLogout}>
-            Đăng xuất
-          </Button>
-          <Headline>Headline</Headline>
-          <Text>Tiếng việt có dậu nè</Text>
-          <Paragraph>Paragraph</Paragraph>
-          <Subheading>Subheading</Subheading>
-          <Caption>Caption</Caption>
+          <Headline> Discover</Headline>
         </Surface>
       </View>
     </>
   );
 };
 
-export default withTheme(Home);
+export default withTheme(Discover);
 
 const styles = StyleSheet.create({
   container: {

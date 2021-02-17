@@ -1,12 +1,15 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { StatusBar, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Colors } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
-
-import AuthStack from './AuthStack';
-import AppTabs from './AppTabs';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
+
+//Navigator
+import AuthStack from './AuthStack';
+import AppTabs from './AppTabs';
+// Redux + theme
 import { saveLoginInfo } from '../redux/actions/user';
 import { LightTheme, DarkTheme } from '../theme';
 
@@ -35,15 +38,36 @@ export default () => {
 
   if (isLoading) {
     return (
-      <View>
-        <Text> Loading ...</Text>
+      <View style={styles.container}>
+        <ActivityIndicator
+          animating={isLoading}
+          size="large"
+          color={Colors.purple600}
+        />
       </View>
     );
   }
+
+  const isDarkModeOn = theme.includes('dark');
+  const statusBarColor = isDarkModeOn
+    ? DarkTheme.colors.background
+    : LightTheme.colors.background;
+
   return (
-    <NavigationContainer
-      theme={theme.includes('dark') ? DarkTheme : LightTheme}>
+    <NavigationContainer theme={isDarkModeOn ? DarkTheme : LightTheme}>
+      <StatusBar
+        backgroundColor={statusBarColor}
+        barStyle={isDarkModeOn ? 'light-content' : 'dark-content'}
+      />
       {isLoggedIn ? <AppTabs /> : <AuthStack />}
     </NavigationContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

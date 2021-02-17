@@ -1,25 +1,13 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import {
-  Button,
-  Headline,
-  withTheme,
-  Text,
-  Paragraph,
-  Subheading,
-  Caption,
-  Surface,
-} from 'react-native-paper';
+import { Headline, withTheme, Surface } from 'react-native-paper';
 import Header from '../common/Header';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../redux/actions/user';
 
-const Home = ({ navigation, theme }) => {
+const Gaming = ({ navigation, theme }) => {
   const dispatch = useDispatch();
 
-  const handleLogout = () => {
-    dispatch(logout());
-  };
   return (
     <>
       <Header />
@@ -29,21 +17,14 @@ const Home = ({ navigation, theme }) => {
           { backgroundColor: theme.colors.background },
         ]}>
         <Surface>
-          <Button mode="contained" onPress={handleLogout}>
-            Đăng xuất
-          </Button>
-          <Headline>Headline</Headline>
-          <Text>Tiếng việt có dậu nè</Text>
-          <Paragraph>Paragraph</Paragraph>
-          <Subheading>Subheading</Subheading>
-          <Caption>Caption</Caption>
+          <Headline>Gaming</Headline>
         </Surface>
       </View>
     </>
   );
 };
 
-export default withTheme(Home);
+export default withTheme(Gaming);
 
 const styles = StyleSheet.create({
   container: {

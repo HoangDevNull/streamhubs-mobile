@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
+import SplashScreen from 'react-native-splash-screen';
+
 import { Provider } from 'react-redux';
 
 import store from './src/redux';
@@ -14,13 +16,15 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
+  React.useEffect(() => {
+    SplashScreen.hide();
+  }, []);
+
   return (
     <Provider store={store}>
-      <View style={styles.container}>
-        <CustomPaperTheme>
-          <Routes />
-        </CustomPaperTheme>
-      </View>
+      <CustomPaperTheme>
+        <Routes />
+      </CustomPaperTheme>
     </Provider>
   );
 };
