@@ -8,7 +8,7 @@
   <strong>Learn once, write anywhere:</strong><br>
   Build mobile apps with React.
 </p>
-<p align="center">
+<p>
   <strong>To build an debug file:</strong><br>
   <code>
   react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/
