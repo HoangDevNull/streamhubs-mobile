@@ -1,16 +1,15 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Headline, withTheme, Surface } from 'react-native-paper';
-import Header from '../common/Header';
+import { Headline, withTheme, Surface, Text } from 'react-native-paper';
+import Header from '../Header';
 import { useDispatch } from 'react-redux';
-import { logout } from '../../redux/actions/user';
 
 const Browse = ({ navigation, theme }) => {
   const dispatch = useDispatch();
 
   return (
     <>
-      <Header />
+      <Header title="Browse" />
       <View
         style={[
           styles.container,

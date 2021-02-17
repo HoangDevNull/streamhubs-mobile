@@ -1,16 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import {
-  Button,
-  Headline,
-  withTheme,
-  Text,
-  Paragraph,
-  Subheading,
-  Caption,
-  Surface,
-} from 'react-native-paper';
-import Header from '../common/Header';
+import { Button, withTheme } from 'react-native-paper';
+import Header from '../Header';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../redux/actions/user';
 
@@ -22,23 +13,10 @@ const Home = ({ navigation, theme }) => {
   };
   return (
     <>
-      <Header />
-      <View
-        style={[
-          styles.container,
-          { backgroundColor: theme.colors.background },
-        ]}>
-        <Surface>
-          <Button mode="contained" onPress={handleLogout}>
-            Đăng xuất
-          </Button>
-          <Headline>Headline</Headline>
-          <Text>Tiếng việt có dậu nè</Text>
-          <Paragraph>Paragraph</Paragraph>
-          <Subheading>Subheading</Subheading>
-          <Caption>Caption</Caption>
-        </Surface>
-      </View>
+      <Header title="Following" />
+      <Button mode="contained" onPress={handleLogout}>
+        Logout
+      </Button>
     </>
   );
 };

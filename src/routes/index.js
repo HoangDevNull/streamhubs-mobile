@@ -7,8 +7,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 
 //Navigator
-import AuthStack from './AuthStack';
 import AppTabs from './AppTabs';
+import AuthStack from './AuthStack';
 // Redux + theme
 import { saveLoginInfo } from '../redux/actions/user';
 import { LightTheme, DarkTheme } from '../theme';
