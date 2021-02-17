@@ -8,6 +8,16 @@
   <strong>Learn once, write anywhere:</strong><br>
   Build mobile apps with React.
 </p>
+<p align="center">
+  <strong>To build an debug file:</strong><br>
+  <code>
+  react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/
+
+cd android && ./gradlew assembleDebug</code>
+
+apk in app/build/outputs/apk/debug/app-debug.apk
+
+</p>
 
 <p align="center">
   <a href="https://github.com/facebook/react-native/blob/master/LICENSE">
@@ -63,7 +73,6 @@ React Native is developed and supported by many companies and individual core co
 - [How to Contribute](#-how-to-contribute)
 - [Code of Conduct](#code-of-conduct)
 - [License](#-license)
-
 
 ## 📋 Requirements
 
