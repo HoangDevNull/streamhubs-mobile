@@ -1,19 +1,36 @@
 import React from 'react';
 import { Image, SafeAreaView, View, ScrollView } from 'react-native';
 import { Button, Subheading, TextInput, withTheme } from 'react-native-paper';
+
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
+
+import { useDispatch } from 'react-redux';
+
 import GoBackButton from '../common/GoBackButton';
+import { saveLoginInfo } from '../../redux/actions/user';
 
 const Login = ({ navigation, theme }) => {
+  const dispatch = useDispatch();
   const styles = useStyles();
   const [showPassword, setShowPassword] = React.useState(false);
   const [credential, setCredentital] = React.useState({
     email: '',
     password: '',
   });
-  const { email, password } = credential;
 
   const _pressEyeButton = () => setShowPassword(!showPassword);
+
+  const _SignIn = () => {
+    dispatch(
+      saveLoginInfo({
+        email: 'h@gmail.com',
+        access_token: '12312312',
+        isLoggedIn: true,
+        userProfile: {},
+      }),
+    );
+  };
+  const { email, password } = credential;
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -64,7 +81,7 @@ const Login = ({ navigation, theme }) => {
             uppercase={false}>
             Forgot Password?
           </Button>
-          <Button mode="contained" onPress={() => console.log('pressed')}>
+          <Button mode="contained" onPress={_SignIn}>
             Sign in
           </Button>
         </View>

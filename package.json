@@ -13,6 +13,7 @@
   "dependencies": {
     "@blackbox-vision/react-native-paper-use-styles": "^0.1.2",
     "@react-native-async-storage/async-storage": "^1.13.4",
+    "@react-native-community/datetimepicker": "^3.0.9",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/material-bottom-tabs": "^5.3.13",
     "@react-navigation/native": "^5.9.2",

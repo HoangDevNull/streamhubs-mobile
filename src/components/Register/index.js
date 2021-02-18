@@ -1,6 +1,13 @@
 import React from 'react';
 import { Image, SafeAreaView, View, ScrollView } from 'react-native';
-import { Button, Subheading, TextInput, withTheme } from 'react-native-paper';
+import {
+  Button,
+  HelperText,
+  Subheading,
+  TextInput,
+  withTheme,
+} from 'react-native-paper';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import GoBackButton from '../common/GoBackButton';
 import { format } from 'date-fns';
@@ -15,12 +22,88 @@ const Login = ({ navigation, theme }) => {
     password: '',
     dateOfBirth: new Date(),
   });
+  const [errors, setErrors] = React.useState({
+    email: '',
+    username: '',
+    password: '',
+  });
+
+  const [visible, setVisible] = React.useState(false);
 
   const _pressEyeButton = React.useCallback(
     () => setShowPassword(!showPassword),
     [showPassword],
   );
+  const emailValidate = (email) => {
+    // eslint-disable-next-line no-useless-escape
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return reg.test(String(email).toLowerCase());
+  };
+
+  const onInputChange = React.useCallback(
+    (name, value) => {
+      const resetErrorFields = () => {
+        if (errors[name] !== '') {
+          setErrors({ ...errors, [name]: '' });
+        }
+      };
+      let isValid = true;
+      if (value !== '') {
+        if (name === 'email') {
+          if (!emailValidate(value)) {
+            setErrors({ ...errors, [name]: 'Invalid email address' });
+            isValid = false;
+          } else {
+            resetErrorFields();
+          }
+        }
+        if (name === 'password') {
+          if (value.length < 8) {
+            setErrors({
+              ...errors,
+              [name]: 'Password length must greater than 8',
+            });
+            isValid = false;
+          } else {
+            resetErrorFields();
+          }
+        }
+      }
+
+      setCredentital({ ...credential, [name]: value });
+      if (isValid) {
+        resetErrorFields();
+      }
+    },
+    [credential, errors],
+  );
+
+  const onDateChange = React.useCallback(
+    (e, date) => {
+      setVisible(false);
+      setCredentital({ ...credential, dateOfBirth: date });
+    },
+    [credential],
+  );
+
+  const _SignUp = () => {
+    console.log({ credential });
+  };
+
   const { email, username, password, dateOfBirth } = credential;
+  const {
+    email: emailError,
+    username: usernameError,
+    password: passwordError,
+  } = errors;
+
+  const isValidateAllField =
+    emailError ||
+    passwordError ||
+    usernameError ||
+    email === '' ||
+    password === '' ||
+    username === '';
 
   return (
     <SafeAreaView style={styles.container}>
@@ -36,15 +119,18 @@ const Login = ({ navigation, theme }) => {
         <View style={styles.mainSection}>
           <Subheading style={styles.label}> Email: </Subheading>
           <TextInput
+            autoFocus
             dense
             mode="outlined"
             left={<TextInput.Icon name="email-outline" />}
             value={email}
-            onChangeText={(text) =>
-              setCredentital({ ...credential, email: text })
-            }
+            onChangeText={(text) => onInputChange('email', text)}
             style={styles.textInput}
+            error={emailError}
           />
+          <HelperText type="error" visible={emailError}>
+            {emailError}
+          </HelperText>
 
           <Subheading style={styles.label}> Name: </Subheading>
           <TextInput
@@ -52,11 +138,13 @@ const Login = ({ navigation, theme }) => {
             mode="outlined"
             left={<TextInput.Icon name="account-outline" />}
             value={username}
-            onChangeText={(text) =>
-              setCredentital({ ...credential, username: text })
-            }
+            onChangeText={(text) => onInputChange('username', text)}
             style={styles.textInput}
+            error={usernameError}
           />
+          <HelperText type="error" visible={usernameError}>
+            {usernameError}
+          </HelperText>
 
           <Subheading style={styles.label}> Password: </Subheading>
           <TextInput
@@ -70,14 +158,23 @@ const Login = ({ navigation, theme }) => {
               />
             }
             value={password}
-            onChangeText={(text) =>
-              setCredentital({ ...credential, password: text })
-            }
+            onChangeText={(text) => onInputChange('password', text)}
             style={styles.textInput}
-            secureTextEntry={showPassword}
+            secureTextEntry={!showPassword}
+            error={passwordError}
           />
+          <HelperText type="error" visible={passwordError}>
+            {passwordError}
+          </HelperText>
 
           <Subheading style={styles.label}> Birth date: </Subheading>
+          {visible && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={dateOfBirth}
+              onChange={onDateChange}
+            />
+          )}
           <Button
             color="#fff"
             uppercase={false}
@@ -91,14 +188,15 @@ const Login = ({ navigation, theme }) => {
             )}
             style={styles.datePicker}
             contentStyle={styles.dateContent}
-            onPress={() => console.log('press')}>
+            onPress={() => setVisible(true)}>
             {format(dateOfBirth, 'P').toString()}
           </Button>
 
           <Button
+            disabled={isValidateAllField}
             style={styles.btnSignUp}
             mode="contained"
-            onPress={() => console.log('pressed')}>
+            onPress={_SignUp}>
             Sign up
           </Button>
         </View>
@@ -126,8 +224,7 @@ const useStyles = makeStyles((theme) => ({
     resizeMode: 'contain',
   },
   label: {
-    marginTop: 15,
-    marginBottom: 5,
+    marginHorizontal: 5,
     marginLeft: -5,
   },
   textInput: {
