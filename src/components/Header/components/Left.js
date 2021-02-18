@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Appbar, withTheme, IconButton, Avatar } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { makeStyles } from '../../common/makeStyles';
+import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 
 import { useNavigation } from '@react-navigation/native';
 

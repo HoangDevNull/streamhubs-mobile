@@ -2,6 +2,7 @@ import React from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Colors } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
+import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,6 +16,7 @@ import { LightTheme, DarkTheme } from '../theme';
 import AppStack from './AppStack';
 
 export default () => {
+  const styles = useStyles();
   const [isLoading, setIsLoading] = React.useState(true);
   const dispatch = useDispatch();
   const { isLoggedIn, theme } = useSelector((state) => state.user);
@@ -65,10 +67,11 @@ export default () => {
   );
 };
 
-const styles = StyleSheet.create({
+const useStyles = makeStyles((theme) => ({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: theme.colors.background,
   },
-});
+}));

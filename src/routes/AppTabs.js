@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { makeStyles } from '../components/common/makeStyles';
+import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
@@ -103,9 +103,9 @@ const useStyles = makeStyles((theme) => ({
   },
   line: {
     position: 'absolute',
-    left: 5.5,
+    left: 2,
     bottom: -5,
-    width: 13,
+    width: 20,
     height: 3,
     borderRadius: 3 / 2,
   },

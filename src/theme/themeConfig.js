@@ -19,7 +19,7 @@ export const DarkTheme = {
   colors: {
     accent: '#03dac6',
     backdrop: 'rgba(0, 0, 0, 0.5)',
-    background: '#121212',
+    background: '#000',
     disabled: 'rgba(255, 255, 255, 0.38)',
     error: '#CF6679',
     notification: '#ff80ab',
@@ -27,7 +27,7 @@ export const DarkTheme = {
     onSurface: '#FFFFFF',
     placeholder: 'rgba(255, 255, 255, 0.54)',
     primary: '#8734FE',
-    surface: '#121212',
+    surface: '#212121',
     text: '#F9F9F9',
   },
   fonts: configureFonts(fontConfig),
