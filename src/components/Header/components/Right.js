@@ -15,18 +15,6 @@ const Right = ({ theme: { colors } }) => {
 
   const { text: mainColor } = colors;
 
-  if (route.name.includes('Home')) {
-    return (
-      <Avatar.Icon
-        style={styles.avatar}
-        size={35}
-        icon={({ color, size }) => {
-          return <Ionicons name="person-outline" color={color} size={size} />;
-        }}
-      />
-    );
-  }
-
   return (
     <>
       <Appbar.Action
@@ -47,14 +35,4 @@ const Right = ({ theme: { colors } }) => {
 
 export default withTheme(Right);
 
-const styles = StyleSheet.create({
-  tinyLogo: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 25,
-  },
-  avatar: {
-    borderWidth: 1,
-    borderColor: '#fff',
-  },
-});
+const styles = StyleSheet.create({});

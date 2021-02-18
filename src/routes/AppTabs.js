@@ -1,7 +1,9 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import { makeStyles } from '../components/common/makeStyles';
 
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
@@ -14,6 +16,7 @@ const TabNavigator = createMaterialBottomTabNavigator();
 
 export default () => {
   const theme = useTheme();
+  const styles = useStyles();
   return (
     <TabNavigator.Navigator
       initialRouteName="Home"
@@ -21,7 +24,7 @@ export default () => {
       screenOptions={{
         title: null,
       }}
-      barStyle={[styles.root, { backgroundColor: theme.colors.background }]}
+      barStyle={styles.root}
       activeColor={theme.colors.primary}>
       <TabNavigator.Screen
         options={{
@@ -91,8 +94,10 @@ export default () => {
   );
 };
 
-const styles = StyleSheet.create({
-  root: {},
+const useStyles = makeStyles((theme) => ({
+  root: {
+    backgroundColor: theme.colors.background,
+  },
   wrapIcon: {
     flex: 1,
   },
@@ -105,6 +110,6 @@ const styles = StyleSheet.create({
     borderRadius: 3 / 2,
   },
   active: {
-    backgroundColor: '#8734FE',
+    backgroundColor: theme.colors.primary,
   },
-});
+}));

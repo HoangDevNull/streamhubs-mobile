@@ -1,15 +1,16 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { withTheme } from 'react-native-paper';
-import Header from '../Header';
+import { Headline, Surface, withTheme } from 'react-native-paper';
+
 import { useDispatch } from 'react-redux';
-import { logout } from '../../redux/actions/user';
 
 const Discovery = ({ navigation, theme }) => {
   const dispatch = useDispatch();
   return (
     <>
-      <Header title="Discovery" />
+      <Surface>
+        <Headline> Discovery</Headline>
+      </Surface>
     </>
   );
 };

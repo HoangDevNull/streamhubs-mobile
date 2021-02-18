@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Headline, withTheme, Surface, Text } from 'react-native-paper';
-import Header from '../Header';
 import { useDispatch } from 'react-redux';
 
 const Browse = ({ navigation, theme }) => {
@@ -9,16 +8,9 @@ const Browse = ({ navigation, theme }) => {
 
   return (
     <>
-      <Header title="Browse" />
-      <View
-        style={[
-          styles.container,
-          { backgroundColor: theme.colors.background },
-        ]}>
-        <Surface>
-          <Headline>Browse</Headline>
-        </Surface>
-      </View>
+      <Surface>
+        <Headline> Discovery</Headline>
+      </Surface>
     </>
   );
 };

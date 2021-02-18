@@ -12,6 +12,7 @@ import AuthStack from './AuthStack';
 // Redux + theme
 import { saveLoginInfo } from '../redux/actions/user';
 import { LightTheme, DarkTheme } from '../theme';
+import AppStack from './AppStack';
 
 export default () => {
   const [isLoading, setIsLoading] = React.useState(true);
@@ -59,7 +60,7 @@ export default () => {
         backgroundColor={statusBarColor}
         barStyle={isDarkModeOn ? 'light-content' : 'dark-content'}
       />
-      {isLoggedIn ? <AppTabs /> : <AuthStack />}
+      {isLoggedIn ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
   );
 };

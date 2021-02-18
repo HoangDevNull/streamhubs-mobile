@@ -1,15 +1,17 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { withTheme } from 'react-native-paper';
-import Header from '../Header';
+import { Headline, Surface, withTheme } from 'react-native-paper';
+
 import { useDispatch } from 'react-redux';
 
-const Gaming = ({ navigation, theme }) => {
+const Gaming = ({ theme }) => {
   const dispatch = useDispatch();
 
   return (
     <>
-      <Header title="Gaming" />
+      <Surface>
+        <Headline> Discovery</Headline>
+      </Surface>
     </>
   );
 };

@@ -1,42 +1,20 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
-import { Appbar, withTheme, IconButton, Headline } from 'react-native-paper';
+import { Appbar, withTheme, IconButton, Avatar } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { useRoute, useNavigation } from '@react-navigation/native';
+import { makeStyles } from '../../common/makeStyles';
 
-const renderTitle = (title) => (
-  <Headline style={styles.title}>
-    {title.split('').map((char, i) => {
-      if (char === 'o' || char === 'a') {
-        return (
-          <Headline
-            key={i}
-            style={[
-              styles.title,
-              i % 2 === 0 ? styles.letterPurple : styles.letterPink,
-            ]}>
-            {char}
-          </Headline>
-        );
-      } else {
-        return char;
-      }
-    })}
-  </Headline>
-);
+import { useNavigation } from '@react-navigation/native';
 
-const Left = ({ theme, title }) => {
-  const route = useRoute();
+const Left = ({ theme }) => {
+  const styles = useStyles();
   const navigation = useNavigation();
+  const _handleBack = () => navigation.goBack();
 
-  const _handleBack = () => console.log('Back');
   return (
     <Appbar.Content
       title={
-        title ? (
-          renderTitle(title)
-        ) : (
+        navigation.canGoBack() ? (
           <IconButton
             icon={() => (
               <Ionicons
@@ -48,6 +26,16 @@ const Left = ({ theme, title }) => {
             size={24}
             onPress={_handleBack}
           />
+        ) : (
+          <Avatar.Icon
+            style={styles.avatar}
+            size={30}
+            icon={({ color, size }) => {
+              return (
+                <Ionicons name="person-outline" color={color} size={size} />
+              );
+            }}
+          />
         )
       }
     />
@@ -56,7 +44,7 @@ const Left = ({ theme, title }) => {
 
 export default withTheme(Left);
 
-const styles = StyleSheet.create({
+const useStyles = makeStyles((theme) => ({
   title: {
     fontFamily: 'Inter-Black',
     letterSpacing: 1.4,
@@ -67,4 +55,8 @@ const styles = StyleSheet.create({
   letterPink: {
     color: '#FF4994',
   },
-});
+  avatar: {
+    borderWidth: 2,
+    borderColor: theme.colors.text,
+  },
+}));
