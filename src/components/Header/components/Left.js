@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { TouchableHighlight } from 'react-native';
 import { Appbar, withTheme, IconButton, Avatar } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -10,7 +11,7 @@ const Left = ({ theme }) => {
   const styles = useStyles();
   const navigation = useNavigation();
   const _handleBack = () => navigation.goBack();
-
+  const _handleGoToSetting = () => navigation.navigate('Setting');
   return (
     <Appbar.Content
       title={
@@ -27,15 +28,17 @@ const Left = ({ theme }) => {
             onPress={_handleBack}
           />
         ) : (
-          <Avatar.Icon
-            style={styles.avatar}
-            size={30}
-            icon={({ color, size }) => {
-              return (
-                <Ionicons name="person-outline" color={color} size={size} />
-              );
-            }}
-          />
+          <TouchableHighlight onPress={_handleGoToSetting}>
+            <Avatar.Icon
+              style={styles.avatar}
+              size={30}
+              icon={({ color, size }) => {
+                return (
+                  <Ionicons name="person-outline" color={color} size={size} />
+                );
+              }}
+            />
+          </TouchableHighlight>
         )
       }
     />

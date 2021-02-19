@@ -104,7 +104,7 @@ const useStyles = makeStyles((theme) => ({
   line: {
     position: 'absolute',
     left: 2,
-    bottom: -5,
+    bottom: -16,
     width: 20,
     height: 3,
     borderRadius: 3 / 2,

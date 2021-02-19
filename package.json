@@ -13,6 +13,7 @@
   "dependencies": {
     "@blackbox-vision/react-native-paper-use-styles": "^0.1.2",
     "@react-native-async-storage/async-storage": "^1.13.4",
+    "@react-native-community/blur": "^3.6.0",
     "@react-native-community/datetimepicker": "^3.0.9",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/material-bottom-tabs": "^5.3.13",
@@ -31,6 +32,7 @@
     "react-native-screens": "^2.17.1",
     "react-native-snap-carousel": "^3.9.1",
     "react-native-splash-screen": "^3.2.0",
+    "react-native-sticky-parallax-header": "^0.4.0",
     "react-native-svg": "^12.1.0",
     "react-native-vector-icons": "^8.0.0",
     "react-redux": "^7.2.2",

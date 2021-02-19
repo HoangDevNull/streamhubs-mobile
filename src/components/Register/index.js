@@ -13,7 +13,7 @@ import GoBackButton from '../common/GoBackButton';
 import { format } from 'date-fns';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const Login = ({ navigation, theme }) => {
+const Register = ({ navigation, theme }) => {
   const styles = useStyles();
   const [showPassword, setShowPassword] = React.useState(false);
   const [credential, setCredentital] = React.useState({
@@ -251,4 +251,4 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default withTheme(Login);
+export default withTheme(Register);
