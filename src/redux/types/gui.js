@@ -1,0 +1,1 @@
+export const OPEN_USER_SETTING = 'OPEN_USER_SETTING';

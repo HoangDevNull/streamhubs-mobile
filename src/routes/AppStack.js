@@ -7,7 +7,7 @@ import {
 // Screen
 import AppTabs from './AppTabs';
 import Header from '../components/Header';
-import Setting from '../components/Setting';
+import Profile from '../components/Profile';
 
 const AppStack = createStackNavigator();
 
@@ -21,7 +21,7 @@ export default () => {
       }}
       initialRouteName="Main">
       <AppStack.Screen name="Main" component={AppTabs} />
-      <AppStack.Screen name="Setting" component={Setting} />
+      <AppStack.Screen name="Profile" component={Profile} />
     </AppStack.Navigator>
   );
 };

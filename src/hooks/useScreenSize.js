@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Dimensions } from 'react-native';
 
-export function useOrientation() {
-  const [orientation, setOrientation] = useState('PORTRAIT');
+export function useScreenSize() {
+  const [size, setSize] = useState({
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+  });
 
   useEffect(() => {
     const handleChange = ({ window: { width, height } }) => {
       if (width < height) {
-        setOrientation('PORTRAIT');
+        setSize({ width: width, height: height });
       } else {
-        setOrientation('LANDSCAPE');
+        setSize({ width: height, height: width });
       }
     };
 
@@ -19,5 +22,5 @@ export function useOrientation() {
     };
   }, []);
 
-  return orientation;
+  return size;
 }

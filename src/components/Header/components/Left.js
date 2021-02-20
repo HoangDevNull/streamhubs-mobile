@@ -9,7 +9,7 @@ import UserAvatar from '../../common/UserAvatar';
 const Left = ({ theme }) => {
   const navigation = useNavigation();
   const _handleBack = () => navigation.goBack();
-  const _handleGoToSetting = () => navigation.navigate('Setting');
+  const _handleGoToSetting = () => navigation.navigate('Profile');
 
   const canGoBack = navigation.canGoBack();
   return (
