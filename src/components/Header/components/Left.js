@@ -18,7 +18,6 @@ const Left = ({ theme }) => {
       title={
         canGoBack ? (
           <IconButton
-            style={styles.goBackButton}
             icon={() => (
               <Ionicons
                 name="chevron-back"

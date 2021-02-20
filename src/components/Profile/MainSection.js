@@ -12,11 +12,7 @@ const MainSection = ({ theme }) => {
     <>
       <View style={styles.container}>
         <Surface style={[styles.surface, styles.wrapDes]}>
-          <Ionicons
-            size={22}
-            color={theme.colors.primary}
-            name="shapes-outline"
-          />
+          <Ionicons size={23} color={theme.colors.text} name="ribbon-outline" />
           <Subheading> Let's have fun with Streamer Hubs</Subheading>
         </Surface>
 

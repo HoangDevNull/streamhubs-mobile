@@ -22,7 +22,7 @@ const Header = ({ theme }) => {
       </View>
       <IconButton
         icon={({ color }) => (
-          <Ionicons color={color} name="videocam-outline" size={23} />
+          <Ionicons color={'#fff'} name="videocam-outline" size={23} />
         )}
         style={styles.btnLive}
         color={colors.primary}
@@ -47,6 +47,6 @@ const useStyles = makeStyles((theme) => ({
     letterSpacing: 1.5,
   },
   btnLive: {
-    backgroundColor: theme.colors.text,
+    backgroundColor: theme.colors.primary,
   },
 }));

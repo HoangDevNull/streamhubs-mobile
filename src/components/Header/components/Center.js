@@ -5,7 +5,6 @@ import { useRoute } from '@react-navigation/native';
 
 const Center = () => {
   const route = useRoute();
-  console.log(route.name);
   const show = route?.name.includes('Setting');
   return (
     <Appbar.Content titleStyle={styles.root} title={show ? 'Hoang Pham' : ''} />

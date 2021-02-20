@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Inter-Bold',
     fontSize: 16,
     marginVertical: 18,
+    color: '#fff',
   },
   image: {
     width: 296,

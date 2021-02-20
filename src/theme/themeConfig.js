@@ -29,6 +29,7 @@ export const DarkTheme = {
     primary: '#8734FE',
     surface: '#212121',
     text: '#F9F9F9',
+    contrast: '#F9F9F9',
   },
   fonts: configureFonts(fontConfig),
 };
@@ -48,5 +49,6 @@ export const LightTheme = {
     primary: '#8734FE',
     surface: '#ffffff',
     text: '#000000',
+    contrast: '#F9F9F9',
   },
 };

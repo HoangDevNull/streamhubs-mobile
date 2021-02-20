@@ -22,8 +22,14 @@ export const logout = () => {
 };
 
 export const setTheme = (payload) => {
-  return {
-    type: SET_THEME,
-    payload,
+  return async (dispatch, getState) => {
+    const { user } = getState();
+    user.theme = payload;
+    await AsyncStorage.setItem('user', JSON.stringify(user));
+
+    dispatch({
+      type: SET_THEME,
+      payload,
+    });
   };
 };

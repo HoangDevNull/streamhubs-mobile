@@ -17,11 +17,11 @@ const userReducer = (state = initState, action) => {
       };
     case LOGOUT:
       return {
+        ...state,
         email: null,
         access_token: null,
         isLoggedIn: false,
         userProfile: null,
-        theme: 'dark',
       };
     case SET_THEME:
       return {

@@ -1,35 +1,42 @@
 import * as React from 'react';
-import { Button, Portal, Text } from 'react-native-paper';
+import { Button, Portal } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import { useDispatch, useSelector } from 'react-redux';
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { openUserSetting } from '../../../redux/actions/gui';
-import { View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
+import { logout, setTheme } from '../../../redux/actions/user';
 
 const DATA = [
   {
     id: '1',
     title: 'Security',
+    icon: 'shield-outline',
   },
   {
     id: '2',
     title: 'Toggle theme',
+    icon: 'water-outline',
   },
   {
     id: '3',
-    title: 'Update user profile ',
+    title: 'Update user profile',
+    icon: 'ios-pencil-outline',
   },
   {
     id: '4',
     title: 'Logout',
+    icon: 'exit-outline',
   },
 ];
 
 const UserSetting = () => {
   const styles = useStyles();
   const dispatch = useDispatch();
-  const open = useSelector((state) => state.gui.openUserSetting);
+  const { open, theme } = useSelector((state) => ({
+    open: state.gui.openUserSetting,
+    theme: state.user.theme,
+  }));
   const containerRef = React.useRef(null);
   React.useEffect(() => {
     if (open) {
@@ -41,15 +48,36 @@ const UserSetting = () => {
 
   const _hideUserSetting = () => dispatch(openUserSetting(false));
 
-  const _handleSettingPress = (id) => {
-    console.log(id);
+  const _handleSettingPress = (action) => {
+    switch (action) {
+      case 'Security':
+        dispatch(openUserSetting(false));
+        break;
+      case 'Toggle theme':
+        dispatch(setTheme(theme.includes('dark') ? 'light' : 'dark'));
+        dispatch(openUserSetting(false));
+        break;
+      case 'Update user profile':
+        dispatch(openUserSetting(false));
+        break;
+      case 'Logout':
+        dispatch(logout());
+        dispatch(openUserSetting(false));
+        break;
+
+      default:
+        break;
+    }
   };
 
   const renderItem = ({ item }) => (
     <Button
       uppercase={false}
-      onPress={() => _handleSettingPress(item.id)}
-      style={styles.button}>
+      onPress={() => _handleSettingPress(item.title)}
+      style={styles.button}
+      icon={({ size, color }) => (
+        <Ionicons color={color} name={item.icon} size={size} />
+      )}>
       {item.title}
     </Button>
   );
@@ -58,7 +86,7 @@ const UserSetting = () => {
     <Portal>
       <Modalize
         modalStyle={styles.modal}
-        modalHeight={250}
+        modalHeight={240}
         onClosed={_hideUserSetting}
         ref={containerRef}
         flatListProps={{

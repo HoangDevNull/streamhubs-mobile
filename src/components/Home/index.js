@@ -1,21 +1,14 @@
 import React from 'react';
-import { Button, withTheme } from 'react-native-paper';
-import { useDispatch } from 'react-redux';
-import { logout } from '../../redux/actions/user';
-
+import { Dimensions, Platform, View, StyleSheet } from 'react-native';
+import { Button, Text, withTheme } from 'react-native-paper';
+import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
+import VideoSlide from './components/VideoSlide';
 const Home = ({ navigation, theme }) => {
-  const dispatch = useDispatch();
+  const styles = useStyles();
 
-  const handleLogout = () => {
-    dispatch(logout());
-  };
-  return (
-    <>
-      <Button mode="contained" onPress={handleLogout}>
-        Logout
-      </Button>
-    </>
-  );
+  return <VideoSlide />;
 };
 
 export default withTheme(Home);
+
+const useStyles = makeStyles((theme) => ({}));
