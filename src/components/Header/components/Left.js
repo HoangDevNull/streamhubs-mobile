@@ -1,22 +1,24 @@
 import * as React from 'react';
-import { TouchableHighlight } from 'react-native';
-import { Appbar, withTheme, IconButton, Avatar } from 'react-native-paper';
+import { StyleSheet } from 'react-native';
+import { Appbar, withTheme, IconButton } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
-
 import { useNavigation } from '@react-navigation/native';
+import UserAvatar from '../../common/UserAvatar';
 
 const Left = ({ theme }) => {
-  const styles = useStyles();
   const navigation = useNavigation();
   const _handleBack = () => navigation.goBack();
   const _handleGoToSetting = () => navigation.navigate('Setting');
+
+  const canGoBack = navigation.canGoBack();
   return (
     <Appbar.Content
+      style={[styles.root, canGoBack && styles.stickToLeft]}
       title={
-        navigation.canGoBack() ? (
+        canGoBack ? (
           <IconButton
+            style={styles.goBackButton}
             icon={() => (
               <Ionicons
                 name="chevron-back"
@@ -28,17 +30,7 @@ const Left = ({ theme }) => {
             onPress={_handleBack}
           />
         ) : (
-          <TouchableHighlight onPress={_handleGoToSetting}>
-            <Avatar.Icon
-              style={styles.avatar}
-              size={30}
-              icon={({ color, size }) => {
-                return (
-                  <Ionicons name="person-outline" color={color} size={size} />
-                );
-              }}
-            />
-          </TouchableHighlight>
+          <UserAvatar size={30} onPress={_handleGoToSetting} />
         )
       }
     />
@@ -47,19 +39,11 @@ const Left = ({ theme }) => {
 
 export default withTheme(Left);
 
-const useStyles = makeStyles((theme) => ({
-  title: {
-    fontFamily: 'Inter-Black',
-    letterSpacing: 1.4,
+const styles = StyleSheet.create({
+  root: {
+    flex: 0,
   },
-  letterPurple: {
-    color: '#8734FE',
+  stickToLeft: {
+    marginLeft: -10,
   },
-  letterPink: {
-    color: '#FF4994',
-  },
-  avatar: {
-    borderWidth: 2,
-    borderColor: theme.colors.text,
-  },
-}));
+});

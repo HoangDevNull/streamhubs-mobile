@@ -15,23 +15,13 @@ export default () => {
   return (
     <AppStack.Navigator
       screenOptions={{
+        header: ({ route: name }) => <Header />,
+
         cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
       }}
       initialRouteName="Main">
-      <AppStack.Screen
-        options={{
-          header: ({ route: name }) => <Header />,
-        }}
-        name="Main"
-        component={AppTabs}
-      />
-      <AppStack.Screen
-        options={{
-          header: () => null,
-        }}
-        name="Setting"
-        component={Setting}
-      />
+      <AppStack.Screen name="Main" component={AppTabs} />
+      <AppStack.Screen name="Setting" component={Setting} />
     </AppStack.Navigator>
   );
 };

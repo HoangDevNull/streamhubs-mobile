@@ -3,11 +3,11 @@ import { StyleSheet, Image } from 'react-native';
 import { Appbar, withTheme, Avatar } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { useRoute, useNavigation } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
+import UserSetting from './UserSetting';
 
 const Right = ({ theme: { colors } }) => {
-  const route = useRoute();
-  const navigation = useNavigation();
+  const { name } = useRoute();
 
   const _handleSearch = () => console.log('Searching');
 
@@ -15,6 +15,16 @@ const Right = ({ theme: { colors } }) => {
 
   const { text: mainColor } = colors;
 
+  if (name.includes('Setting')) {
+    return (
+      <Appbar.Action
+        icon={({ size }) => (
+          <Ionicons name="settings-outline" size={size} color={mainColor} />
+        )}
+        onPress={_handleSearch}
+      />
+    );
+  }
   return (
     <>
       <Appbar.Action
@@ -29,10 +39,11 @@ const Right = ({ theme: { colors } }) => {
         )}
         onPress={_handleMore}
       />
+      <UserSetting />
     </>
   );
 };
 
-export default withTheme(Right);
+export default withTheme(React.memo(Right));
 
 const styles = StyleSheet.create({});

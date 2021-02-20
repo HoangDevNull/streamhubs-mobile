@@ -3,13 +3,15 @@ import { StyleSheet } from 'react-native';
 import { Appbar, withTheme } from 'react-native-paper';
 import Left from './components/Left';
 import Right from './components/Right';
+import Center from './components/Center';
 
-const Header = ({ theme, title }) => {
+const Header = ({ theme }) => {
   return (
     <Appbar.Header
       style={[styles.root, { backgroundColor: theme.colors.background }]}>
       {/* Left pannel */}
-      <Left title={title} />
+      <Left />
+      <Center />
       {/* Right pannel */}
       <Right />
     </Appbar.Header>
