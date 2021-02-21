@@ -9,11 +9,7 @@ export function useScreenSize() {
 
   useEffect(() => {
     const handleChange = ({ window: { width, height } }) => {
-      if (width < height) {
-        setSize({ width: width, height: height });
-      } else {
-        setSize({ width: height, height: width });
-      }
+      setSize({ width: width, height: height });
     };
 
     Dimensions.addEventListener('change', handleChange);

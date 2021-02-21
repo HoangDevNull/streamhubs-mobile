@@ -21,6 +21,8 @@ const Home = ({ navigation, theme }) => {
             F<Text style={styles.primaryText}>o</Text>ll
             <Text style={styles.pinkText}>o</Text>wing
           </Text>
+
+          {/* Main */}
           <VideoSlide />
           <View style={styles.grid}>
             <LiveChannel />

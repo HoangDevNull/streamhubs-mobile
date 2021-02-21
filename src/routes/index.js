@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusBar, StyleSheet, View } from 'react-native';
+import { StatusBar, View } from 'react-native';
 import { ActivityIndicator, Colors } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
@@ -8,12 +8,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 
 //Navigator
-import AppTabs from './AppTabs';
 import AuthStack from './AuthStack';
+import AppStack from './AppStack';
 // Redux + theme
 import { saveLoginInfo } from '../redux/actions/user';
 import { LightTheme, DarkTheme } from '../theme';
-import AppStack from './AppStack';
 
 export default () => {
   const styles = useStyles();

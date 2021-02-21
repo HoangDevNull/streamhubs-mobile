@@ -8,14 +8,19 @@ const Prime = ({ theme }) => {
   return (
     <View style={styles.container}>
       <View style={[styles.intro]}>
+        <View style={styles.wrapper}>
+          <Text style={styles.text}>Join Prime Streaming Today</Text>
+          <Button
+            style={styles.btnPrime}
+            mode="contained"
+            color={theme.colors.surface}>
+            Try Premium
+          </Button>
+        </View>
         <Image
           style={styles.image}
-          source={require('../../../assets/images/game_day.png')}
+          source={require('../../../assets/images/AR.png')}
         />
-        <Text style={styles.text}>Join Prime Streaming Today</Text>
-        <Button mode="contained" color={theme.colors.surface}>
-          Try Premium
-        </Button>
       </View>
     </View>
   );
@@ -30,10 +35,15 @@ const useStyles = makeStyles((theme) => ({
   },
   intro: {
     borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
     backgroundColor: theme.colors.primary,
-    paddingBottom: 20,
+    paddingBottom: 15,
+    overflow: 'hidden',
+  },
+  wrapper: {
+    flex: 1,
+    paddingLeft: 15,
   },
   text: {
     fontFamily: 'Inter-Bold',
@@ -41,9 +51,16 @@ const useStyles = makeStyles((theme) => ({
     marginVertical: 18,
     color: '#fff',
   },
+  btnPrime: {
+    width: 145,
+  },
+
   image: {
-    width: 296,
-    height: 193,
-    resizeMode: 'contain',
+    width: 145,
+    height: 93,
+    resizeMode: 'cover',
+    position: 'absolute',
+    bottom: -5,
+    right: 15,
   },
 }));

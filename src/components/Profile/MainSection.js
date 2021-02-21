@@ -5,6 +5,7 @@ import { Subheading, Surface, Button, withTheme } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MyChanel from './components/MyChanel';
 import Prime from './components/Prime';
+import SurfaceButton from '../common/SurfaceButton';
 
 const MainSection = ({ theme }) => {
   const styles = useStyles();
@@ -41,6 +42,38 @@ const MainSection = ({ theme }) => {
         <View style={styles.surface}>
           <Prime />
         </View>
+
+        <Surface style={[styles.surface]}>
+          <SurfaceButton
+            onPress={() => console.log('pressed')}
+            icon="notifications-outline"
+            title="Subcribed"
+          />
+        </Surface>
+
+        <Surface style={[styles.surface]}>
+          <SurfaceButton
+            onPress={() => console.log('pressed')}
+            icon="barcode-outline"
+            title="Drops"
+          />
+        </Surface>
+
+        <Surface style={[styles.surface]}>
+          <SurfaceButton
+            onPress={() => console.log('pressed')}
+            icon="people-outline"
+            title="Friends"
+          />
+        </Surface>
+
+        <Surface style={[styles.surface]}>
+          <SurfaceButton
+            onPress={() => console.log('pressed')}
+            icon="eye-outline"
+            title="Set online status"
+          />
+        </Surface>
       </View>
     </>
   );
@@ -65,12 +98,24 @@ const useStyles = makeStyles((theme) => ({
     paddingHorizontal: 18,
   },
   wrapOptions: {
-    paddingVertical: 8,
+    paddingVertical: 15,
     paddingHorizontal: 10,
   },
   divider: {
     height: '100%',
     width: 1,
     backgroundColor: theme.colors.disabled,
+  },
+  wrappButton: {
+    width: '85%',
+    marginLeft: -10,
+  },
+  fullSizeBtn: {
+    justifyContent: 'flex-start',
+  },
+  buttonLable: {
+    paddingLeft: 20,
+    fontSize: 16,
+    color: theme.colors.text,
   },
 }));

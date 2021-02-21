@@ -1,15 +1,14 @@
 import React from 'react';
 import { View, FlatList } from 'react-native';
-import { Text, Title, Caption, Colors } from 'react-native-paper';
+import { Text, Title } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
+import ChipCustom from '../../../common/ChipCustom';
 
 const RigthItem = ({ data }) => {
   const styles = useStyles();
 
   const _renderItem = ({ item: { color, name }, i }) => (
-    <View style={[styles.category, { backgroundColor: Colors[color] }]}>
-      <Caption style={styles.categoryText}>#{name}</Caption>
-    </View>
+    <ChipCustom color={color} title={name} />
   );
 
   const { title, username, categories } = data;
@@ -47,17 +46,5 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Inter-Light',
     marginBottom: 10,
     marginTop: 2.5,
-  },
-  category: {
-    borderRadius: 4,
-    paddingVertical: 0,
-    paddingHorizontal: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 10,
-  },
-  categoryText: {
-    color: '#fff',
-    textAlign: 'center',
   },
 }));
