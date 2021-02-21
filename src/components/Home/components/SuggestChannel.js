@@ -70,14 +70,14 @@ const ENTRIES1 = [
 const { width: screenWidth } = Dimensions.get('window');
 export const sliderWidth = screenWidth;
 
-const LiveChannel = () => {
+const SuggestChannel = () => {
   const styles = useStyles();
 
   return (
     <View styles={styles.container}>
       <List.Section>
         <List.Subheader>
-          <Headline style={styles.headline}>Live Channel</Headline>
+          <Headline style={styles.headline}>Suggestion Channel</Headline>
         </List.Subheader>
         {ENTRIES1.map((item) => (
           <List.Item
@@ -93,7 +93,7 @@ const LiveChannel = () => {
   );
 };
 
-export default React.memo(LiveChannel);
+export default React.memo(SuggestChannel);
 
 const useStyles = makeStyles((theme) => ({
   container: {

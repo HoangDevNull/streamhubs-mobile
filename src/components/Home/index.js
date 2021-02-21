@@ -1,12 +1,14 @@
 import React from 'react';
 import { SafeAreaView, View } from 'react-native';
-import { Button, Headline, Text, withTheme } from 'react-native-paper';
+import { Text, withTheme } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 
 import { ScrollView } from 'react-native-gesture-handler';
 
 import VideoSlide from './components/VideoSlide';
 import LiveChannel from './components/LiveChannel';
+import SuggestChannel from './components/SuggestChannel';
+import FollowedChannel from './components/FollowedChannel';
 
 const Home = ({ navigation, theme }) => {
   const styles = useStyles();
@@ -22,6 +24,8 @@ const Home = ({ navigation, theme }) => {
           <VideoSlide />
           <View style={styles.grid}>
             <LiveChannel />
+            <SuggestChannel />
+            <FollowedChannel />
           </View>
         </View>
       </ScrollView>

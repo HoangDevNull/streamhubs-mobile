@@ -75,8 +75,6 @@ export default withTheme(VideoSlide);
 const useStyles = makeStyles((theme) => ({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   card: {
     alignSelf: 'center',
