@@ -8,7 +8,6 @@ import {
 import AppTabs from './AppTabs';
 import Header from '../components/Header';
 import Profile from '../components/Profile';
-import { Portal } from 'react-native-paper';
 
 const AppStack = createStackNavigator();
 

@@ -1,113 +1,70 @@
-import React, { useRef, useState } from 'react';
-import Carousel, {
-  Pagination,
-  ParallaxImage,
-} from 'react-native-snap-carousel';
-import { View, Dimensions, StyleSheet, Platform } from 'react-native';
-import { Button, withTheme } from 'react-native-paper';
+import React from 'react';
+import { View, Dimensions, Platform } from 'react-native';
+import { Text, Card, withTheme, Badge } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
-
+import Slider from '../../common/Slider';
 const ENTRIES1 = [
   {
-    title: 'Beautiful and dramatic Antelope Canyon',
-    subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-    illustration: 'https://i.imgur.com/UYiroysl.jpg',
+    name: 'LOL',
+    viewer: 430,
+    banner:
+      'https://www.riotgames.com/darkroom/700/ff82d668da3b61325a4d9a00f0d4bad2:8c97ff73a96ae9fe351eeebae2220a5e/lol-key-art-2021-1920x1080-article-banner.jpg',
   },
   {
-    title: 'Earlier this morning, NYC',
-    subtitle: 'Lorem ipsum dolor sit amet',
-    illustration: 'https://i.imgur.com/UPrs1EWl.jpg',
+    name: 'Earlier this morning, NYC',
+    viewer: 400,
+    banner:
+      'https://www.riotgames.com/darkroom/700/a1833b4d5367d801178f49057ce2daa9:e33fb2751ba9703e7b1f47f4eb1ab7fb/riot-games-1920x1080-valorant-asset.jpg',
   },
   {
-    title: 'White Pocket Sunset',
-    subtitle: 'Lorem ipsum dolor sit amet et nuncat ',
-    illustration: 'https://i.imgur.com/MABUbpDl.jpg',
+    name: 'White Pocket Sunset',
+    viewer: 320,
+    banner:
+      'https://www.riotgames.com/darkroom/700/b313a88e7a60ba9ddb4b2b3f78700aab:40870d3d4e320a0f39b685e84970d759/wr-banner-ziggs-nov.jpg',
   },
   {
-    title: 'Acrocorinth, Greece',
-    subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-    illustration: 'https://i.imgur.com/KZsmUi2l.jpg',
+    name: 'Acrocorinth, Greece',
+    viewer: 300,
+    banner:
+      'https://www.riotgames.com/darkroom/700/4589086aa1b8dc68fd0b6f052297a251:e7cd15652842615ca8f7a69e6eecde6d/tft-riot-site-card.jpg)',
   },
   {
-    title: 'The lone tree, majestic landscape of New Zealand',
-    subtitle: 'Lorem ipsum dolor sit amet',
-    illustration: 'https://i.imgur.com/2nCt3Sbl.jpg',
+    name: 'The lone tree, majestic landscape of New Zealand',
+    viewer: 230,
+    banner: 'https://wallpapercave.com/wp/wp7048889.jpg',
   },
 ];
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
-
-function wp(percentage) {
-  const value = (percentage * screenWidth) / 100;
-  return Math.round(value);
-}
-
-const slideHeight = screenHeight * 0.36;
-const slideWidth = wp(75);
-const itemHorizontalMargin = wp(2);
-
+const { width: screenWidth } = Dimensions.get('window');
 export const sliderWidth = screenWidth;
-export const itemWidth = slideWidth + itemHorizontalMargin * 2;
 
 const VideoSlide = ({ theme }) => {
   const styles = useStyles();
-  const [slider1ActiveSlide, setSlider1ActiveSlide] = useState(1);
-  const carouselRef = useRef(null);
-
   const renderItem = ({ item, index }, parallaxProps) => {
     return (
-      <View style={styles.item}>
-        <ParallaxImage
-          source={{ uri: item.illustration }}
-          containerStyle={styles.imageContainer}
-          style={styles.image}
-          parallaxFactor={0.4}
-          {...parallaxProps}
+      <Card elevation={2} style={styles.card}>
+        <Card.Cover
+          style={styles.imageContainer}
+          source={{ uri: item.banner }}
         />
-      </View>
+        <Card.Content style={styles.cardContent}>
+          <View style={styles.viewerWrapper}>
+            <Badge size={8} style={styles.dot} />
+            <Text style={styles.textContent}>{`${item.viewer} K`} </Text>
+          </View>
+        </Card.Content>
+      </Card>
     );
   };
 
   return (
-    <View style={styles.container}>
-      <Carousel
-        // layout={'tinder'}
-        ref={carouselRef}
-        sliderWidth={screenWidth}
-        sliderHeight={screenWidth}
-        itemWidth={screenWidth - 60}
+    <View styles={styles.container}>
+      <Slider
+        sliderWidth={sliderWidth - 60}
+        itemWidth={sliderWidth}
         data={ENTRIES1}
+        type="tinder"
         renderItem={renderItem}
-        firstItem={2}
-        inactiveSlideScale={0.9}
-        inactiveSlideOpacity={0.3}
-        enableMomentum={true}
-        hasParallaxImages
-        loop={true}
-        loopClonesPerSide={2}
-        autoplay={true}
-        autoplayDelay={3000}
-        autoplayInterval={3000}
-        onSnapToItem={(index) => setSlider1ActiveSlide(index)}
-        activeAnimationType={'spring'}
-        activeAnimationOptions={{
-          friction: 4,
-          tension: 40,
-        }}
-        containerCustomStyle={styles.slider}
-        contentContainerCustomStyle={styles.sliderContentContainer}
-      />
-
-      <Pagination
-        dotsLength={ENTRIES1.length}
-        activeDotIndex={slider1ActiveSlide}
-        containerStyle={styles.paginationContainer}
-        dotColor={theme.colors.text}
-        dotStyle={styles.paginationDot}
-        inactiveDotColor={theme.colors.disabled}
-        inactiveDotOpacity={0.4}
-        inactiveDotScale={0.6}
-        carouselRef={carouselRef}
-        tappableDots={!!carouselRef}
+        hidePagination
       />
     </View>
   );
@@ -118,35 +75,37 @@ export default withTheme(VideoSlide);
 const useStyles = makeStyles((theme) => ({
   container: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  item: {
-    width: screenWidth - 60,
-    height: 200,
-    backgroundColor: theme.colors.background,
+  card: {
+    alignSelf: 'center',
+    width: screenWidth - 35,
+    borderRadius: 15,
+  },
+  cardContent: {
+    position: 'absolute',
+    bottom: -5,
+    left: 0,
   },
   imageContainer: {
-    flex: 1,
     marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
+    borderRadius: 15,
+  },
+  viewerWrapper: {
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    backgroundColor: theme.colors.backdrop,
     borderRadius: 8,
+    paddingVertical: 5,
+    paddingHorizontal: 12,
   },
-  image: {
-    ...StyleSheet.absoluteFillObject,
-    resizeMode: 'cover',
+  dot: {
+    alignSelf: 'center',
+    marginRight: 10,
   },
-  paginationContainer: {
-    paddingVertical: 8,
-  },
-  slider: {
-    marginTop: 15,
-    overflow: 'visible', // for custom animations
-  },
-  sliderContentContainer: {
-    paddingBottom: 10, // for custom animation
-  },
-  paginationDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginHorizontal: 8,
+  textContent: {
+    fontFamily: 'Inter-Bold',
+    color: '#fff',
   },
 }));

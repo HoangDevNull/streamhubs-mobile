@@ -1,14 +1,58 @@
 import React from 'react';
-import { Dimensions, Platform, View, StyleSheet } from 'react-native';
-import { Button, Text, withTheme } from 'react-native-paper';
+import { SafeAreaView, View } from 'react-native';
+import { Button, Headline, Text, withTheme } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
+
+import { ScrollView } from 'react-native-gesture-handler';
+
 import VideoSlide from './components/VideoSlide';
+import LiveChannel from './components/LiveChannel';
+
 const Home = ({ navigation, theme }) => {
   const styles = useStyles();
 
-  return <VideoSlide />;
+  return (
+    <SafeAreaView>
+      <ScrollView>
+        <View style={styles.container}>
+          <Text style={[styles.grid, styles.headText]}>
+            F<Text style={styles.primaryText}>o</Text>ll
+            <Text style={styles.pinkText}>o</Text>wing
+          </Text>
+          <VideoSlide />
+          <View style={styles.grid}>
+            <LiveChannel />
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
 };
 
 export default withTheme(Home);
 
-const useStyles = makeStyles((theme) => ({}));
+const useStyles = makeStyles((theme) => ({
+  container: {
+    width: '100%',
+    height: '100%',
+  },
+  grid: {
+    marginTop: 15,
+  },
+  headText: {
+    paddingHorizontal: 15,
+    marginTop: 15,
+    marginBottom: 10,
+    fontFamily: 'Inter-Black',
+    fontSize: 34,
+    letterSpacing: 1.5,
+  },
+  pinkText: {
+    fontFamily: 'Inter-Black',
+    color: theme.colors.notification,
+  },
+  primaryText: {
+    fontFamily: 'Inter-Black',
+    color: theme.colors.primary,
+  },
+}));
