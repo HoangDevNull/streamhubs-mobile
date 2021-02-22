@@ -1,14 +1,24 @@
 import React from 'react';
 import { View, Image } from 'react-native';
-import { Card, Text, Title } from 'react-native-paper';
+import {
+  Caption,
+  Card,
+  Paragraph,
+  Subheading,
+  Text,
+  Title,
+} from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import ChipCustom from '../../common/ChipCustom';
 
-const CategoryBanner = ({ navigation }) => {
+const CardCategory = ({ navigation }) => {
   const styles = useStyles();
 
   return (
-    <Card elevation={0} style={styles.container}>
+    <Card
+      onPress={() => console.log('prest')}
+      elevation={0}
+      style={styles.container}>
       <Card.Content style={styles.wrapper}>
         <View style={styles.leftWrapper}>
           <Image
@@ -21,15 +31,10 @@ const CategoryBanner = ({ navigation }) => {
         </View>
 
         <View style={styles.rightWrapper}>
-          <Title style={styles.fontBold}>Apex Legend</Title>
-          <Text numberOfLines={2}>
-            Apex Legends is a free-to-play Battle Royale game where legendary
-            competitors battle for glory, fame, and fortune on the fringes of
-            the Frontier.
-          </Text>
+          <Subheading style={styles.fontBold}>Apex Legend</Subheading>
           <View style={styles.viewerWrapper}>
-            <Text style={styles.fontBold}>29.3K Viewers</Text>
-            <Text style={styles.fontBold}>1.6m Followers</Text>
+            <Paragraph style={styles.fontBold}>29.3K Viewers</Paragraph>
+            <Paragraph style={styles.fontBold}>1.6m Followers</Paragraph>
           </View>
 
           <View style={styles.tagWrapper}>
@@ -43,11 +48,12 @@ const CategoryBanner = ({ navigation }) => {
   );
 };
 
-export default React.memo(CategoryBanner);
+export default React.memo(CardCategory);
 
 const useStyles = makeStyles((theme) => ({
   container: {
     marginVertical: 15,
+    paddingHorizontal: 15,
     backgroundColor: theme.colors.backgroundColor,
   },
   wrapper: {
@@ -64,23 +70,25 @@ const useStyles = makeStyles((theme) => ({
   rightWrapper: {
     flex: 1,
     marginLeft: 15,
+    alignSelf: 'flex-start',
   },
   viewerWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 18,
+    marginTop: 7,
+    marginBottom: 15,
     maxWidth: 230,
   },
   tagWrapper: {
     flexDirection: 'row',
   },
   image: {
-    height: '100%',
-    width: 120,
+    height: 110,
+    width: 90,
     padding: 16,
     justifyContent: 'flex-end',
     resizeMode: 'cover',
-    borderRadius: 15,
+    borderRadius: 8,
   },
   fontBold: {
     fontFamily: 'Inter-Bold',

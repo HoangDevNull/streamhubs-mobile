@@ -13,7 +13,7 @@ const MainSection = ({ theme }) => {
     <>
       <View style={styles.container}>
         <Surface style={[styles.surface, styles.wrapDes]}>
-          <Ionicons size={23} color={theme.colors.text} name="ribbon-outline" />
+          <Ionicons size={22} color={theme.colors.text} name="ribbon-outline" />
           <Subheading> Let's have fun with Streamer Hubs</Subheading>
         </Surface>
 
@@ -21,7 +21,7 @@ const MainSection = ({ theme }) => {
           <Button
             color={theme.colors.text}
             icon={({ size, color }) => (
-              <Ionicons size={size} color={color} name="person-outline" />
+              <Ionicons size={20} color={color} name="person-outline" />
             )}
             uppercase={false}>
             My Chanel
@@ -32,7 +32,7 @@ const MainSection = ({ theme }) => {
           <Button
             color={theme.colors.text}
             icon={({ size, color }) => (
-              <Ionicons size={size} color={color} name="build-outline" />
+              <Ionicons size={20} color={color} name="build-outline" />
             )}
             uppercase={false}>
             Stream tool
@@ -43,37 +43,39 @@ const MainSection = ({ theme }) => {
           <Prime />
         </View>
 
-        <Surface style={[styles.surface]}>
-          <SurfaceButton
-            onPress={() => console.log('pressed')}
-            icon="notifications-outline"
-            title="Subcribed"
-          />
-        </Surface>
+        <View style={styles.mt10}>
+          <Surface style={styles.wrappButtonSurface}>
+            <SurfaceButton
+              onPress={() => console.log('pressed')}
+              icon="notifications-outline"
+              title="Subcribed"
+            />
+          </Surface>
 
-        <Surface style={[styles.surface]}>
-          <SurfaceButton
-            onPress={() => console.log('pressed')}
-            icon="barcode-outline"
-            title="Drops"
-          />
-        </Surface>
+          <Surface style={styles.wrappButtonSurface}>
+            <SurfaceButton
+              onPress={() => console.log('pressed')}
+              icon="barcode-outline"
+              title="Drops"
+            />
+          </Surface>
 
-        <Surface style={[styles.surface]}>
-          <SurfaceButton
-            onPress={() => console.log('pressed')}
-            icon="people-outline"
-            title="Friends"
-          />
-        </Surface>
+          <Surface style={styles.wrappButtonSurface}>
+            <SurfaceButton
+              onPress={() => console.log('pressed')}
+              icon="people-outline"
+              title="Friends"
+            />
+          </Surface>
 
-        <Surface style={[styles.surface]}>
-          <SurfaceButton
-            onPress={() => console.log('pressed')}
-            icon="eye-outline"
-            title="Set online status"
-          />
-        </Surface>
+          <Surface style={styles.wrappButtonSurface}>
+            <SurfaceButton
+              onPress={() => console.log('pressed')}
+              icon="eye-outline"
+              title="Set online status"
+            />
+          </Surface>
+        </View>
       </View>
     </>
   );
@@ -91,7 +93,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-around',
     alignItems: 'center',
     borderRadius: 12,
-    marginVertical: 15,
+    marginVertical: 10,
   },
   wrapDes: {
     paddingVertical: 14,
@@ -106,16 +108,14 @@ const useStyles = makeStyles((theme) => ({
     width: 1,
     backgroundColor: theme.colors.disabled,
   },
-  wrappButton: {
-    width: '85%',
-    marginLeft: -10,
+  mt10: {
+    marginTop: 10,
   },
-  fullSizeBtn: {
-    justifyContent: 'flex-start',
-  },
-  buttonLable: {
-    paddingLeft: 20,
-    fontSize: 16,
-    color: theme.colors.text,
+  wrappButtonSurface: {
+    flexDirection: 'row',
+    borderRadius: 12,
+    marginVertical: 5,
+    justifyContent: 'space-around',
+    alignItems: 'center',
   },
 }));

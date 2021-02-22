@@ -102,7 +102,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   item: {
-    marginLeft: 5,
+    paddingLeft: 15,
     marginBottom: 15,
   },
   headline: {

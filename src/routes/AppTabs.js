@@ -33,7 +33,7 @@ export default () => {
               <Ionicons
                 color={color}
                 size={24.3}
-                name={focused ? 'easel' : 'easel-outline'}
+                name={focused ? 'heart' : 'heart-outline'}
               />
               <View style={[styles.line, focused && styles.active]} />
             </View>
@@ -65,7 +65,7 @@ export default () => {
               <Ionicons
                 color={color}
                 size={24.3}
-                name={focused ? 'radio' : 'radio-outline'}
+                name={focused ? 'easel' : 'easel-outline'}
               />
               <View style={[styles.line, focused && styles.active]} />
             </View>

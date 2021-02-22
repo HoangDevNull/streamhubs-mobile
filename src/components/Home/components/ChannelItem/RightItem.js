@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   // Right
   rightContainer: {
     flex: 100,
-    marginTop: -5,
+    marginLeft: 10,
   },
   title: {
     fontFamily: 'Inter-Bold',
@@ -45,6 +45,6 @@ const useStyles = makeStyles((theme) => ({
   paragraph: {
     fontFamily: 'Inter-Light',
     marginBottom: 10,
-    marginTop: 2.5,
+    // marginTop: 5.5,
   },
 }));
