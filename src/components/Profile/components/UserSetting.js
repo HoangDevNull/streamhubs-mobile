@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Button, Portal } from 'react-native-paper';
+import { Menu, Portal } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import { useDispatch, useSelector } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { openUserSetting } from '../../../redux/actions/gui';
 import { Modalize } from 'react-native-modalize';
 import { logout, setTheme } from '../../../redux/actions/user';
+import { Dimensions } from 'react-native';
 
 const DATA = [
   {
@@ -29,6 +30,8 @@ const DATA = [
     icon: 'exit-outline',
   },
 ];
+
+const { width } = Dimensions.get('window');
 
 const UserSetting = () => {
   const styles = useStyles();
@@ -71,22 +74,21 @@ const UserSetting = () => {
   };
 
   const renderItem = ({ item }) => (
-    <Button
-      uppercase={false}
-      onPress={() => _handleSettingPress(item.title)}
+    <Menu.Item
       style={styles.button}
       icon={({ size, color }) => (
         <Ionicons color={color} name={item.icon} size={size} />
-      )}>
-      {item.title}
-    </Button>
+      )}
+      onPress={() => _handleSettingPress(item.title)}
+      title={item.title}
+    />
   );
 
   return (
     <Portal>
       <Modalize
         modalStyle={styles.modal}
-        modalHeight={240}
+        modalHeight={270}
         onClosed={_hideUserSetting}
         ref={containerRef}
         flatListProps={{
@@ -107,11 +109,13 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.colors.surface,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    padding: 20,
+    paddingLeft: 20,
+    paddingTop: 20,
   },
   button: {
     marginVertical: 6,
     alignItems: 'flex-start',
-    flex: 1,
+    maxWidth: 'auto',
+    marginRight: 10,
   },
 }));

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, FlatList } from 'react-native';
-import { Text, Title } from 'react-native-paper';
+import { Paragraph, Subheading } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import ChipCustom from '../../../common/ChipCustom';
 
@@ -15,11 +15,11 @@ const RigthItem = ({ data }) => {
 
   return (
     <View style={styles.rightContainer}>
-      <Title style={styles.title}>{username}</Title>
+      <Subheading style={styles.title}>{username}</Subheading>
 
-      <Text numberOfLines={1} style={styles.paragraph}>
+      <Paragraph numberOfLines={1} style={styles.paragraph}>
         {title}
-      </Text>
+      </Paragraph>
       <FlatList
         data={categories}
         keyExtractor={({ id }) => String(id)}
@@ -43,7 +43,6 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Inter-Bold',
   },
   paragraph: {
-    fontFamily: 'Inter-Light',
     marginBottom: 10,
     // marginTop: 5.5,
   },

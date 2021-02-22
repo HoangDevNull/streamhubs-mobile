@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Carousel, { Pagination } from 'react-native-snap-carousel';
-import { View, Dimensions, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { withTheme } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 const Slider = ({

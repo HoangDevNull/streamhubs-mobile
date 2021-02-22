@@ -15,7 +15,7 @@ const CategoryBanner = ({ navigation }) => {
             style={styles.image}
             source={{
               uri:
-                'https://static-cdn.jtvnw.net/ttv-boxart/Apex%20Legends-244x292.jpg',
+                'https://static-cdn.jtvnw.net/previews-ttv/live_user_esl_csgo-440x248.jpg',
             }}
           />
         </View>

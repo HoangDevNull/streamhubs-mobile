@@ -20,7 +20,7 @@ const CardCategory = ({ navigation }) => {
             style={styles.image}
             source={{
               uri:
-                'https://static-cdn.jtvnw.net/ttv-boxart/Apex%20Legends-1920x1080.jpg',
+                'https://static-cdn.jtvnw.net/previews-ttv/live_user_esl_csgo-440x248.jpg',
             }}
           />
           <LiveBadge position="top" />

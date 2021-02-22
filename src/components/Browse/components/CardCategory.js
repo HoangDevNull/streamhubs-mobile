@@ -52,7 +52,7 @@ export default React.memo(CardCategory);
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    marginVertical: 15,
+    paddingVertical: 20,
     paddingHorizontal: 15,
     backgroundColor: theme.colors.backgroundColor,
   },

@@ -1,8 +1,11 @@
 import React from 'react';
-import { Dimensions, SafeAreaView, View } from 'react-native';
-import { Text, withTheme } from 'react-native-paper';
+import { Dimensions, SafeAreaView } from 'react-native';
+import { FAB, Text, withTheme } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import { TabView, SceneMap } from 'react-native-tab-view';
+
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import ListCategory from './components/ListCategory';
 import ListChannel from './components/ListChannel';
 import Tabs from './components/Tabs';
@@ -10,7 +13,7 @@ import Tabs from './components/Tabs';
 const initialLayout = { width: Dimensions.get('window').width };
 import Animated, { Easing, timing } from 'react-native-reanimated';
 
-const { multiply, Extrapolate, set, interpolate, Value } = Animated;
+const { Value } = Animated;
 
 const tabOffset = new Value(0);
 
@@ -23,11 +26,6 @@ const Browse = ({ theme }) => {
     { key: 'second', title: 'Channel' },
   ]);
 
-  const renderScene = SceneMap({
-    first: ListCategory,
-    second: ListChannel,
-  });
-
   const onTabChange = (i) => {
     setIndex(i);
     timing(tabOffset, {
@@ -39,18 +37,33 @@ const Browse = ({ theme }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={[styles.grid, styles.headText]}>
+      <Text style={[styles.headText]}>
         Br<Text style={styles.primaryText}>o</Text>wse
       </Text>
 
       <TabView
         navigationState={{ index, routes }}
-        renderScene={renderScene}
+        renderScene={SceneMap({
+          first: ListCategory,
+          second: ListChannel,
+        })}
         onIndexChange={onTabChange}
         renderTabBar={(props) => (
           <Tabs {...props} onPress={onTabChange} tabOffset={tabOffset} />
         )}
         initialLayout={initialLayout}
+      />
+
+      <FAB
+        style={styles.fab}
+        icon={({ color, size }) => (
+          <Ionicons name="options-outline" color={color} size={size} />
+        )}
+        label="Filter And Sort"
+        animated={false}
+        uppercase={false}
+        onPress={() => console.log('Pressed')}
+        color={theme.colors.text}
       />
     </SafeAreaView>
   );
@@ -64,9 +77,14 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '100%',
   },
-  grid: {
-    // marginTop: 15,
-    // paddingHorizontal: 15,
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    left: 0,
+    bottom: 0,
+    backgroundColor: theme.colors.surface,
+    justifyContent: 'center',
+    height: 46,
   },
   headText: {
     paddingHorizontal: 15,

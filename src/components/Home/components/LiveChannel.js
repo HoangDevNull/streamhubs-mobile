@@ -3,6 +3,8 @@ import { View, Dimensions } from 'react-native';
 import { Headline, List } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 
+import { useNavigation } from '@react-navigation/native';
+
 import { LeftItem, RigthItem } from './ChannelItem';
 const ENTRIES1 = [
   {
@@ -71,6 +73,7 @@ const { width: screenWidth } = Dimensions.get('window');
 export const sliderWidth = screenWidth;
 
 const LiveChannel = () => {
+  const navigation = useNavigation();
   const styles = useStyles();
 
   return (
@@ -82,7 +85,9 @@ const LiveChannel = () => {
         {ENTRIES1.map((item) => (
           <List.Item
             style={styles.item}
-            onPress={() => console.log(item.id)}
+            onPress={() =>
+              navigation.navigate('DetailStream', { id: 1, streamName: 'test' })
+            }
             key={item.id}
             left={() => <LeftItem uri={item.image} />}
             right={() => <RigthItem data={item} />}

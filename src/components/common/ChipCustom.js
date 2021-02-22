@@ -2,9 +2,9 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Caption, Colors } from 'react-native-paper';
 
-const ChipCustom = ({ color, title }) => {
+const ChipCustom = ({ color, title, style }) => {
   return (
-    <View style={[styles.category, { backgroundColor: Colors[color] }]}>
+    <View style={[styles.category, style, { backgroundColor: Colors[color] }]}>
       <Caption style={styles.categoryText}>#{title}</Caption>
     </View>
   );
@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   categoryText: {
+    alignSelf: 'center',
     color: '#fff',
     textAlign: 'center',
   },
