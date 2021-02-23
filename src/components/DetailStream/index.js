@@ -5,7 +5,7 @@ import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import Head from './components/Head';
 import Chat from './components/Chat';
 import DismissKeyboard from '../common/DismissKeyboard';
-import Player from '../common/Player';
+import Player from './components/Player';
 
 const DetailStream = ({ route, theme }) => {
   const { id: userID, streamName } = route.params;
