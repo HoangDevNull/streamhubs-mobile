@@ -5,6 +5,7 @@ import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import Head from './components/Head';
 import Chat from './components/Chat';
 import DismissKeyboard from '../common/DismissKeyboard';
+import Player from '../common/Player';
 
 const DetailStream = ({ route, theme }) => {
   const { id: userID, streamName } = route.params;
@@ -16,13 +17,7 @@ const DetailStream = ({ route, theme }) => {
       <SafeAreaView style={styles.root}>
         <View style={styles.container}>
           <View style={styles.player}>
-            <Image
-              style={styles.image}
-              source={{
-                uri:
-                  'https://static-cdn.jtvnw.net/previews-ttv/live_user_esl_csgo-440x248.jpg',
-              }}
-            />
+            <Player url="rtmp://192.168.1.5/live/test" />
           </View>
           <View style={styles.main}>
             <Head />
@@ -50,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
   player: {
     width: '100%',
-    height: 178,
+    height: 'auto',
     backgroundColor: theme.colors.backdrop,
   },
   image: {
