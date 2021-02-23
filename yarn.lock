@@ -5861,6 +5861,11 @@ react-native-nodemediaclient@^0.2.14:
   resolved "https://registry.yarnpkg.com/react-native-nodemediaclient/-/react-native-nodemediaclient-0.2.14.tgz#2989a5443572252fc8f5d5c1922d12379e34ddfa"
   integrity sha512-U74/Fpx0jJx14XyJAVKJjIO1vcr+nq38tVRskbP2vcy0dUqHWv+XWzvFfEhU75z4xgZUSochH72xNX6s+lJoUA==
 
+react-native-orientation-locker@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-orientation-locker/-/react-native-orientation-locker-1.2.0.tgz#9fa51b3aade9b847e63066b6fd60509371940a7e"
+  integrity sha512-lnwp9Jbt1m/0Gfw9a5Mrwj/APNSuYkVdJEgBKRyQgOshDrKRv5dxpD0P786AgIEjnEbjyrNOS6GQvBdqPYSxsg==
+
 react-native-paper@^4.7.1:
   version "4.7.1"
   resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-4.7.1.tgz#9f22116d39e4a129be9fd4c8d7342d0f6a20245c"
