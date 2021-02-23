@@ -16,9 +16,8 @@ const DetailStream = ({ route, theme }) => {
     <DismissKeyboard>
       <SafeAreaView style={styles.root}>
         <View style={styles.container}>
-          <View style={styles.player}>
-            <Player url="rtmp://192.168.1.5/live/test" />
-          </View>
+          <Player url="rtmp://192.168.1.5/live/test" />
+
           <View style={styles.main}>
             <Head />
             <Chat />
@@ -42,11 +41,6 @@ const useStyles = makeStyles((theme) => ({
   },
   fontBold: {
     fontFamily: 'Inter-Bold',
-  },
-  player: {
-    width: '100%',
-    height: 'auto',
-    backgroundColor: theme.colors.backdrop,
   },
   image: {
     flex: 1,
