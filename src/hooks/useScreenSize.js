@@ -11,9 +11,9 @@ export function useScreenSize() {
 
   useEffect(() => {
     const handleChange = ({ window: { width, height } }) => {
-      Orientation.getDeviceOrientation((o) => {
-        setSize({ width: width, height: height, orientation: o });
-      });
+      Orientation.getOrientation((o) =>
+        setSize({ width: width, height: height, orientation: o }),
+      );
     };
 
     Dimensions.addEventListener('change', handleChange);

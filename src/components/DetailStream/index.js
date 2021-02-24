@@ -1,8 +1,8 @@
 import React from 'react';
 import { SafeAreaView, View, Image } from 'react-native';
-import { withTheme } from 'react-native-paper';
+import { Banner, withTheme } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
-import Head from './components/Head';
+import Head from './components/Head2';
 import Chat from './components/Chat';
 import DismissKeyboard from '../common/DismissKeyboard';
 import Player from './components/Player';
@@ -16,7 +16,7 @@ const DetailStream = ({ route, theme }) => {
     <DismissKeyboard>
       <SafeAreaView style={styles.root}>
         <View style={styles.container}>
-          <Player url="rtmp://192.168.1.5/live/test" />
+          <Player url="rtmp://192.168.1.6/live/test" />
 
           <View style={styles.main}>
             <Head />

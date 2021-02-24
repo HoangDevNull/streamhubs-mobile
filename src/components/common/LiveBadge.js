@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Text, Badge } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 
-const LeftItem = ({ position = 'top', backdrop }) => {
+const LeftItem = ({ style, position = 'top', backdrop }) => {
   const styles = useStyles();
   return (
     <View
@@ -11,6 +11,7 @@ const LeftItem = ({ position = 'top', backdrop }) => {
         styles.container,
         backdrop && styles.backdrop,
         position.includes('top') ? styles.top : styles.bottom,
+        style,
       ]}>
       <Badge size={8.5} style={styles.dot} />
       <Text style={styles.texBackdrop}> Live </Text>

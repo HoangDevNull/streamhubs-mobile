@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Inter-Bold',
   },
   paragraph: {
-    marginBottom: 10,
+    marginBottom: 18,
     // marginTop: 5.5,
   },
 }));

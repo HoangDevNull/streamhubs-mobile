@@ -19,9 +19,9 @@ const ChatInput = ({ theme }) => {
       <View style={styles.divider} />
 
       <IconButton
-        icon={() => <Ionicons name="happy-outline" color="#f50057" size={35} />}
+        icon={() => <Ionicons name="happy-outline" color="#f50057" size={23} />}
         color={theme.colors.primary}
-        size={35}
+        size={25}
         onPress={() => console.log('Pressed')}
       />
     </LinearGradient>
@@ -45,9 +45,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#E3E3E4',
   },
   input: {
-    width: '80%',
+    width: '85%',
     paddingHorizontal: 15,
     fontFamily: 'Inter-SemiBold',
-    fontSize: 16,
   },
 }));

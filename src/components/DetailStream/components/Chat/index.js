@@ -32,8 +32,8 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
     marginTop: 10,
     backgroundColor: theme.colors.surface,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
   },
   messWrapper: {
     padding: 15,
