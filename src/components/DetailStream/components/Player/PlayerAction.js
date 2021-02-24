@@ -5,12 +5,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Badge, Text, IconButton } from 'react-native-paper';
 
 import Orientation from 'react-native-orientation-locker';
+import ScreenResize from './actions/ScreenResize';
+import ViewerCount from './actions/ViewerCount';
 
-const PORTRAIT = 'PORTRAIT';
-
-const PlayerAction = ({ orientation, open }) => {
+const PlayerAction = ({ isPortraitScreen, open }) => {
   const styles = useStyles();
-  const isPortraitScreen = orientation.includes(PORTRAIT);
 
   const _toggleScreenOrientation = () => {
     if (isPortraitScreen) {
@@ -22,17 +21,6 @@ const PlayerAction = ({ orientation, open }) => {
 
   return (
     <View style={[styles.container, { opacity: open ? 1 : 0 }]}>
-      <View style={styles.bottomLeft}>
-        <View style={styles.gridRow}>
-          <Badge size={10} style={styles.dot} />
-          <Text style={styles.fontBold}> LIVE </Text>
-        </View>
-        <View style={styles.gridRow}>
-          <Ionicons name="people-outline" size={22} color="#fff" />
-          <Text style={styles.fontBold}> 17k </Text>
-        </View>
-      </View>
-
       <IconButton
         icon={() => (
           <Ionicons name="chevron-down-circle-outline" size={28} color="#fff" />
@@ -51,19 +39,17 @@ const PlayerAction = ({ orientation, open }) => {
         style={styles.topRight}
       />
 
-      <IconButton
-        icon={() => (
-          <Ionicons
-            name={isPortraitScreen ? 'expand-outline' : 'crop-outline'}
-            size={22}
-            color="#fff"
+      {/* On fullscreen this will render in StreamInfo component */}
+      {isPortraitScreen && (
+        <ScreenResize>
+          <ScreenResize
+            style={styles.bottomRight}
+            isPortraitScreen={isPortraitScreen}
           />
-        )}
-        size={33}
-        color="#fff"
-        onPress={_toggleScreenOrientation}
-        style={styles.bottomRight}
-      />
+
+          <ViewerCount style={styles.bottomLeft} viewer="17 k" />
+        </ScreenResize>
+      )}
 
       {/* <View style={styles.center}>
         <IconButton
@@ -110,15 +96,5 @@ const useStyles = makeStyles((theme) => ({
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  gridRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 15,
-  },
-  dot: {
-    alignSelf: 'center',
-    marginRight: 3,
   },
 }));

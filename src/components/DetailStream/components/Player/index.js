@@ -15,6 +15,7 @@ import { NodePlayerView } from 'react-native-nodemediaclient';
 
 import { useScreenSize } from '../../../../hooks/useScreenSize';
 import PlayerAction from './PlayerAction';
+import StreamInfo from './StreamInfo';
 
 const PORTRAIT = 'PORTRAIT';
 
@@ -60,32 +61,36 @@ const Player = ({ url }) => {
   const landscapeSize = height;
   const playerSize = isPortraitScreen ? portraitSize : landscapeSize;
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        setFocus(!focus);
-        resestFocus();
-      }}>
-      <View style={styles.container}>
-        <StatusBar hidden />
-        <NodePlayerView
-          style={[
-            styles.player,
-            {
-              height: playerSize,
-            },
-          ]}
-          ref={(ref) => (player = ref)}
-          inputUrl={url}
-          scaleMode={'ScaleAspectFill'}
-          bufferTime={300}
-          maxBufferTime={1000}
-          autoplay={true}
-          onStatus={_onStatus}
-        />
+    <>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          setFocus(!focus);
+          resestFocus();
+        }}>
+        <View style={styles.container}>
+          <StatusBar hidden />
+          <NodePlayerView
+            style={[
+              styles.player,
+              {
+                height: playerSize,
+              },
+            ]}
+            ref={(ref) => (player = ref)}
+            inputUrl={url}
+            scaleMode={'ScaleAspectFill'}
+            bufferTime={300}
+            maxBufferTime={1000}
+            autoplay={true}
+            onStatus={_onStatus}
+          />
 
-        <PlayerAction open={focus} orientation={orientation} />
-      </View>
-    </TouchableWithoutFeedback>
+          <PlayerAction open={focus} isPortraitScreen={isPortraitScreen} />
+        </View>
+      </TouchableWithoutFeedback>
+
+      <StreamInfo open={focus} isPortraitScreen={isPortraitScreen} />
+    </>
   );
 };
 

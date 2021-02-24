@@ -15,9 +15,13 @@ const ChatInput = ({ theme }) => {
       colors={[theme.colors.contrast, '#F7F7F8']}
       style={styles.container}>
       <TextInput placeholder="Send a message" style={styles.input} />
-
+      <IconButton
+        icon={() => <Ionicons name="send-outline" color="#f50057" size={23} />}
+        color={theme.colors.primary}
+        size={25}
+        onPress={() => console.log('Pressed')}
+      />
       <View style={styles.divider} />
-
       <IconButton
         icon={() => <Ionicons name="happy-outline" color="#f50057" size={23} />}
         color={theme.colors.primary}
@@ -45,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#E3E3E4',
   },
   input: {
-    width: '85%',
+    width: '70%',
     paddingHorizontal: 15,
     fontFamily: 'Inter-SemiBold',
   },

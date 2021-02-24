@@ -1,8 +1,7 @@
 import React from 'react';
 import { SafeAreaView, View, Image } from 'react-native';
-import { Banner, withTheme } from 'react-native-paper';
+import { Banner, Button, withTheme } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
-import Head from './components/Head2';
 import Chat from './components/Chat';
 import DismissKeyboard from '../common/DismissKeyboard';
 import Player from './components/Player';
@@ -10,6 +9,7 @@ import Player from './components/Player';
 const DetailStream = ({ route, theme }) => {
   const { id: userID, streamName } = route.params;
 
+  const [open, setOpen] = React.useState(true);
   const styles = useStyles();
 
   return (
@@ -19,7 +19,6 @@ const DetailStream = ({ route, theme }) => {
           <Player url="rtmp://192.168.1.6/live/test" />
 
           <View style={styles.main}>
-            <Head />
             <Chat />
           </View>
         </View>
