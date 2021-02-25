@@ -6,13 +6,17 @@ export function useScreenSize() {
   const [size, setSize] = useState({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
-    orientation: Orientation.getInitialOrientation(),
+    isPortrait: Orientation.getInitialOrientation().includes('PORTRAIT'),
   });
 
   useEffect(() => {
     const handleChange = ({ window: { width, height } }) => {
       Orientation.getOrientation((o) =>
-        setSize({ width: width, height: height, orientation: o }),
+        setSize({
+          width: width,
+          height: height,
+          isPortrait: o.includes('PORTRAIT'),
+        }),
       );
     };
 

@@ -12,12 +12,19 @@ import { debounce } from 'lodash';
 import Orientation from 'react-native-orientation-locker';
 import { NodePlayerView } from 'react-native-nodemediaclient';
 
-import PlayerAction from './PlayerAction';
-import StreamInfo from './StreamInfo';
+import withResize from '../../../hoc/withScreenResize';
 
-const PORTRAIT = 'PORTRAIT';
+import PlayerAction from '../components/PlayerAction';
+import CollapseInfo from '../components/CollapseInfo';
 
-class Player extends React.Component {
+export const calcScreen = ({ width, height, isPortrait }) => {
+  const portraitSize = width / 1.8;
+  const landscapeSize = height;
+  const playerHeight = isPortrait ? portraitSize : landscapeSize;
+  return playerHeight;
+};
+
+class Main extends React.Component {
   _isMounted = false;
   constructor(props) {
     super(props);
@@ -32,30 +39,19 @@ class Player extends React.Component {
 
   componentDidMount() {
     this._isMounted = true;
-    BackHandler.addEventListener('hardwareBackPress', this.backAction);
+    BackHandler.addEventListener('hardwareBackPress', this.deviceBackEvent);
     this.player.start();
     this.resestFocus();
   }
 
-  backAction = () => {
-    const { isPortraitScreen } = this.props;
-    if (!isPortraitScreen) {
+  deviceBackEvent = () => {
+    const { screenSize: isPortrait } = this.props;
+    if (!isPortrait) {
       Orientation.lockToPortrait();
       return true;
     }
     return false;
   };
-
-  // onPressPlayButton = () => {
-  //   const { playing } = this.state;
-  //   if (playing) {
-  //     this.player.pause();
-  //   } else {
-  //     this.player.start();
-  //   }
-
-  //   this.setState({ playing: !playing });
-  // };
 
   resestFocus = debounce(() => {
     const { focus } = this.state;
@@ -64,7 +60,7 @@ class Player extends React.Component {
 
   componentWillUnmount() {
     this._isMounted = false;
-    BackHandler.removeEventListener('hardwareBackPress', this.backAction);
+    BackHandler.removeEventListener('hardwareBackPress', this.deviceBackEvent);
     Orientation.removeAllListeners();
     console.log('stop player');
     this.player.stop();
@@ -73,7 +69,9 @@ class Player extends React.Component {
   render() {
     const { focus } = this.state;
     // Props from parent
-    const { playerHeight, isPortraitScreen, url } = this.props;
+    const { screenSize, url } = this.props;
+    const { isPortrait } = screenSize;
+    const playerHeight = calcScreen(screenSize);
 
     return (
       <>
@@ -83,7 +81,7 @@ class Player extends React.Component {
             this.resestFocus();
           }}>
           <View style={styles.container}>
-            <StatusBar hidden={!isPortraitScreen} />
+            <StatusBar hidden={!isPortrait} />
             <NodePlayerView
               style={[
                 styles.player,
@@ -93,26 +91,32 @@ class Player extends React.Component {
               ]}
               ref={(ref) => (this.player = ref)}
               inputUrl={url}
-              scaleMode={
-                isPortraitScreen ? 'ScaleAspectFill' : 'ScaleAspectFit'
-              }
+              scaleMode={isPortrait ? 'ScaleAspectFill' : 'ScaleAspectFit'}
               bufferTime={300}
               maxBufferTime={1000}
               autoplay={false}
               // onStatus={this_onStatus}
             />
 
-            <PlayerAction open={focus} isPortraitScreen={isPortraitScreen} />
+            <PlayerAction open={focus} isPortrait={isPortrait} />
+
+            <View
+              style={{
+                position: 'absolute',
+                top: focus ? playerHeight + 125 : playerHeight,
+              }}>
+              {/* Chat main */}
+            </View>
           </View>
         </TouchableWithoutFeedback>
 
-        <StreamInfo open={focus} isPortraitScreen={isPortraitScreen} />
+        <CollapseInfo open={focus} isPortrait={isPortrait} />
       </>
     );
   }
 }
 
-export default React.memo(Player);
+export default withResize(React.memo(Main));
 
 const styles = StyleSheet.create({
   container: {

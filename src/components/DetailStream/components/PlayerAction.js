@@ -5,14 +5,14 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { IconButton } from 'react-native-paper';
 
 import Orientation from 'react-native-orientation-locker';
-import ScreenResize from './actions/ScreenResize';
-import ViewerCount from './actions/ViewerCount';
 
-const PlayerAction = ({ isPortraitScreen, open }) => {
+import ViewerCount from './shared/ViewerCount';
+
+const PlayerAction = ({ isPortrait = true, open }) => {
   const styles = useStyles();
 
   const _toggleScreenOrientation = () => {
-    if (isPortraitScreen) {
+    if (isPortrait) {
       Orientation.lockToLandscape();
     } else {
       Orientation.lockToPortrait();
@@ -39,26 +39,24 @@ const PlayerAction = ({ isPortraitScreen, open }) => {
         style={styles.topRight}
       />
 
-      {/* On fullscreen this will render in StreamInfo component */}
-      {isPortraitScreen && (
-        <>
-          <ScreenResize
-            style={styles.bottomRight}
-            isPortraitScreen={isPortraitScreen}
+      <IconButton
+        icon={() => (
+          <Ionicons
+            name={isPortrait ? 'expand-outline' : 'crop-outline'}
+            size={22}
+            color="#fff"
           />
+        )}
+        size={33}
+        color="#fff"
+        onPress={_toggleScreenOrientation}
+        style={isPortrait ? styles.bottomRight : styles.bottomRightLandscape}
+      />
 
-          <ViewerCount style={styles.bottomLeft} viewer="17 k" />
-        </>
-      )}
-
-      {/* <View style={styles.center}>
-        <IconButton
-          icon={() => <Ionicons name="play-outline" size={30} color="#fff" />}
-          size={33}
-          color="#fff"
-          onPress={onPressPlayButton}
-        />
-      </View> */}
+      <ViewerCount
+        style={isPortrait ? styles.bottomLeft : styles.bottomLeftLandscape}
+        viewer="17 k"
+      />
     </View>
   );
 };
@@ -88,11 +86,22 @@ const useStyles = makeStyles((theme) => ({
     top: 0,
     right: 0,
   },
+  bottomRightLandscape: {
+    position: 'absolute',
+    bottom: 105,
+    right: 10,
+  },
   bottomLeft: {
     flexDirection: 'row',
     position: 'absolute',
     bottom: 15,
     left: 0,
+  },
+  bottomLeftLandscape: {
+    position: 'absolute',
+    bottom: 125,
+    left: 0,
+    flexDirection: 'row',
   },
   center: {
     ...StyleSheet.absoluteFillObject,

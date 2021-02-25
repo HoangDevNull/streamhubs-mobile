@@ -16,12 +16,16 @@ export default function withResize(WrappedComponent) {
       this.state = {
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height,
-        orientation: Orientation.getInitialOrientation(),
+        isPortrait: Orientation.getInitialOrientation().includes('PORTRAIT'),
       };
     }
     onresize = ({ window: { width, height } }) => {
       Orientation.getOrientation((o) =>
-        this.setState({ width: width, height: height, orientation: o }),
+        this.setState({
+          width: width,
+          height: height,
+          isPortrait: o.includes('PORTRAIT'),
+        }),
       );
     };
 

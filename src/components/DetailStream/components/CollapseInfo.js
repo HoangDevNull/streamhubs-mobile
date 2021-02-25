@@ -1,16 +1,13 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Subheading, withTheme, Text, Button, Badge } from 'react-native-paper';
+import { Subheading, Text, Button } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import { FlatList } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Animated, { Easing } from 'react-native-reanimated';
 
-import ChipCustom from '../../../common/ChipCustom';
-import UserAvatar from '../../../common/UserAvatar';
-import useOnLayout from '../../../../hooks/useOnLayout';
-import ScreenResize from './actions/ScreenResize';
-import ViewerCount from './actions/ViewerCount';
+import ChipCustom from '../../common/ChipCustom';
+import UserAvatar from '../../common/UserAvatar';
 
 const tags = [
   { id: 1, color: 'pink400', name: 'Chating' },
@@ -22,32 +19,30 @@ const { Value } = Animated;
 
 const position = new Value(1);
 
-const StreamInfo = ({ open = true, isPortraitScreen, theme }) => {
+const CollapseInfo = ({ open = true, isPortrait }) => {
   const styles = useStyles();
-
-  const { scale } = theme.animation;
 
   React.useEffect(() => {
     if (open) {
       // show
       Animated.timing(position, {
-        duration: 250,
+        duration: 400,
         toValue: 1,
-        easing: Easing.linear,
+        easing: Easing.inOut(Easing.ease),
       }).start();
     } else {
       // hide
       Animated.timing(position, {
-        duration: 200,
+        duration: 400,
         toValue: 0,
-        easing: Easing.linear,
+        easing: Easing.inOut(Easing.ease),
       }).start();
     }
   }, [open]);
 
   const height = Animated.interpolate(position, {
     inputRange: [0, 1],
-    outputRange: [0, 130],
+    outputRange: [0, 125],
     extrapolate: Animated.Extrapolate.CLAMP,
   });
   const opacity = Animated.interpolate(position, {
@@ -58,20 +53,10 @@ const StreamInfo = ({ open = true, isPortraitScreen, theme }) => {
 
   return (
     <>
-      {!isPortraitScreen && open && (
-        <>
-          <ScreenResize
-            style={styles.resizeButton}
-            isPortraitScreen={isPortraitScreen}
-          />
-
-          <ViewerCount style={styles.viewerCount} viewer="17 k" />
-        </>
-      )}
       <Animated.View
         style={[
           styles.container,
-          !isPortraitScreen && styles.rootLandscape,
+          !isPortrait && styles.rootLandscape,
           { height: height, opacity },
         ]}>
         <View style={styles.wrapper}>
@@ -111,7 +96,7 @@ const StreamInfo = ({ open = true, isPortraitScreen, theme }) => {
   );
 };
 
-export default withTheme(React.memo(StreamInfo));
+export default React.memo(CollapseInfo);
 
 const useStyles = makeStyles((theme) => ({
   fontBold: {
@@ -124,9 +109,8 @@ const useStyles = makeStyles((theme) => ({
   container: {
     paddingHorizontal: 15,
     width: '100%',
-    backgroundColor: theme.colors.background,
+    // backgroundColor: theme.colors.surface,
   },
-
   wrapper: {
     flexDirection: 'row',
     marginTop: 15,
@@ -147,16 +131,5 @@ const useStyles = makeStyles((theme) => ({
   wrapTag: {
     marginTop: 15,
     paddingLeft: 42,
-  },
-  resizeButton: {
-    position: 'absolute',
-    bottom: 125,
-    right: 10,
-  },
-  viewerCount: {
-    position: 'absolute',
-    bottom: 135,
-    left: 10,
-    flexDirection: 'row',
   },
 }));

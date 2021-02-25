@@ -37,7 +37,6 @@ export default withTheme(ChatInput);
 const useStyles = makeStyles((theme) => ({
   container: {
     width: '100%',
-    backgroundColor: theme.colors.background,
     borderRadius: 15,
     marginHorizontal: 10,
     flexDirection: 'row',
