@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, BackHandler, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { Badge, Text, IconButton } from 'react-native-paper';
+import { IconButton } from 'react-native-paper';
 
 import Orientation from 'react-native-orientation-locker';
 import ScreenResize from './actions/ScreenResize';
@@ -20,7 +20,7 @@ const PlayerAction = ({ isPortraitScreen, open }) => {
   };
 
   return (
-    <View style={[styles.container, { opacity: open ? 1 : 0 }]}>
+    <View style={[styles.container, open ? styles.show : styles.hide]}>
       <IconButton
         icon={() => (
           <Ionicons name="chevron-down-circle-outline" size={28} color="#fff" />
@@ -41,14 +41,14 @@ const PlayerAction = ({ isPortraitScreen, open }) => {
 
       {/* On fullscreen this will render in StreamInfo component */}
       {isPortraitScreen && (
-        <ScreenResize>
+        <>
           <ScreenResize
             style={styles.bottomRight}
             isPortraitScreen={isPortraitScreen}
           />
 
           <ViewerCount style={styles.bottomLeft} viewer="17 k" />
-        </ScreenResize>
+        </>
       )}
 
       {/* <View style={styles.center}>
@@ -56,7 +56,7 @@ const PlayerAction = ({ isPortraitScreen, open }) => {
           icon={() => <Ionicons name="play-outline" size={30} color="#fff" />}
           size={33}
           color="#fff"
-          onPress={_toggleScreenOrientation}
+          onPress={onPressPlayButton}
         />
       </View> */}
     </View>
@@ -96,5 +96,11 @@ const useStyles = makeStyles((theme) => ({
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  show: {
+    opacity: 1,
+  },
+  hide: {
+    opacity: 0,
   },
 }));

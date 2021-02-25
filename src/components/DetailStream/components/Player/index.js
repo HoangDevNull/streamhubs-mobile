@@ -4,7 +4,6 @@ import {
   View,
   BackHandler,
   TouchableWithoutFeedback,
-  StyleSheet,
 } from 'react-native';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 
@@ -21,8 +20,9 @@ const PORTRAIT = 'PORTRAIT';
 
 const Player = ({ url }) => {
   const styles = useStyles();
-  let player = React.useRef(null);
+  let player = React.useRef();
   const [focus, setFocus] = React.useState(true);
+  const [playing, setPlaying] = React.useState(false);
   const { width, height, orientation } = useScreenSize();
   const isPortraitScreen = orientation.includes(PORTRAIT);
 
@@ -34,7 +34,11 @@ const Player = ({ url }) => {
   // Unmounted componnent event
   React.useEffect(() => {
     resestFocus();
-    return () => Orientation.removeAllListeners();
+    return () => {
+      console.log('un mount');
+      Orientation.removeAllListeners();
+      console.log({ player });
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -52,6 +56,17 @@ const Player = ({ url }) => {
       BackHandler.removeEventListener('hardwareBackPress', backAction);
     };
   }, [isPortraitScreen]);
+
+  const onPressPlayButton = () => {
+    console.log({ player });
+    if (playing) {
+      player.pause();
+    } else {
+      player.start();
+    }
+
+    setPlaying(!playing);
+  };
 
   const _onStatus = (code, msg) => {
     // console.log('onStatus=' + code + ' msg=' + msg);
@@ -78,14 +93,18 @@ const Player = ({ url }) => {
             ]}
             ref={(ref) => (player = ref)}
             inputUrl={url}
-            scaleMode={'ScaleAspectFill'}
+            scaleMode={isPortraitScreen ? 'ScaleAspectFill' : 'ScaleAspectFit'}
             bufferTime={300}
             maxBufferTime={1000}
-            autoplay={true}
+            autoplay={false}
             onStatus={_onStatus}
           />
 
-          <PlayerAction open={focus} isPortraitScreen={isPortraitScreen} />
+          <PlayerAction
+            onPressPlayButton={onPressPlayButton}
+            open={focus}
+            isPortraitScreen={isPortraitScreen}
+          />
         </View>
       </TouchableWithoutFeedback>
 
