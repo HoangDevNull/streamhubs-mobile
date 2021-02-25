@@ -1,28 +1,53 @@
 import React from 'react';
-import { SafeAreaView, View, Image } from 'react-native';
-import { Banner, Button, withTheme } from 'react-native-paper';
+import { Dimensions, KeyboardAvoidingView, Platform, View } from 'react-native';
+import { withTheme } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
-import Chat from './components/Chat';
 import DismissKeyboard from '../common/DismissKeyboard';
 import Player from './components/Player';
+import ChatInput from './components/Chat/ChatInput';
+import { useScreenSize } from '../../hooks/useScreenSize';
+
+export const calcScreen = ({ width, height, orientation }) => {
+  const portraitSize = width / 1.8;
+  const landscapeSize = height;
+  const isPortraitScreen = orientation.includes('PORTRAIT');
+  const playerHeight = isPortraitScreen ? portraitSize : landscapeSize;
+  return { playerHeight, isPortraitScreen };
+};
 
 const DetailStream = ({ route, theme }) => {
-  const { id: userID, streamName } = route.params;
-
-  const [open, setOpen] = React.useState(true);
   const styles = useStyles();
 
-  return (
-    <DismissKeyboard>
-      <SafeAreaView style={styles.root}>
-        <View style={styles.container}>
-          <Player url="rtmp://192.168.1.6/live/test" />
+  // width, height, orientation
+  const screen = useScreenSize();
 
-          <View style={styles.main}>
-            <Chat />
-          </View>
+  const { playerHeight, isPortraitScreen } = calcScreen(screen);
+  console.log({ height: Dimensions.get('window').height });
+  return (
+    <DismissKeyboard style={styles.container}>
+      {/* Sticky header */}
+      <View style={styles.head}>
+        <Player
+          playerHeight={playerHeight}
+          isPortraitScreen={isPortraitScreen}
+          url="rtmp://192.168.1.6/live/test"
+        />
+      </View>
+
+      {/* Avoid keyboard push up */}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : null}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}>
+        <View
+          style={[
+            styles.foot,
+            {
+              height: 'auto',
+            },
+          ]}>
+          <ChatInput />
         </View>
-      </SafeAreaView>
+      </KeyboardAvoidingView>
     </DismissKeyboard>
   );
 };
@@ -30,23 +55,21 @@ const DetailStream = ({ route, theme }) => {
 export default withTheme(DetailStream);
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    // flex: 1,
-    width: '100%',
-    height: '100%',
-  },
   container: {
     flex: 1,
   },
-  fontBold: {
-    fontFamily: 'Inter-Bold',
-  },
-  image: {
+  head: {
+    backgroundColor: 'green',
     flex: 1,
-    height: 198,
-    resizeMode: 'cover',
+    zIndex: 5,
   },
-  main: {
-    flex: 1,
+  foot: {
+    zIndex: 1,
+    marginTop: 'auto',
+    backgroundColor: theme.colors.background,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    paddingBottom: 10,
+    paddingHorizontal: 15,
   },
 }));

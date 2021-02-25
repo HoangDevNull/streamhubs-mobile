@@ -67,7 +67,9 @@ export default React.memo(PlayerAction);
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
+    marginBottom: -1,
+    marginTop: -1,
     backgroundColor: theme.colors.backdrop,
     zIndex: 2,
   },
@@ -78,12 +80,12 @@ const useStyles = makeStyles((theme) => ({
   },
   topLeft: {
     position: 'absolute',
-    top: 15,
+    top: 0,
     left: 0,
   },
   topRight: {
     position: 'absolute',
-    top: 15,
+    top: 0,
     right: 0,
   },
   bottomLeft: {

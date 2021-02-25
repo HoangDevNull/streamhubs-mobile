@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput } from 'react-native';
+import { View, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import { IconButton, withTheme } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -36,10 +36,10 @@ export default withTheme(ChatInput);
 
 const useStyles = makeStyles((theme) => ({
   container: {
+    width: '100%',
     backgroundColor: theme.colors.background,
     borderRadius: 15,
-    marginHorizontal: 15,
-    marginBottom: 15,
+    marginHorizontal: 10,
     flexDirection: 'row',
   },
   divider: {

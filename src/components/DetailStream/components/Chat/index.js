@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.colors.surface,
   },
   messWrapper: {
-    padding: 15,
+    // padding: 15,
     flex: 1,
   },
 }));

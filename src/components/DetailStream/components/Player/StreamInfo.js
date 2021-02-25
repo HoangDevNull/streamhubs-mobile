@@ -47,7 +47,12 @@ const StreamInfo = ({ open = true, isPortraitScreen, theme }) => {
 
   const height = Animated.interpolate(position, {
     inputRange: [0, 1],
-    outputRange: [0, 110],
+    outputRange: [0, 130],
+    extrapolate: Animated.Extrapolate.CLAMP,
+  });
+  const opacity = Animated.interpolate(position, {
+    inputRange: [0, 1],
+    outputRange: [0, 1],
     extrapolate: Animated.Extrapolate.CLAMP,
   });
 
@@ -66,8 +71,8 @@ const StreamInfo = ({ open = true, isPortraitScreen, theme }) => {
       <Animated.View
         style={[
           styles.container,
-          !isPortraitScreen && styles.rootPortrait,
-          { height: height },
+          !isPortraitScreen && styles.rootLandscape,
+          { height: height, opacity },
         ]}>
         <View style={styles.wrapper}>
           <UserAvatar size={32} />
@@ -112,19 +117,19 @@ const useStyles = makeStyles((theme) => ({
   fontBold: {
     fontFamily: 'Inter-Bold',
   },
-  rootPortrait: {
+  rootLandscape: {
     position: 'absolute',
     bottom: 0,
-    backgroundColor: theme.colors.background,
   },
   container: {
     paddingHorizontal: 15,
     width: '100%',
+    backgroundColor: theme.colors.background,
   },
 
   wrapper: {
     flexDirection: 'row',
-    marginTop: 10,
+    marginTop: 15,
   },
   titleWrapper: {
     flex: 1,
@@ -145,12 +150,12 @@ const useStyles = makeStyles((theme) => ({
   },
   resizeButton: {
     position: 'absolute',
-    bottom: 100,
+    bottom: 125,
     right: 10,
   },
   viewerCount: {
     position: 'absolute',
-    bottom: 115,
+    bottom: 135,
     left: 10,
     flexDirection: 'row',
   },

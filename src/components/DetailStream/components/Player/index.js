@@ -14,7 +14,6 @@ import { NodePlayerView } from 'react-native-nodemediaclient';
 
 import PlayerAction from './PlayerAction';
 import StreamInfo from './StreamInfo';
-import withScreenResize from '../../../../hoc/withScreenResize';
 
 const PORTRAIT = 'PORTRAIT';
 
@@ -24,7 +23,7 @@ class Player extends React.Component {
     super(props);
 
     this.state = {
-      focus: false,
+      focus: true,
       playing: false,
     };
 
@@ -35,11 +34,11 @@ class Player extends React.Component {
     this._isMounted = true;
     BackHandler.addEventListener('hardwareBackPress', this.backAction);
     this.player.start();
+    this.resestFocus();
   }
 
   backAction = () => {
-    const { screenSize } = this.props;
-    const isPortraitScreen = screenSize.orientation.includes(PORTRAIT);
+    const { isPortraitScreen } = this.props;
     if (!isPortraitScreen) {
       Orientation.lockToPortrait();
       return true;
@@ -73,15 +72,8 @@ class Player extends React.Component {
 
   render() {
     const { focus } = this.state;
-    const {
-      screenSize: { orientation, width, height },
-      url,
-    } = this.props;
-    const isPortraitScreen = orientation.includes(PORTRAIT);
-
-    const portraitSize = width / 1.8;
-    const landscapeSize = height;
-    const playerSize = isPortraitScreen ? portraitSize : landscapeSize;
+    // Props from parent
+    const { playerHeight, isPortraitScreen, url } = this.props;
 
     return (
       <>
@@ -91,12 +83,12 @@ class Player extends React.Component {
             this.resestFocus();
           }}>
           <View style={styles.container}>
-            <StatusBar hidden />
+            <StatusBar hidden={!isPortraitScreen} />
             <NodePlayerView
               style={[
                 styles.player,
                 {
-                  height: playerSize,
+                  height: playerHeight,
                 },
               ]}
               ref={(ref) => (this.player = ref)}
@@ -120,7 +112,7 @@ class Player extends React.Component {
   }
 }
 
-export default withScreenResize(Player);
+export default React.memo(Player);
 
 const styles = StyleSheet.create({
   container: {
