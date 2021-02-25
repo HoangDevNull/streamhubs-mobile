@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, TextInput } from 'react-native';
 import { IconButton, withTheme } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -10,20 +10,24 @@ const ChatInput = ({ theme }) => {
 
   return (
     <LinearGradient
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 0 }}
-      colors={[theme.colors.contrast, '#F7F7F8']}
+      start={{ x: 10, y: 0 }}
+      end={{ x: 0, y: 0 }}
+      colors={[theme.colors.disabled, theme.colors.disabled]}
       style={styles.container}>
-      <TextInput placeholder="Send a message" style={styles.input} />
+      <TextInput
+        placeholderTextColor={theme.colors.placeholder}
+        placeholder="Send a message"
+        style={styles.input}
+      />
       <IconButton
-        icon={() => <Ionicons name="send-outline" color="#f50057" size={23} />}
+        icon={() => <Ionicons name="send-outline" color="#fff" size={22} />}
         color={theme.colors.primary}
         size={25}
         onPress={() => console.log('Pressed')}
       />
       <View style={styles.divider} />
       <IconButton
-        icon={() => <Ionicons name="happy-outline" color="#f50057" size={23} />}
+        icon={() => <Ionicons name="happy-outline" color="#fff" size={22} />}
         color={theme.colors.primary}
         size={25}
         onPress={() => console.log('Pressed')}
@@ -37,8 +41,7 @@ export default withTheme(ChatInput);
 const useStyles = makeStyles((theme) => ({
   container: {
     width: '100%',
-    borderRadius: 15,
-    marginHorizontal: 10,
+    borderRadius: 10,
     flexDirection: 'row',
   },
   divider: {
@@ -51,5 +54,6 @@ const useStyles = makeStyles((theme) => ({
     width: '70%',
     paddingHorizontal: 15,
     fontFamily: 'Inter-SemiBold',
+    color: theme.colors.text,
   },
 }));

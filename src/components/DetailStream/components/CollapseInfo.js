@@ -107,9 +107,9 @@ const useStyles = makeStyles((theme) => ({
     bottom: 0,
   },
   container: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 8,
     width: '100%',
-    // backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.background,
   },
   wrapper: {
     flexDirection: 'row',

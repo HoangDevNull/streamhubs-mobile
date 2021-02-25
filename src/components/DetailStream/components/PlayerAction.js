@@ -71,11 +71,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.colors.backdrop,
     zIndex: 2,
   },
-  bottomRight: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-  },
   topLeft: {
     position: 'absolute',
     top: 0,
@@ -84,22 +79,27 @@ const useStyles = makeStyles((theme) => ({
   topRight: {
     position: 'absolute',
     top: 0,
-    right: 0,
+    right: -5,
+  },
+  bottomRight: {
+    position: 'absolute',
+    bottom: 0,
+    right: -5,
   },
   bottomRightLandscape: {
     position: 'absolute',
-    bottom: 105,
+    bottom: 120,
     right: 10,
   },
   bottomLeft: {
     flexDirection: 'row',
     position: 'absolute',
     bottom: 15,
-    left: 0,
+    left: -5,
   },
   bottomLeftLandscape: {
     position: 'absolute',
-    bottom: 125,
+    bottom: 135,
     left: 0,
     flexDirection: 'row',
   },

@@ -24,6 +24,10 @@ const ViewerCount = ({ style, viewer }) => {
 export default React.memo(ViewerCount);
 
 const useStyles = makeStyles((theme) => ({
+  fontBold: {
+    fontFamily: 'Inter-Bold',
+    color: '#fff',
+  },
   gridRow: {
     flexDirection: 'row',
     justifyContent: 'center',

@@ -44,11 +44,9 @@ const useStyles = makeStyles((theme) => ({
   },
   foot: {
     marginTop: 'auto',
+    alignSelf: 'center',
     backgroundColor: theme.colors.background,
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
     paddingBottom: 10,
-    paddingHorizontal: 15,
   },
   hide: {},
 }));

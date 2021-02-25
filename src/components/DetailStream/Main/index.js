@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {
   StatusBar,
@@ -16,8 +17,9 @@ import withResize from '../../../hoc/withScreenResize';
 
 import PlayerAction from '../components/PlayerAction';
 import CollapseInfo from '../components/CollapseInfo';
+import ChatList from '../components/ChatList';
 
-export const calcScreen = ({ width, height, isPortrait }) => {
+export const calcPlayerHeight = ({ width, height, isPortrait }) => {
   const portraitSize = width / 1.8;
   const landscapeSize = height;
   const playerHeight = isPortrait ? portraitSize : landscapeSize;
@@ -70,8 +72,14 @@ class Main extends React.Component {
     const { focus } = this.state;
     // Props from parent
     const { screenSize, url } = this.props;
-    const { isPortrait } = screenSize;
-    const playerHeight = calcScreen(screenSize);
+    const { isPortrait, height } = screenSize;
+    const playerHeight = calcPlayerHeight(screenSize);
+
+    const headHeight = playerHeight + 125;
+    const chatListOffset = focus ? headHeight : playerHeight;
+    let chatListHeight = focus
+      ? height - (headHeight + 100)
+      : height - (playerHeight + 100);
 
     return (
       <>
@@ -101,11 +109,15 @@ class Main extends React.Component {
             <PlayerAction open={focus} isPortrait={isPortrait} />
 
             <View
-              style={{
-                position: 'absolute',
-                top: focus ? playerHeight + 125 : playerHeight,
-              }}>
+              style={[
+                styles.chatList,
+                {
+                  top: chatListOffset,
+                  height: isPortrait ? chatListHeight : 100,
+                },
+              ]}>
               {/* Chat main */}
+              <ChatList />
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -128,5 +140,10 @@ const styles = StyleSheet.create({
   },
   fontBold: {
     fontFamily: 'Inter-Bold',
+  },
+  chatList: {
+    width: '100%',
+    position: 'absolute',
+    paddingHorizontal: 10,
   },
 });
