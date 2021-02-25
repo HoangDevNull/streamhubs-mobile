@@ -4,118 +4,125 @@ import {
   View,
   BackHandler,
   TouchableWithoutFeedback,
+  StyleSheet,
 } from 'react-native';
-import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 
 import { debounce } from 'lodash';
 
 import Orientation from 'react-native-orientation-locker';
 import { NodePlayerView } from 'react-native-nodemediaclient';
 
-import { useScreenSize } from '../../../../hooks/useScreenSize';
 import PlayerAction from './PlayerAction';
 import StreamInfo from './StreamInfo';
+import withScreenResize from '../../../../hoc/withScreenResize';
 
 const PORTRAIT = 'PORTRAIT';
 
-const Player = ({ url }) => {
-  const styles = useStyles();
-  let player = React.useRef();
-  const [focus, setFocus] = React.useState(true);
-  const [playing, setPlaying] = React.useState(false);
-  const { width, height, orientation } = useScreenSize();
-  const isPortraitScreen = orientation.includes(PORTRAIT);
+class Player extends React.Component {
+  _isMounted = false;
+  constructor(props) {
+    super(props);
 
-  const resestFocus = React.useCallback(
-    debounce(() => focus && setFocus(false), 5000),
-    [],
-  );
-
-  // Unmounted componnent event
-  React.useEffect(() => {
-    resestFocus();
-    return () => {
-      console.log('un mount');
-      Orientation.removeAllListeners();
-      console.log({ player });
+    this.state = {
+      focus: false,
+      playing: false,
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
-  // Listener to back button when on Fullscreen mode
-  React.useEffect(() => {
-    const backAction = () => {
-      if (!isPortraitScreen) {
-        Orientation.lockToPortrait();
-        return true;
-      }
-      return false;
-    };
-    BackHandler.addEventListener('hardwareBackPress', backAction);
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', backAction);
-    };
-  }, [isPortraitScreen]);
+    this.player = React.createRef(null);
+  }
 
-  const onPressPlayButton = () => {
-    console.log({ player });
-    if (playing) {
-      player.pause();
-    } else {
-      player.start();
+  componentDidMount() {
+    this._isMounted = true;
+    BackHandler.addEventListener('hardwareBackPress', this.backAction);
+    this.player.start();
+  }
+
+  backAction = () => {
+    const { screenSize } = this.props;
+    const isPortraitScreen = screenSize.orientation.includes(PORTRAIT);
+    if (!isPortraitScreen) {
+      Orientation.lockToPortrait();
+      return true;
     }
-
-    setPlaying(!playing);
+    return false;
   };
 
-  const _onStatus = (code, msg) => {
-    // console.log('onStatus=' + code + ' msg=' + msg);
-  };
+  // onPressPlayButton = () => {
+  //   const { playing } = this.state;
+  //   if (playing) {
+  //     this.player.pause();
+  //   } else {
+  //     this.player.start();
+  //   }
 
-  const portraitSize = width / 1.8;
-  const landscapeSize = height;
-  const playerSize = isPortraitScreen ? portraitSize : landscapeSize;
-  return (
-    <>
-      <TouchableWithoutFeedback
-        onPress={() => {
-          setFocus(!focus);
-          resestFocus();
-        }}>
-        <View style={styles.container}>
-          <StatusBar hidden />
-          <NodePlayerView
-            style={[
-              styles.player,
-              {
-                height: playerSize,
-              },
-            ]}
-            ref={(ref) => (player = ref)}
-            inputUrl={url}
-            scaleMode={isPortraitScreen ? 'ScaleAspectFill' : 'ScaleAspectFit'}
-            bufferTime={300}
-            maxBufferTime={1000}
-            autoplay={false}
-            onStatus={_onStatus}
-          />
+  //   this.setState({ playing: !playing });
+  // };
 
-          <PlayerAction
-            onPressPlayButton={onPressPlayButton}
-            open={focus}
-            isPortraitScreen={isPortraitScreen}
-          />
-        </View>
-      </TouchableWithoutFeedback>
+  resestFocus = debounce(() => {
+    const { focus } = this.state;
+    this._isMounted && focus && this.setState({ focus: false });
+  }, 5000);
 
-      <StreamInfo open={focus} isPortraitScreen={isPortraitScreen} />
-    </>
-  );
-};
+  componentWillUnmount() {
+    this._isMounted = false;
+    BackHandler.removeEventListener('hardwareBackPress', this.backAction);
+    Orientation.removeAllListeners();
+    console.log('stop player');
+    this.player.stop();
+  }
 
-export default Player;
+  render() {
+    const { focus } = this.state;
+    const {
+      screenSize: { orientation, width, height },
+      url,
+    } = this.props;
+    const isPortraitScreen = orientation.includes(PORTRAIT);
 
-const useStyles = makeStyles((theme) => ({
+    const portraitSize = width / 1.8;
+    const landscapeSize = height;
+    const playerSize = isPortraitScreen ? portraitSize : landscapeSize;
+
+    return (
+      <>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            this.setState({ focus: !focus });
+            this.resestFocus();
+          }}>
+          <View style={styles.container}>
+            <StatusBar hidden />
+            <NodePlayerView
+              style={[
+                styles.player,
+                {
+                  height: playerSize,
+                },
+              ]}
+              ref={(ref) => (this.player = ref)}
+              inputUrl={url}
+              scaleMode={
+                isPortraitScreen ? 'ScaleAspectFill' : 'ScaleAspectFit'
+              }
+              bufferTime={300}
+              maxBufferTime={1000}
+              autoplay={false}
+              // onStatus={this_onStatus}
+            />
+
+            <PlayerAction open={focus} isPortraitScreen={isPortraitScreen} />
+          </View>
+        </TouchableWithoutFeedback>
+
+        <StreamInfo open={focus} isPortraitScreen={isPortraitScreen} />
+      </>
+    );
+  }
+}
+
+export default withScreenResize(Player);
+
+const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: 'auto',
@@ -126,4 +133,4 @@ const useStyles = makeStyles((theme) => ({
   fontBold: {
     fontFamily: 'Inter-Bold',
   },
-}));
+});
