@@ -7,7 +7,6 @@ import {
   TouchableWithoutFeedback,
   StyleSheet,
   AppState,
-  Pressable,
 } from 'react-native';
 
 import { debounce } from 'lodash';
@@ -53,8 +52,8 @@ class Main extends React.Component {
   };
 
   deviceBackEvent = () => {
-    const { screenSize: isPortrait } = this.props;
-    if (!isPortrait) {
+    const { screenSize } = this.props;
+    if (!screenSize.isPortrait) {
       Orientation.lockToPortrait();
       return true;
     }
@@ -63,8 +62,8 @@ class Main extends React.Component {
 
   componentDidMount() {
     this._isMounted = true;
-    AppState.addEventListener('change', this._handleAppStateChange);
     BackHandler.addEventListener('hardwareBackPress', this.deviceBackEvent);
+    AppState.addEventListener('change', this._handleAppStateChange);
     this.player.start();
     this.resetFocus();
   }
@@ -105,8 +104,6 @@ class Main extends React.Component {
     let chatListHeight = focus
       ? height - (headHeight + 100)
       : height - (playerHeight + 100);
-
-    console.log('render');
 
     return (
       <>

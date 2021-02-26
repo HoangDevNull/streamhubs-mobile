@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Subheading, Text, Button } from 'react-native-paper';
+import { Subheading, Text, Button, withTheme } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import { FlatList } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -22,27 +22,27 @@ const { Value } = Animated;
 
 const position = new Value(1);
 
-const CollapseInfo = ({ isPortrait }) => {
+const CollapseInfo = ({ isPortrait, theme }) => {
   const styles = useStyles();
   const { focus, showChatRoom } = useSelector((state) => state.player);
-
+  const { scale } = theme.animation;
   React.useEffect(() => {
     if (focus) {
       // show
       Animated.timing(position, {
-        duration: 600,
+        duration: 250 * scale,
         toValue: 1,
         easing: Easing.inOut(Easing.ease),
       }).start();
     } else {
       // hide
       Animated.timing(position, {
-        duration: 600,
+        duration: 200 * scale,
         toValue: 0,
         easing: Easing.inOut(Easing.ease),
       }).start();
     }
-  }, [focus]);
+  }, [focus, scale]);
 
   const height = Animated.interpolate(position, {
     inputRange: [0, 1],
@@ -102,7 +102,7 @@ const CollapseInfo = ({ isPortrait }) => {
   );
 };
 
-export default React.memo(CollapseInfo);
+export default React.memo(withTheme(CollapseInfo));
 
 const useStyles = makeStyles((theme) => ({
   fontBold: {

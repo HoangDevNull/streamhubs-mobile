@@ -44,7 +44,7 @@ const PlayerAction = ({ isPortrait = true }) => {
               color="#fff"
             />
           )}
-          size={22}
+          size={30}
           color="#fff"
           onPress={() => console.log('pressed')}
           style={styles.topLeft}
@@ -64,7 +64,7 @@ const PlayerAction = ({ isPortrait = true }) => {
                   color="#fff"
                 />
               )}
-              size={22}
+              size={30}
               color="#fff"
               onPress={_toggleChatRoom}
             />
@@ -73,7 +73,7 @@ const PlayerAction = ({ isPortrait = true }) => {
             icon={() => (
               <Ionicons name="settings-outline" size={22} color="#fff" />
             )}
-            size={22}
+            size={30}
             color="#fff"
             onPress={_toggleScreenOrientation}
           />
@@ -87,7 +87,7 @@ const PlayerAction = ({ isPortrait = true }) => {
               color="#fff"
             />
           )}
-          size={22}
+          size={30}
           color="#fff"
           onPress={_toggleScreenOrientation}
           style={isPortrait ? styles.bottomRight : styles.bottomRightLandscape}

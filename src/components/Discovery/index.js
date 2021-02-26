@@ -138,7 +138,6 @@ const useStyles = makeStyles((theme) => ({
   categoryImage: {
     width: columnWidth,
     height: 140,
-    backgroundColor: 'red',
     marginVertical: 15,
     marginLeft: 15,
     borderRadius: 13,

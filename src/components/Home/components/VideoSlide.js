@@ -3,6 +3,7 @@ import { View, Dimensions, Platform } from 'react-native';
 import { Text, Card, withTheme, Badge } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import Slider from '../../common/Slider';
+import { useScreenSize } from '../../../hooks/useScreenSize';
 const ENTRIES1 = [
   {
     name: 'LOL',
@@ -34,11 +35,12 @@ const ENTRIES1 = [
     banner: 'https://wallpapercave.com/wp/wp7048889.jpg',
   },
 ];
-const { width: screenWidth } = Dimensions.get('window');
-export const sliderWidth = screenWidth;
+// const { width } = Dimensions.get('window');
 
 const VideoSlide = ({ theme }) => {
   const styles = useStyles();
+  const { width, height, isPortrait } = useScreenSize();
+
   const renderItem = ({ item, index }, parallaxProps) => {
     return (
       <Card elevation={2} style={styles.card}>
@@ -55,6 +57,8 @@ const VideoSlide = ({ theme }) => {
       </Card>
     );
   };
+
+  const sliderWidth = isPortrait ? width : height;
 
   return (
     <View styles={styles.container}>
@@ -75,11 +79,16 @@ export default withTheme(VideoSlide);
 const useStyles = makeStyles((theme) => ({
   container: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   card: {
     alignSelf: 'center',
-    width: screenWidth - 35,
+    width: '100%',
     borderRadius: 15,
+    paddingHorizontal: 15,
+    backgroundColor: 'transparent',
+    maxWidth: 550,
   },
   cardContent: {
     position: 'absolute',

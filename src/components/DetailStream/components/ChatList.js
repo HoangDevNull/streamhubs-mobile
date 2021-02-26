@@ -94,7 +94,7 @@ const messages = [
 
 const ChatList = ({ theme }) => {
   const styles = useStyles();
-
+  let chatRef = React.useRef(null);
   const [data, setData] = React.useState(messages);
 
   React.useEffect(() => {
@@ -109,7 +109,7 @@ const ChatList = ({ theme }) => {
             ' Expo extends React Native and gives us all the tools we need',
         },
       ]);
-    }, 500);
+    }, 3000);
     return () => {
       clearInterval(interval);
     };
@@ -139,10 +139,17 @@ const ChatList = ({ theme }) => {
       {/* List message  */}
 
       <FlatList
+        ref={(ref) => (chatRef = ref)}
+        // onContentSizeChange={() => chatRef.scrollToEnd({ animated: false })}
         keyExtractor={({ id }) => String(id)}
         data={data}
         renderItem={_renderMessage}
         ListFooterComponent={<View style={styles.mb20} />}
+        initialNumToRender={8}
+        maxToRenderPerBatch={2}
+        onEndReachedThreshold={0.5}
+        inverted
+        contentContainerStyle={styles.contentContainer}
       />
     </View>
   );
@@ -154,6 +161,9 @@ const useStyles = makeStyles((theme) => ({
   container: {
     flex: 1,
     // height: '100%',
+  },
+  contentContainer: {
+    flexDirection: 'column-reverse',
   },
   banner: {
     flexDirection: 'row',
