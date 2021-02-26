@@ -30,16 +30,6 @@ const PlayerAction = ({ isPortrait = true }) => {
 
   return (
     <>
-      {/* <TouchableOpacity onPress={() => console.log('press')}> */}
-      <View
-        style={[
-          styles.containerTransparent,
-          !isPortrait && showChatRoom && styles.showChatRoom,
-        ]}>
-        <Text>Touch Here</Text>
-      </View>
-      {/* </TouchableOpacity> */}
-
       <View
         style={[
           styles.container,

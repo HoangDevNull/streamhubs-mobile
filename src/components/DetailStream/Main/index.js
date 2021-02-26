@@ -110,50 +110,51 @@ class Main extends React.Component {
 
     return (
       <>
-        <View style={styles.container}>
-          <StatusBar hidden={!isPortrait} />
-          <NodePlayerView
-            style={[
-              styles.player,
-              {
-                width: playerWidth,
-                height: playerHeight,
-              },
-            ]}
-            ref={(ref) => (this.player = ref)}
-            inputUrl={url}
-            scaleMode={isPortrait ? 'ScaleAspectFill' : 'ScaleAspectFit'}
-            bufferTime={300}
-            maxBufferTime={1000}
-            autoplay={false}
-            // onStatus={this_onStatus}
-          />
+        <TouchableWithoutFeedback onPress={this.toggleFocus}>
+          <View style={styles.container}>
+            <StatusBar hidden={!isPortrait} />
+            <NodePlayerView
+              style={[
+                styles.player,
+                {
+                  width: playerWidth,
+                  height: playerHeight,
+                },
+              ]}
+              ref={(ref) => (this.player = ref)}
+              inputUrl={url}
+              scaleMode={isPortrait ? 'ScaleAspectFill' : 'ScaleAspectFit'}
+              bufferTime={300}
+              maxBufferTime={1000}
+              autoplay={false}
+              // onStatus={this_onStatus}
+            />
 
-          <PlayerAction
-            onToggleChatRoom={this._handleToggleChatRoom}
-            isPortrait={isPortrait}
-          />
+            <PlayerAction
+              onToggleChatRoom={this._handleToggleChatRoom}
+              isPortrait={isPortrait}
+            />
 
-          <View
-            // onStartShouldSetResponder={() => true}
-            style={[
-              styles.chatList,
-              {
-                top: isPortrait ? chatListOffset : 0,
-                bottom: 0,
-                height: isPortrait ? chatListHeight : playerHeight,
-                width: isPortrait ? '100%' : showChatRoom ? '25%' : '0%',
-                zIndex: isPortrait ? 0 : 10,
-                paddingHorizontal: isPortrait ? 8 : showChatRoom ? 8 : 0,
-              },
-            ]}>
-            {/* Chat main */}
-            <ChatList />
+            <View
+              onStartShouldSetResponder={() => true}
+              style={[
+                styles.chatList,
+                {
+                  top: isPortrait ? chatListOffset : 0,
+                  bottom: 0,
+                  height: isPortrait ? chatListHeight : playerHeight,
+                  width: isPortrait ? '100%' : showChatRoom ? '25%' : '0%',
+                  zIndex: isPortrait ? 0 : 10,
+                  paddingHorizontal: isPortrait ? 8 : showChatRoom ? 8 : 0,
+                },
+              ]}>
+              {/* Chat main */}
+              <ChatList />
 
-            {!isPortrait && <ChatInput />}
+              {!isPortrait && <ChatInput />}
+            </View>
           </View>
-        </View>
-
+        </TouchableWithoutFeedback>
         <CollapseInfo isPortrait={isPortrait} />
       </>
     );
