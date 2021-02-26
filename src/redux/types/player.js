@@ -1,0 +1,3 @@
+export const SET_CHAT_ROOM_MOBILE = 'SET_CHAT_ROOM_MOBILE';
+export const SET_FOCUS_PLAYER = 'SET_FOCUS_PLAYER';
+export const SET_PLAYING = 'SET_PLAYING';

@@ -4,6 +4,9 @@ import { Subheading, Text, Button } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import { FlatList } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import { useSelector } from 'react-redux';
+
 import Animated, { Easing } from 'react-native-reanimated';
 
 import ChipCustom from '../../common/ChipCustom';
@@ -19,26 +22,27 @@ const { Value } = Animated;
 
 const position = new Value(1);
 
-const CollapseInfo = ({ open = true, isPortrait }) => {
+const CollapseInfo = ({ isPortrait }) => {
   const styles = useStyles();
+  const { focus, showChatRoom } = useSelector((state) => state.player);
 
   React.useEffect(() => {
-    if (open) {
+    if (focus) {
       // show
       Animated.timing(position, {
-        duration: 400,
+        duration: 600,
         toValue: 1,
         easing: Easing.inOut(Easing.ease),
       }).start();
     } else {
       // hide
       Animated.timing(position, {
-        duration: 400,
+        duration: 600,
         toValue: 0,
         easing: Easing.inOut(Easing.ease),
       }).start();
     }
-  }, [open]);
+  }, [focus]);
 
   const height = Animated.interpolate(position, {
     inputRange: [0, 1],
@@ -51,12 +55,14 @@ const CollapseInfo = ({ open = true, isPortrait }) => {
     extrapolate: Animated.Extrapolate.CLAMP,
   });
 
+  const shouldResize = isPortrait === false && showChatRoom;
   return (
     <>
       <Animated.View
         style={[
           styles.container,
-          !isPortrait && styles.rootLandscape,
+          !isPortrait && styles.containerLandscape,
+          shouldResize && styles.showChatRoom,
           { height: height, opacity },
         ]}>
         <View style={styles.wrapper}>
@@ -102,7 +108,13 @@ const useStyles = makeStyles((theme) => ({
   fontBold: {
     fontFamily: 'Inter-Bold',
   },
-  rootLandscape: {
+  showChatRoom: {
+    width: '75%',
+  },
+  hideChatRoom: {
+    width: '100%',
+  },
+  containerLandscape: {
     position: 'absolute',
     bottom: 0,
   },

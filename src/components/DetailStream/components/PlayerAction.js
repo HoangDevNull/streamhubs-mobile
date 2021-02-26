@@ -2,14 +2,19 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { IconButton } from 'react-native-paper';
+import { IconButton, Text } from 'react-native-paper';
 
+import { useDispatch, useSelector } from 'react-redux';
 import Orientation from 'react-native-orientation-locker';
 
 import ViewerCount from './shared/ViewerCount';
+import { toggleChatRoom } from '../../../redux/actions/player';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const PlayerAction = ({ isPortrait = true, open }) => {
+const PlayerAction = ({ isPortrait = true }) => {
   const styles = useStyles();
+  const dispatch = useDispatch();
+  const { focus, showChatRoom } = useSelector((state) => state.player);
 
   const _toggleScreenOrientation = () => {
     if (isPortrait) {
@@ -19,57 +24,113 @@ const PlayerAction = ({ isPortrait = true, open }) => {
     }
   };
 
+  const _toggleChatRoom = () => {
+    dispatch(toggleChatRoom(!showChatRoom));
+  };
+
   return (
-    <View style={[styles.container, open ? styles.show : styles.hide]}>
-      <IconButton
-        icon={() => (
-          <Ionicons name="chevron-down-circle-outline" size={28} color="#fff" />
-        )}
-        size={33}
-        color="#fff"
-        onPress={() => console.log('pressed')}
-        style={styles.topLeft}
-      />
+    <>
+      {/* <TouchableOpacity onPress={() => console.log('press')}> */}
+      <View
+        style={[
+          styles.containerTransparent,
+          !isPortrait && showChatRoom && styles.showChatRoom,
+        ]}>
+        <Text>Touch Here</Text>
+      </View>
+      {/* </TouchableOpacity> */}
 
-      <IconButton
-        icon={() => <Ionicons name="settings-outline" size={22} color="#fff" />}
-        size={33}
-        color="#fff"
-        onPress={_toggleScreenOrientation}
-        style={styles.topRight}
-      />
+      <View
+        style={[
+          styles.container,
+          focus ? styles.show : styles.hide,
+          !isPortrait && showChatRoom && styles.showChatRoom,
+        ]}>
+        <IconButton
+          icon={() => (
+            <Ionicons
+              name="chevron-down-circle-outline"
+              size={28}
+              color="#fff"
+            />
+          )}
+          size={22}
+          color="#fff"
+          onPress={() => console.log('pressed')}
+          style={styles.topLeft}
+        />
 
-      <IconButton
-        icon={() => (
-          <Ionicons
-            name={isPortrait ? 'expand-outline' : 'crop-outline'}
+        <View style={styles.topRight}>
+          {!isPortrait && (
+            <IconButton
+              icon={() => (
+                <Ionicons
+                  name={
+                    showChatRoom
+                      ? 'chatbubble-ellipses-outline'
+                      : 'chatbubble-outline'
+                  }
+                  size={22}
+                  color="#fff"
+                />
+              )}
+              size={22}
+              color="#fff"
+              onPress={_toggleChatRoom}
+            />
+          )}
+          <IconButton
+            icon={() => (
+              <Ionicons name="settings-outline" size={22} color="#fff" />
+            )}
             size={22}
             color="#fff"
+            onPress={_toggleScreenOrientation}
           />
-        )}
-        size={33}
-        color="#fff"
-        onPress={_toggleScreenOrientation}
-        style={isPortrait ? styles.bottomRight : styles.bottomRightLandscape}
-      />
+        </View>
 
-      <ViewerCount
-        style={isPortrait ? styles.bottomLeft : styles.bottomLeftLandscape}
-        viewer="17 k"
-      />
-    </View>
+        <IconButton
+          icon={() => (
+            <Ionicons
+              name={isPortrait ? 'expand-outline' : 'crop-outline'}
+              size={22}
+              color="#fff"
+            />
+          )}
+          size={22}
+          color="#fff"
+          onPress={_toggleScreenOrientation}
+          style={isPortrait ? styles.bottomRight : styles.bottomRightLandscape}
+        />
+
+        <ViewerCount
+          style={isPortrait ? styles.bottomLeft : styles.bottomLeftLandscape}
+          viewer="17 k"
+        />
+      </View>
+    </>
   );
 };
 
 export default React.memo(PlayerAction);
 
 const useStyles = makeStyles((theme) => ({
+  containerTransparent: {
+    ...StyleSheet.absoluteFill,
+    backgroundColor: 'red',
+    marginBottom: -1,
+    marginTop: -1,
+    zIndex: 3,
+  },
   container: {
     ...StyleSheet.absoluteFill,
     marginBottom: -1,
     marginTop: -1,
     backgroundColor: theme.colors.backdrop,
     zIndex: 2,
+  },
+  showChatRoom: {
+    width: '75%',
   },
   topLeft: {
     position: 'absolute',
@@ -80,6 +141,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     top: 0,
     right: -5,
+    flexDirection: 'row',
   },
   bottomRight: {
     position: 'absolute',
@@ -94,7 +156,7 @@ const useStyles = makeStyles((theme) => ({
   bottomLeft: {
     flexDirection: 'row',
     position: 'absolute',
-    bottom: 15,
+    bottom: 8,
     left: -5,
   },
   bottomLeftLandscape: {

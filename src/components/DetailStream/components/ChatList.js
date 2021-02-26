@@ -95,6 +95,8 @@ const messages = [
 const ChatList = ({ theme }) => {
   const styles = useStyles();
 
+  const [data, setData] = React.useState(messages);
+
   const _renderMessage = ({ item: { username, color, message } }) => (
     <View style={styles.message}>
       <Text>
@@ -106,6 +108,19 @@ const ChatList = ({ theme }) => {
       </Text>
     </View>
   );
+
+  setInterval(() => {
+    setData([
+      ...data,
+      {
+        id: Date.now(),
+        username: 'last1',
+        color: 'blue400',
+        message:
+          ' Expo extends React Native and gives us all the tools we need',
+      },
+    ]);
+  }, 2000);
 
   return (
     <View style={styles.container}>
@@ -120,8 +135,9 @@ const ChatList = ({ theme }) => {
 
       <FlatList
         keyExtractor={({ id }) => String(id)}
-        data={messages}
+        data={data}
         renderItem={_renderMessage}
+        ListFooterComponent={<View style={styles.mb20} />}
       />
     </View>
   );
@@ -132,7 +148,7 @@ export default withTheme(ChatList);
 const useStyles = makeStyles((theme) => ({
   container: {
     flex: 1,
-    height: '100%',
+    // height: '100%',
   },
   banner: {
     flexDirection: 'row',
@@ -142,12 +158,13 @@ const useStyles = makeStyles((theme) => ({
     borderBottomWidth: 1,
   },
   message: {
-    flexDirection: 'row',
-    width: '100%',
-    marginTop: 5,
+    flex: 1,
   },
   username: {
     fontFamily: 'Inter-Bold',
   },
   content: {},
+  mb20: {
+    marginBottom: 20,
+  },
 }));
