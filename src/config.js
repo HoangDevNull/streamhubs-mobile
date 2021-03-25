@@ -1,1 +1,1 @@
-export const ROOT_API = 'localhost:3001/api';
+export const ROOT_API = 'http://localhost:3001/api';

@@ -1,37 +1,58 @@
 import React from 'react';
 import { Image, SafeAreaView, View, ScrollView } from 'react-native';
-import { Button, Subheading, TextInput, withTheme } from 'react-native-paper';
+import {
+  Button,
+  Subheading,
+  TextInput,
+  Caption,
+  withTheme,
+  Text,
+} from 'react-native-paper';
 
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import { useDispatch } from 'react-redux';
-import { useForm } from 'react-hook-form';
-import GoBackButton from '../common/GoBackButton';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm, Controller } from 'react-hook-form';
+
+import * as yup from 'yup';
 import { saveLoginInfo } from '../../redux/actions/user';
+import GoBackButton from '../common/GoBackButton';
+import { loginUrl, request } from '../../services';
+
+const schema = yup.object().shape({
+  email: yup.string().email('Invalid email').required('Email is required'),
+  password: yup.string().min(6).required('Password is required'),
+});
 
 const Login = ({ navigation, theme }) => {
   const dispatch = useDispatch();
   const styles = useStyles();
   const [showPassword, setShowPassword] = React.useState(false);
+  const [error, setError] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
 
-  const { register, handleSubmit, setValue } = useForm();
+  const { control, handleSubmit, errors } = useForm({
+    resolver: yupResolver(schema),
+  });
 
-  React.useEffect(() => {
-    register('email');
-    register('password');
-  }, [register]);
-
-  const _pressEyeButton = () => setShowPassword(!showPassword);
-
-  const _submit = (data) => {
-    console.log({ data });
-    dispatch(
-      saveLoginInfo({
-        email: 'h@gmail.com',
-        access_token: '12312312',
-        isLoggedIn: true,
-        userProfile: {},
-      }),
-    );
+  const _submit = async (payload) => {
+    setLoading(true);
+    try {
+      const { data } = await request(loginUrl, 'POST', payload);
+      dispatch(
+        saveLoginInfo({
+          ...data.user,
+          access_token: data.token,
+          isLoggedIn: true,
+        }),
+      );
+      setError('');
+      setLoading(false);
+    } catch (err) {
+      console.log({ err });
+      setError('Username or password is incorrect');
+      setLoading(false);
+    }
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -46,30 +67,63 @@ const Login = ({ navigation, theme }) => {
 
         <View style={styles.mainSection}>
           <Subheading style={styles.label}> Email: </Subheading>
-          <TextInput
-            autoFocus
-            dense
-            mode="outlined"
-            left={<TextInput.Icon name="email-outline" />}
-            onChangeText={(text) => setValue('email', text)}
-            style={styles.textInput}
+
+          <Controller
+            control={control}
+            render={({ onChange, onBlur, value }) => (
+              <TextInput
+                autoFocus
+                dense
+                mode="outlined"
+                left={<TextInput.Icon name="email-outline" />}
+                onChangeText={(text) => onChange(text)}
+                style={styles.textInput}
+                onBlur={onBlur}
+                value={value}
+                error={errors.email}
+              />
+            )}
+            name="email"
+            defaultValue=""
           />
 
+          {errors.email && (
+            <Caption style={styles.errorText}>{errors?.email?.message}</Caption>
+          )}
+
           <Subheading style={styles.label}> Password: </Subheading>
-          <TextInput
-            dense
-            mode="outlined"
-            left={<TextInput.Icon name="lock-outline" />}
-            right={
-              <TextInput.Icon
-                name={!showPassword ? 'eye' : 'eye-off'}
-                onPress={_pressEyeButton}
+
+          <Controller
+            control={control}
+            render={({ onChange, onBlur, value }) => (
+              <TextInput
+                dense
+                mode="outlined"
+                left={<TextInput.Icon name="lock-outline" />}
+                right={
+                  <TextInput.Icon
+                    name={showPassword ? 'eye' : 'eye-off'}
+                    onPress={() => setShowPassword(!showPassword)}
+                  />
+                }
+                onChangeText={(text) => onChange(text)}
+                style={styles.textInput}
+                secureTextEntry={!showPassword}
+                value={value}
+                error={errors.password}
               />
-            }
-            onChangeText={(text) => setValue('password', text)}
-            style={styles.textInput}
-            secureTextEntry={showPassword}
+            )}
+            name="password"
+            defaultValue=""
           />
+
+          {errors.password && (
+            <Caption style={styles.errorText}>
+              {errors?.password?.message}
+            </Caption>
+          )}
+
+          <Text style={styles.loginFailed}>{error}</Text>
 
           <Button
             color={theme.colors.text}
@@ -77,7 +131,12 @@ const Login = ({ navigation, theme }) => {
             uppercase={false}>
             Forgot Password?
           </Button>
-          <Button mode="contained" onPress={handleSubmit(_submit)}>
+
+          <Button
+            disabled={loading}
+            loading={loading}
+            mode="contained"
+            onPress={handleSubmit(_submit)}>
             Sign in
           </Button>
         </View>
@@ -119,6 +178,14 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     top: 15,
     left: 13,
+  },
+  errorText: {
+    color: theme.colors.error,
+  },
+  loginFailed: {
+    paddingTop: 10,
+    color: theme.colors.error,
+    textAlign: 'center',
   },
 }));
 

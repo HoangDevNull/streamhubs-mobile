@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar, View } from 'react-native';
-import { ActivityIndicator, Colors } from 'react-native-paper';
+import { ActivityIndicator, Colors, Snackbar } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 
@@ -13,12 +13,14 @@ import AppStack from './AppStack';
 // Redux + theme
 import { saveLoginInfo } from '../redux/actions/user';
 import { LightTheme, DarkTheme } from '../theme';
+import { setSnackbar } from '../redux/actions/snackbar';
 
 export default () => {
   const styles = useStyles();
   const [isLoading, setIsLoading] = React.useState(true);
   const dispatch = useDispatch();
   const { isLoggedIn, theme } = useSelector((state) => state.user);
+  const { open, text } = useSelector((state) => state.snackbar);
 
   React.useEffect(() => {
     AsyncStorage.getItem('user')
@@ -37,6 +39,10 @@ export default () => {
         }, 1000);
       });
   }, [dispatch]);
+
+  const _dismissSnackbar = () => {
+    dispatch(setSnackbar({ open: false, text: '' }));
+  };
 
   if (isLoading) {
     return (
@@ -62,6 +68,10 @@ export default () => {
         barStyle={isDarkModeOn ? 'light-content' : 'dark-content'}
       />
       {isLoggedIn ? <AppStack /> : <AuthStack />}
+
+      <Snackbar visible={open} onDismiss={_dismissSnackbar}>
+        {text}
+      </Snackbar>
     </NavigationContainer>
   );
 };
