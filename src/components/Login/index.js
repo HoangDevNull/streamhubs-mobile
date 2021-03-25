@@ -3,9 +3,8 @@ import { Image, SafeAreaView, View, ScrollView } from 'react-native';
 import { Button, Subheading, TextInput, withTheme } from 'react-native-paper';
 
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
-
 import { useDispatch } from 'react-redux';
-
+import { useForm } from 'react-hook-form';
 import GoBackButton from '../common/GoBackButton';
 import { saveLoginInfo } from '../../redux/actions/user';
 
@@ -13,14 +12,18 @@ const Login = ({ navigation, theme }) => {
   const dispatch = useDispatch();
   const styles = useStyles();
   const [showPassword, setShowPassword] = React.useState(false);
-  const [credential, setCredentital] = React.useState({
-    email: '',
-    password: '',
-  });
+
+  const { register, handleSubmit, setValue } = useForm();
+
+  React.useEffect(() => {
+    register('email');
+    register('password');
+  }, [register]);
 
   const _pressEyeButton = () => setShowPassword(!showPassword);
 
-  const _SignIn = () => {
+  const _submit = (data) => {
+    console.log({ data });
     dispatch(
       saveLoginInfo({
         email: 'h@gmail.com',
@@ -30,7 +33,6 @@ const Login = ({ navigation, theme }) => {
       }),
     );
   };
-  const { email, password } = credential;
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -49,10 +51,7 @@ const Login = ({ navigation, theme }) => {
             dense
             mode="outlined"
             left={<TextInput.Icon name="email-outline" />}
-            value={email}
-            onChangeText={(text) =>
-              setCredentital({ ...credential, email: text })
-            }
+            onChangeText={(text) => setValue('email', text)}
             style={styles.textInput}
           />
 
@@ -67,10 +66,7 @@ const Login = ({ navigation, theme }) => {
                 onPress={_pressEyeButton}
               />
             }
-            value={password}
-            onChangeText={(text) =>
-              setCredentital({ ...credential, password: text })
-            }
+            onChangeText={(text) => setValue('password', text)}
             style={styles.textInput}
             secureTextEntry={showPassword}
           />
@@ -81,7 +77,7 @@ const Login = ({ navigation, theme }) => {
             uppercase={false}>
             Forgot Password?
           </Button>
-          <Button mode="contained" onPress={_SignIn}>
+          <Button mode="contained" onPress={handleSubmit(_submit)}>
             Sign in
           </Button>
         </View>
