@@ -1,17 +1,29 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, ImageBackground } from 'react-native';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import { withTheme, Caption, Text, IconButton } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import UserAvatar from '../common/UserAvatar';
+import { useSelector } from 'react-redux';
+
+import { AVATAR_URL } from '../../config';
 
 const Header = ({ theme }) => {
   const styles = useStyles();
-
+  const { avatar, banner } = useSelector((state) => state.user?.userProfile);
   const { colors } = theme;
   return (
-    <View style={styles.container}>
-      <UserAvatar size={70} onPress={null} />
+    <ImageBackground
+      source={{
+        uri: banner,
+      }}
+      imageStyle={styles.imageStyle}
+      style={styles.container}>
+      <UserAvatar
+        size={70}
+        src={avatar ? AVATAR_URL + avatar : null}
+        onPress={null}
+      />
       <View>
         <Text style={styles.textBold}>4.6 K</Text>
         <Caption>Followers</Caption>
@@ -29,7 +41,7 @@ const Header = ({ theme }) => {
         size={28}
         onPress={() => console.log('Pressed')}
       />
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -38,9 +50,15 @@ export default withTheme(Header);
 const useStyles = makeStyles((theme) => ({
   container: {
     paddingVertical: 20,
+    paddingHorizontal: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  imageStyle: {
+    borderRadius: 10,
+    opacity: 0.6,
+    resizeMode: 'cover',
   },
   textBold: {
     fontFamily: 'Inter-Bold',

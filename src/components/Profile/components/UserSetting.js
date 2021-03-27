@@ -26,6 +26,11 @@ const DATA = [
   },
   {
     id: '4',
+    title: 'Change chat color',
+    icon: 'chatbubbles-outline',
+  },
+  {
+    id: '5',
     title: 'Logout',
     icon: 'exit-outline',
   },
@@ -88,7 +93,7 @@ const UserSetting = () => {
     <Portal>
       <Modalize
         modalStyle={styles.modal}
-        modalHeight={270}
+        modalHeight={320}
         onClosed={_hideUserSetting}
         ref={containerRef}
         flatListProps={{

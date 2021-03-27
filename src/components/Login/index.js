@@ -18,6 +18,7 @@ import * as yup from 'yup';
 import { saveLoginInfo } from '../../redux/actions/user';
 import GoBackButton from '../common/GoBackButton';
 import { loginUrl, request } from '../../services';
+import { setSnackbar } from '../../redux/actions/snackbar';
 
 const schema = yup.object().shape({
   email: yup.string().email('Invalid email').required('Email is required'),
@@ -50,8 +51,17 @@ const Login = ({ navigation, theme }) => {
       setLoading(false);
     } catch (err) {
       console.log({ err });
-      setError('Username or password is incorrect');
       setLoading(false);
+      if (err?.response?.status === 403) {
+        dispatch(
+          setSnackbar({
+            open: true,
+            text: 'Your account need to active with Email registed',
+          }),
+        );
+        return;
+      }
+      setError('Username or password is incorrect');
     }
   };
   return (

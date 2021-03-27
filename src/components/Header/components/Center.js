@@ -2,12 +2,14 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { Appbar } from 'react-native-paper';
 import { useRoute } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 const Center = () => {
   const route = useRoute();
-  const show = route?.name.includes('Setting');
+  const show = route?.name.includes('Profile');
+  const username = useSelector((state) => state?.user?.username);
   return (
-    <Appbar.Content titleStyle={styles.root} title={show ? 'Hoang Pham' : ''} />
+    <Appbar.Content titleStyle={styles.root} title={show ? username : ''} />
   );
 };
 

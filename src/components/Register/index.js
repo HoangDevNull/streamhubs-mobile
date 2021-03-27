@@ -54,14 +54,15 @@ const Register = ({ navigation, theme }) => {
       dispatch(
         setSnackbar({
           open: true,
-          text: 'Your account was successfully created',
+          text: 'An email has been sent for verification',
         }),
       );
       setLoading(false);
       navigation.push('Start');
     } catch (err) {
       console.log({ err });
-      if (err?.response?.status === 409) {
+      const status = err?.response?.status;
+      if (status === 409) {
         dispatch(
           setSnackbar({
             open: true,

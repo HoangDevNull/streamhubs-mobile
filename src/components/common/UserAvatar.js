@@ -5,32 +5,42 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { View } from 'react-native';
 
-const UserAvatar = ({ onPress, style, size = 24, theme }) => {
+const UserAvatar = ({ onPress, style, size = 24, src }) => {
   const styles = useStyles();
 
   return (
     <View style={style}>
       <TouchableOpacity onPress={onPress}>
-        <Avatar.Icon
-          style={[styles.avatar, { borderRadius: size / 4 }]}
-          size={size}
-          icon={({ size: iconSize }) => {
-            return (
-              <Ionicons
-                name="person-circle-outline"
-                color={'#fff'}
-                size={iconSize}
-              />
-            );
-          }}
-        />
+        {src ? (
+          <Avatar.Image
+            style={[styles.avatar]}
+            size={size}
+            source={{
+              uri: src,
+            }}
+          />
+        ) : (
+          <Avatar.Icon
+            style={[styles.avatar]}
+            size={size}
+            icon={({ size: iconSize }) => {
+              return (
+                <Ionicons
+                  name="person-circle-outline"
+                  color={'#fff'}
+                  size={iconSize}
+                />
+              );
+            }}
+          />
+        )}
       </TouchableOpacity>
     </View>
   );
 };
 const useStyles = makeStyles((theme) => ({
   avatar: {
-    borderWidth: 2,
+    // borderWidth: 2,
     borderColor: theme.colors.contrast,
   },
 }));

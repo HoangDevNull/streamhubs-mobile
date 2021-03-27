@@ -5,13 +5,18 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { useNavigation } from '@react-navigation/native';
 import UserAvatar from '../../common/UserAvatar';
+import { useSelector } from 'react-redux';
+
+import { AVATAR_URL } from '../../../config';
 
 const Left = ({ theme }) => {
   const navigation = useNavigation();
+  const { avatar } = useSelector((state) => state.user?.userProfile);
   const _handleBack = () => navigation.goBack();
   const _handleGoToSetting = () => navigation.navigate('Profile');
 
   const canGoBack = navigation.canGoBack();
+
   return (
     <Appbar.Content
       style={[styles.root, canGoBack && styles.stickToLeft]}
@@ -29,7 +34,11 @@ const Left = ({ theme }) => {
             onPress={_handleBack}
           />
         ) : (
-          <UserAvatar size={30} onPress={_handleGoToSetting} />
+          <UserAvatar
+            src={avatar ? AVATAR_URL + avatar : null}
+            size={30}
+            onPress={_handleGoToSetting}
+          />
         )
       }
     />

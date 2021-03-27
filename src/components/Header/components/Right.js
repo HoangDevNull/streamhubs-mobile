@@ -19,6 +19,9 @@ const Right = ({ theme: { colors } }) => {
 
   const { text: mainColor } = colors;
 
+  if (name.includes('CommingSoon')) {
+    return false;
+  }
   if (name.includes('Profile')) {
     return (
       <Appbar.Action

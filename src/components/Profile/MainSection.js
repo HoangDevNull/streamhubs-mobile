@@ -1,20 +1,29 @@
 import React from 'react';
 import { View } from 'react-native';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
-import { Subheading, Surface, Button, withTheme } from 'react-native-paper';
+import { Text, Surface, Button, withTheme } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import MyChanel from './components/MyChanel';
 import Prime from './components/Prime';
 import SurfaceButton from '../common/SurfaceButton';
-
+import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/core';
 const MainSection = ({ theme }) => {
+  const navigate = useNavigation();
   const styles = useStyles();
+  const userProfile = useSelector((state) => state.user?.userProfile);
   return (
     <>
       <View style={styles.container}>
         <Surface style={[styles.surface, styles.wrapDes]}>
-          <Ionicons size={22} color={theme.colors.text} name="ribbon-outline" />
-          <Subheading> Let's have fun with Streamer Hubs</Subheading>
+          <Ionicons
+            size={28}
+            color={theme.colors.text}
+            name="ribbon-outline"
+            style={styles.iconDes}
+          />
+          <Text>
+            {userProfile.description || `Let's have fun with Stream Hub`}
+          </Text>
         </Surface>
 
         <Surface style={[styles.surface, styles.wrapOptions]}>
@@ -23,7 +32,8 @@ const MainSection = ({ theme }) => {
             icon={({ size, color }) => (
               <Ionicons size={20} color={color} name="person-outline" />
             )}
-            uppercase={false}>
+            uppercase={false}
+            onPress={() => navigate.navigate('CommingSoon')}>
             My Chanel
           </Button>
 
@@ -34,7 +44,8 @@ const MainSection = ({ theme }) => {
             icon={({ size, color }) => (
               <Ionicons size={20} color={color} name="build-outline" />
             )}
-            uppercase={false}>
+            uppercase={false}
+            onPress={() => navigate.navigate('CommingSoon')}>
             Stream tool
           </Button>
         </Surface>
@@ -96,8 +107,15 @@ const useStyles = makeStyles((theme) => ({
     marginVertical: 10,
   },
   wrapDes: {
-    paddingVertical: 14,
+    paddingTop: 20,
+    paddingBottom: 14,
     paddingHorizontal: 18,
+    flexDirection: 'row',
+  },
+  iconDes: {
+    position: 'absolute',
+    top: -15,
+    left: '50%',
   },
   wrapOptions: {
     paddingVertical: 15,
