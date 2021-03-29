@@ -4,6 +4,7 @@ import { Text, Card, withTheme, Badge } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import Slider from '../../common/Slider';
 import { useScreenSize } from '../../../hooks/useScreenSize';
+import { useSelector } from 'react-redux';
 const ENTRIES1 = [
   {
     name: 'LOL',
@@ -37,10 +38,10 @@ const ENTRIES1 = [
 ];
 // const { width } = Dimensions.get('window');
 
-const VideoSlide = ({ theme }) => {
+const CategorySlider = ({ theme }) => {
   const styles = useStyles();
   const { width, height, isPortrait } = useScreenSize();
-
+  const categories = useSelector((state) => state.following?.categories);
   const renderItem = ({ item, index }, parallaxProps) => {
     return (
       <Card elevation={2} style={styles.card}>
@@ -51,7 +52,7 @@ const VideoSlide = ({ theme }) => {
         <Card.Content style={styles.cardContent}>
           <View style={styles.viewerWrapper}>
             <Badge size={8} style={styles.dot} />
-            <Text style={styles.textContent}>{`${item.viewer} K`} </Text>
+            <Text style={styles.textContent}>{`${item.follower} K`} </Text>
           </View>
         </Card.Content>
       </Card>
@@ -65,7 +66,7 @@ const VideoSlide = ({ theme }) => {
       <Slider
         sliderWidth={sliderWidth - 60}
         itemWidth={sliderWidth}
-        data={ENTRIES1}
+        data={categories?.results}
         type="tinder"
         renderItem={renderItem}
         hidePagination
@@ -74,7 +75,7 @@ const VideoSlide = ({ theme }) => {
   );
 };
 
-export default withTheme(VideoSlide);
+export default withTheme(CategorySlider);
 
 const useStyles = makeStyles((theme) => ({
   container: {

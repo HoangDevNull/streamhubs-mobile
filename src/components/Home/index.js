@@ -3,15 +3,41 @@ import { SafeAreaView, View } from 'react-native';
 import { Text, withTheme } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 
+import { useSelector, useDispatch } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
 
-import VideoSlide from './components/VideoSlide';
+import CategorySlider from './components/CategorySlider';
 import LiveChannel from './components/LiveChannel';
 import SuggestChannel from './components/SuggestChannel';
 import FollowedChannel from './components/FollowedChannel';
 
+// Request
+import {
+  authRequest,
+  randomCategoriesURL,
+  subChannelsURL,
+} from '../../services';
+import { initFollowingData } from '../../redux/actions/following';
+
 const Home = ({ navigation, theme }) => {
   const styles = useStyles();
+  const dispatch = useDispatch();
+  const access_token = useSelector((state) => state.user?.access_token);
+  React.useEffect(() => {
+    (async () => {
+      const category = authRequest(randomCategoriesURL, 'POST', access_token);
+      const subcribeChannel = authRequest(subChannelsURL, 'POST', access_token);
+      try {
+        const [
+          { data: categories },
+          { data: liveChannel },
+        ] = await Promise.all([category, subcribeChannel]);
+        dispatch(initFollowingData({ categories, liveChannel }));
+      } catch (err) {
+        console.log({ err });
+      }
+    })();
+  }, [access_token, dispatch]);
 
   return (
     <SafeAreaView>
@@ -23,7 +49,7 @@ const Home = ({ navigation, theme }) => {
           </Text>
 
           {/* Main */}
-          <VideoSlide />
+          <CategorySlider />
           <View style={styles.grid}>
             <LiveChannel />
             <SuggestChannel />

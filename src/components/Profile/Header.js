@@ -15,7 +15,7 @@ const Header = ({ theme }) => {
   return (
     <ImageBackground
       source={{
-        uri: banner,
+        uri: banner || null,
       }}
       imageStyle={styles.imageStyle}
       style={styles.container}>
