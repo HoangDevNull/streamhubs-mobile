@@ -4,6 +4,7 @@ import { Headline, List } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 
 import { LeftItem, RigthItem } from './ChannelItem';
+import { useSelector } from 'react-redux';
 const ENTRIES1 = [
   {
     id: 1,
@@ -70,22 +71,27 @@ const ENTRIES1 = [
 const { width: screenWidth } = Dimensions.get('window');
 export const sliderWidth = screenWidth;
 
-const SuggestChannel = () => {
+const SuggestChannel = ({ navigation }) => {
   const styles = useStyles();
-
+  const channels = useSelector((state) => state.following.suggestChannel);
   return (
     <View styles={styles.container}>
       <List.Section>
         <List.Subheader>
           <Headline style={styles.headline}>Suggestion Channel</Headline>
         </List.Subheader>
-        {ENTRIES1.map((item) => (
+        {channels.map((channel) => (
           <List.Item
             style={styles.item}
-            onPress={() => console.log(item.id)}
-            key={item.id}
-            left={() => <LeftItem uri={item.image} />}
-            right={() => <RigthItem data={item} />}
+            onPress={() =>
+              navigation.navigate('DetailStream', {
+                id: 1,
+                streamName: 'test',
+              })
+            }
+            key={channel.id}
+            left={() => <LeftItem uri={channel.banner} />}
+            right={() => <RigthItem data={channel} />}
           />
         ))}
       </List.Section>

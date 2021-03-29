@@ -98,21 +98,21 @@ const ChatList = ({ theme }) => {
   const [data, setData] = React.useState(messages);
 
   React.useEffect(() => {
-    const interval = setInterval(() => {
-      setData([
-        ...data,
-        {
-          id: Date.now(),
-          username: 'last1',
-          color: 'blue400',
-          message:
-            ' Expo extends React Native and gives us all the tools we need',
-        },
-      ]);
-    }, 3000);
-    return () => {
-      clearInterval(interval);
-    };
+    // const interval = setInterval(() => {
+    //   setData([
+    //     ...data,
+    //     {
+    //       id: Date.now(),
+    //       username: 'last1',
+    //       color: 'blue400',
+    //       message:
+    //         ' Expo extends React Native and gives us all the tools we need',
+    //     },
+    //   ]);
+    // }, 1000);
+    // return () => {
+    //   clearInterval(interval);
+    // };
   }, [data]);
 
   const _renderMessage = ({ item: { username, color, message } }) => (

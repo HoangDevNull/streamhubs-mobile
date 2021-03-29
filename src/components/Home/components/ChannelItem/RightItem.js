@@ -6,22 +6,19 @@ import ChipCustom from '../../../common/ChipCustom';
 
 const RigthItem = ({ data }) => {
   const styles = useStyles();
-
   const _renderItem = ({ item: { color, name }, i }) => (
     <ChipCustom color={color} title={name} />
   );
 
-  const { title, username, categories } = data;
-
   return (
     <View style={styles.rightContainer}>
-      <Subheading style={styles.title}>{username}</Subheading>
+      <Subheading style={styles.title}>{data?.owner?.username}</Subheading>
 
       <Paragraph numberOfLines={1} style={styles.paragraph}>
-        {title}
+        {data?.description}
       </Paragraph>
       <FlatList
-        data={categories}
+        data={data?.category?.tags}
         keyExtractor={({ id }) => String(id)}
         renderItem={_renderItem}
         horizontal={true}

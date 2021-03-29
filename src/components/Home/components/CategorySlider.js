@@ -66,7 +66,7 @@ const CategorySlider = ({ theme }) => {
       <Slider
         sliderWidth={sliderWidth - 60}
         itemWidth={sliderWidth}
-        data={categories?.results}
+        data={categories?.results || []}
         type="tinder"
         renderItem={renderItem}
         hidePagination

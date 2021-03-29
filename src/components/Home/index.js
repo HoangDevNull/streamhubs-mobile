@@ -15,7 +15,8 @@ import FollowedChannel from './components/FollowedChannel';
 import {
   authRequest,
   randomCategoriesURL,
-  subChannelsURL,
+  subChannelURL,
+  suggestChannelURL,
 } from '../../services';
 import { initFollowingData } from '../../redux/actions/following';
 
@@ -26,13 +27,22 @@ const Home = ({ navigation, theme }) => {
   React.useEffect(() => {
     (async () => {
       const category = authRequest(randomCategoriesURL, 'POST', access_token);
-      const subcribeChannel = authRequest(subChannelsURL, 'POST', access_token);
+      const subcribeChannel = authRequest(subChannelURL, 'POST', access_token, {
+        channelStatus: 0,
+      });
+      const sugChannel = authRequest(suggestChannelURL, 'POST', access_token, {
+        channelStatus: 0,
+      });
       try {
         const [
           { data: categories },
           { data: liveChannel },
-        ] = await Promise.all([category, subcribeChannel]);
-        dispatch(initFollowingData({ categories, liveChannel }));
+          { data: suggestChannel },
+        ] = await Promise.all([category, subcribeChannel, sugChannel]);
+
+        dispatch(
+          initFollowingData({ categories, liveChannel, suggestChannel }),
+        );
       } catch (err) {
         console.log({ err });
       }

@@ -25,4 +25,5 @@ export const loginUrl = '/login';
 export const logoutUrl = '/logout';
 export const registerURL = '/users';
 export const randomCategoriesURL = '/categories/random';
-export const subChannelsURL = '/channel/subcribed';
+export const subChannelURL = '/channel/subcribed';
+export const suggestChannelURL = '/channel/suggest';

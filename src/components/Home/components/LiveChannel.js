@@ -6,6 +6,7 @@ import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import { useNavigation } from '@react-navigation/native';
 
 import { LeftItem, RigthItem } from './ChannelItem';
+import { useSelector } from 'react-redux';
 const ENTRIES1 = [
   {
     id: 1,
@@ -75,6 +76,7 @@ export const sliderWidth = screenWidth;
 const LiveChannel = () => {
   const navigation = useNavigation();
   const styles = useStyles();
+  const channels = useSelector((state) => state.following.liveChannel);
 
   return (
     <View styles={styles.container}>
@@ -82,15 +84,18 @@ const LiveChannel = () => {
         <List.Subheader>
           <Headline style={styles.headline}>Live Channel</Headline>
         </List.Subheader>
-        {ENTRIES1.map((item) => (
+        {channels.map((channel) => (
           <List.Item
             style={styles.item}
             onPress={() =>
-              navigation.navigate('DetailStream', { id: 1, streamName: 'test' })
+              navigation.navigate('DetailStream', {
+                id: 1,
+                streamName: 'test',
+              })
             }
-            key={item.id}
-            left={() => <LeftItem uri={item.image} />}
-            right={() => <RigthItem data={item} />}
+            key={channel.id}
+            left={() => <LeftItem uri={channel.banner} />}
+            right={() => <RigthItem data={channel} />}
           />
         ))}
       </List.Section>

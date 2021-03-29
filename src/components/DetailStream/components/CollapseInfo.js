@@ -25,24 +25,23 @@ const position = new Value(1);
 const CollapseInfo = ({ isPortrait, theme }) => {
   const styles = useStyles();
   const { focus, showChatRoom } = useSelector((state) => state.player);
-  const { scale } = theme.animation;
   React.useEffect(() => {
     if (focus) {
       // show
       Animated.timing(position, {
-        duration: 250 * scale,
+        duration: 50,
         toValue: 1,
         easing: Easing.inOut(Easing.ease),
       }).start();
     } else {
       // hide
       Animated.timing(position, {
-        duration: 200 * scale,
+        duration: 10,
         toValue: 0,
         easing: Easing.inOut(Easing.ease),
       }).start();
     }
-  }, [focus, scale]);
+  }, [focus]);
 
   const height = Animated.interpolate(position, {
     inputRange: [0, 1],

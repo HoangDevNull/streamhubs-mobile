@@ -21,7 +21,7 @@ const MainSection = ({ theme }) => {
             name="ribbon-outline"
             style={styles.iconDes}
           />
-          <Text>
+          <Text style={styles.description}>
             {userProfile.description || `Let's have fun with Stream Hub`}
           </Text>
         </Surface>
@@ -116,6 +116,9 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     top: -15,
     left: '50%',
+  },
+  description: {
+    textAlign: 'center',
   },
   wrapOptions: {
     paddingVertical: 15,

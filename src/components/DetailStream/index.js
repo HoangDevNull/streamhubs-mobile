@@ -15,7 +15,7 @@ const DetailStream = ({ route, theme }) => {
     <DismissKeyboard style={styles.container}>
       {/* Player : Monitor screen , Stream info, Chat content */}
       <View style={styles.head}>
-        <Player url="rtmp://192.168.1.6/live/test" />
+        <Player url="rtmp://192.168.1.5/live/test" />
       </View>
 
       {/* Keyboard*/}
