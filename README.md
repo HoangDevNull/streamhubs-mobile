@@ -62,7 +62,7 @@
        Active tài khoản thông qua email
     </li>
     <li>
-       Validate form đăng kí
+       Validate form đăng kí ( email, mật khẩu, username, password )
     </li>
     <li>
        Kiểm tra user trùng lặp
@@ -74,14 +74,17 @@
 
 <li> Forgot Password  </li>
 <ul>
-	<li>
+    <li>
        Lấy mật khẩu bằng email 
+    </li>
+    <li>
+       Kiểm tra email có hợp lệ
     </li>
 </ul>
 
 <li> User Profile  </li>
 <ul>
-	<li>
+    <li>
        Hiển thị thông tin user
     </li>
     <li>
@@ -104,15 +107,18 @@
     </li>
     <li>
        Thay đổi mật khẩu tài khoản
+    </li>    
+     <li>
+       Thay đổi màu chat
     </li>
     <li>
        Đăng xuất
     </li>
 </ul>
 
-<li> Follow screen </li>
+<li> Following screen </li>
 <ul>
-	<li>
+    <li>
       Hiển thị các category đã thích
     </li>
     <li>
@@ -121,44 +127,100 @@
      <li>
       Hiển thị các kênh đang live và nhiều người xem ( Suggestion channel )
     </li>
-	<li>
-      Hiển thị các kênh đã đăng ký
+    <li>
+      Hiển thị các streamer đã đăng ký
     </li>
-    
 </ul>
 
 <li> Discovery screen </li>
 <ul>
-	<li>
-     x
+    <li>
+       Hiển thị các category nổi bật bằng slider
+    </li>
+    <li>
+       Gợi ý 1 category phù hợp với user
+    </li>
+    <li>
+       Liệt kê các category hàng đầu theo list
+    </li>
+    <li>
+       Hiển thị các nhãn gắn liền với category
+    </li>
+    <li>
+       Phân trang bằng load more action
     </li>
 </ul>
 
 <li> Browse screen </li>
 <ul>
-	<li>
-      x
+    <li>
+       Hiển thị toàn bộ các kênh 
+    </li>  
+    <li>
+       Hiển thị toàn bộ các category
+    </li>
+    <li>
+       Hiển thị các nhãn gắn liền với category
+    </li>
+    <li>
+       Sắp xếp và lọc theo mong muốn bằng 1 dialog khi press vào button
     </li>
 </ul>
 
 <li> Gamming screen </li>
 <ul>
-	<li>
-     x
-    </li>
+     <li>
+       Hiển thị toàn bộ các kênh có category là gaming 
+    </li>  
 </ul>
 
 <li> Detail stream screen </li>
 <ul>
-	<li>
-      x
+    <li>
+       Hiển thị video stream 
+    </li>
+    <li>
+       Hiển thị tên streamer
+    </li>
+    <li>
+       Hiển thị thông tin của strean (Description, viewer)
+    </li>
+    <li>
+       Cho phép user chưa đăng kí có thể đăng kí kênh
+    </li>
+    <li>
+       Cho phép user chưa đăng kí có thể đăng kí kênh
+    </li>
+    <li>
+       Trò truyện realtime tại kênh
+    </li>
+    <li>
+       Trò truyện bằng emote 
+    </li>
+    <li>
+      	Chủ kênh có quyền block các viewer từ phần trò chuyện
+    </li>
+    <li>
+      	Thông báo stream kết thúc đến các viewer khi streammer bị disconnect
     </li>
 </ul>
 
 <li> Search screen </li>
 <ul>
-	<li>
-      x
+    <li>
+      Search theo tên kênh ( tên streammer )
+    </li>
+    <li>
+      Lọc theo category
+    </li>  
+    <li>
+      Lọc theo tags
+    </li> 
+    <li>
+      Ưu tiên search với các kênh đã theo dõi hoặc đang online
+    </li>
+    <li>
+      Áp dụng fulltext search phía backend để cải thiện hiệu quả search
     </li>
 </ul>
 
