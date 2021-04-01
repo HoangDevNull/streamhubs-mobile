@@ -8,13 +8,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import Orientation from 'react-native-orientation-locker';
 
 import ViewerCount from './shared/ViewerCount';
-import { toggleChatRoom } from '../../../redux/actions/player';
+import { openSetting, toggleChatRoom } from '../../../redux/actions/player';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const PlayerAction = ({ isPortrait = true }) => {
   const styles = useStyles();
   const dispatch = useDispatch();
-  const { focus, showChatRoom } = useSelector((state) => state.player);
+  const { focus, showChatRoom, openSetting: open } = useSelector(
+    (state) => state.player,
+  );
 
   const _toggleScreenOrientation = () => {
     if (isPortrait) {
@@ -22,6 +24,9 @@ const PlayerAction = ({ isPortrait = true }) => {
     } else {
       Orientation.lockToPortrait();
     }
+  };
+  const _openSetting = () => {
+    dispatch(openSetting(!open));
   };
 
   const _toggleChatRoom = () => {
@@ -75,7 +80,7 @@ const PlayerAction = ({ isPortrait = true }) => {
             )}
             size={30}
             color="#fff"
-            onPress={_toggleScreenOrientation}
+            onPress={_openSetting}
           />
         </View>
 

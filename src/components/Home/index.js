@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView, View } from 'react-native';
-import { Text, withTheme } from 'react-native-paper';
+import { ActivityIndicator, Text, withTheme, Colors } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -24,6 +24,7 @@ const Home = ({ navigation, theme }) => {
   const styles = useStyles();
   const dispatch = useDispatch();
   const access_token = useSelector((state) => state.user?.access_token);
+  const [isLoading, setIsLoading] = React.useState(true);
   React.useEffect(() => {
     (async () => {
       const category = authRequest(randomCategoriesURL, 'POST', access_token);
@@ -43,11 +44,25 @@ const Home = ({ navigation, theme }) => {
         dispatch(
           initFollowingData({ categories, liveChannel, suggestChannel }),
         );
+        setIsLoading(false);
       } catch (err) {
         console.log({ err });
+        setIsLoading(false);
       }
     })();
   }, [access_token, dispatch]);
+
+  if (isLoading) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator
+          animating={isLoading}
+          size="large"
+          color={Colors.purple600}
+        />
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView>
@@ -74,6 +89,12 @@ const Home = ({ navigation, theme }) => {
 export default withTheme(Home);
 
 const useStyles = makeStyles((theme) => ({
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: theme.colors.background,
+  },
   container: {
     width: '100%',
     height: '100%',

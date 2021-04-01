@@ -79,6 +79,14 @@ class Main extends React.Component {
     this.resetFocus();
   };
 
+  componentDidUpdate(prevProps) {
+    // Restart stream after change resolution
+    if (this.props.url !== prevProps.url) {
+      this.player.stop();
+      this.player.start();
+    }
+  }
+
   componentWillUnmount() {
     this._isMounted = false;
     AppState.removeEventListener('change', this._handleAppStateChange);
@@ -124,7 +132,7 @@ class Main extends React.Component {
               bufferTime={300}
               maxBufferTime={1000}
               autoplay={false}
-              // onStatus={this_onStatus}
+              onStatus={this._onStatus}
             />
 
             <PlayerAction
