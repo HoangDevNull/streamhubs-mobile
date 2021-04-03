@@ -4,6 +4,11 @@ import { Avatar, Badge, Headline, List } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 
 import { LeftItem, RigthItem } from './ChannelItem';
+import { useSelector } from 'react-redux';
+
+import { AVATAR_URL } from '../../../config';
+import UserAvatar from '../../common/UserAvatar';
+
 const ENTRIES1 = [
   {
     id: 1,
@@ -48,6 +53,7 @@ export const sliderWidth = screenWidth;
 
 const FollowedChannel = () => {
   const styles = useStyles();
+  const streamers = useSelector((state) => state.following.followedStreamer);
 
   return (
     <View styles={styles.container}>
@@ -55,18 +61,26 @@ const FollowedChannel = () => {
         <List.Subheader>
           <Headline style={styles.headline}>Followed Channel</Headline>
         </List.Subheader>
-        {ENTRIES1.map(({ username, description, id, avatar }) => (
+        {streamers?.results?.map(({ username, id, userProfile }) => (
           <List.Item
             style={styles.item}
             onPress={() => console.log({ id })}
             key={String(id)}
             title={username}
-            description={description}
+            description={userProfile?.description}
             left={(props) => (
               <List.Icon
                 {...props}
-                icon={({ size, color }) => (
-                  <Avatar.Image size={42} source={{ uri: avatar }} />
+                icon={() => (
+                  <UserAvatar
+                    size={42}
+                    src={
+                      userProfile?.avatar
+                        ? AVATAR_URL + userProfile.avatar
+                        : null
+                    }
+                    onPress={null}
+                  />
                 )}
               />
             )}

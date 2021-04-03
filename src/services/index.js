@@ -27,3 +27,4 @@ export const registerURL = '/users';
 export const randomCategoriesURL = '/categories/random';
 export const subChannelURL = '/channel/subcribed';
 export const suggestChannelURL = '/channel/suggest';
+export const streamerFollowedURL = '/channel/all-subcribed-streamer-profile';

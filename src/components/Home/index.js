@@ -1,10 +1,9 @@
 import React from 'react';
-import { SafeAreaView, View } from 'react-native';
+import { RefreshControl, SafeAreaView, ScrollView, View } from 'react-native';
 import { ActivityIndicator, Text, withTheme, Colors } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { ScrollView } from 'react-native-gesture-handler';
 
 import CategorySlider from './components/CategorySlider';
 import LiveChannel from './components/LiveChannel';
@@ -17,6 +16,7 @@ import {
   randomCategoriesURL,
   subChannelURL,
   suggestChannelURL,
+  streamerFollowedURL,
 } from '../../services';
 import { initFollowingData } from '../../redux/actions/following';
 
@@ -25,32 +25,59 @@ const Home = ({ navigation, theme }) => {
   const dispatch = useDispatch();
   const access_token = useSelector((state) => state.user?.access_token);
   const [isLoading, setIsLoading] = React.useState(true);
-  React.useEffect(() => {
-    (async () => {
-      const category = authRequest(randomCategoriesURL, 'POST', access_token);
-      const subcribeChannel = authRequest(subChannelURL, 'POST', access_token, {
-        channelStatus: 0,
-      });
-      const sugChannel = authRequest(suggestChannelURL, 'POST', access_token, {
-        channelStatus: 0,
-      });
-      try {
-        const [
-          { data: categories },
-          { data: liveChannel },
-          { data: suggestChannel },
-        ] = await Promise.all([category, subcribeChannel, sugChannel]);
+  const [refreshing, setRefreshing] = React.useState(false);
 
-        dispatch(
-          initFollowingData({ categories, liveChannel, suggestChannel }),
-        );
+  const fetchData = React.useCallback(async () => {
+    const category = authRequest(randomCategoriesURL, 'POST', access_token);
+    const subcribeChannel = authRequest(subChannelURL, 'POST', access_token, {
+      channelStatus: 0,
+    });
+    const sugChannel = authRequest(suggestChannelURL, 'POST', access_token, {
+      channelStatus: 0,
+    });
+    const streamer = authRequest(streamerFollowedURL, 'POST', access_token, {
+      page: 0,
+      offset: 10,
+    });
+    const [
+      { data: categories },
+      { data: liveChannel },
+      { data: suggestChannel },
+      { data: followedStreamer },
+    ] = await Promise.all([category, subcribeChannel, sugChannel, streamer]);
+    dispatch(
+      initFollowingData({
+        categories,
+        liveChannel,
+        suggestChannel,
+        followedStreamer,
+      }),
+    );
+  }, [access_token, dispatch]);
+
+  const onRefresh = React.useCallback(async () => {
+    console.log('run 2');
+    setRefreshing(true);
+    try {
+      await fetchData();
+      setRefreshing(false);
+    } catch (err) {
+      setRefreshing(false);
+    }
+  }, [fetchData]);
+
+  React.useEffect(() => {
+    console.log('run first');
+    (async () => {
+      try {
+        await fetchData();
         setIsLoading(false);
       } catch (err) {
         console.log({ err });
         setIsLoading(false);
       }
     })();
-  }, [access_token, dispatch]);
+  }, [fetchData]);
 
   if (isLoading) {
     return (
@@ -66,7 +93,11 @@ const Home = ({ navigation, theme }) => {
 
   return (
     <SafeAreaView>
-      <ScrollView>
+      <ScrollView
+        contentContainerStyle={styles.scrollView}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <View style={styles.container}>
           <Text style={[styles.grid, styles.headText]}>
             F<Text style={styles.primaryText}>o</Text>ll
@@ -98,6 +129,9 @@ const useStyles = makeStyles((theme) => ({
   container: {
     width: '100%',
     height: '100%',
+  },
+  scrollView: {
+    flex: 1,
   },
   grid: {
     marginTop: 15,
