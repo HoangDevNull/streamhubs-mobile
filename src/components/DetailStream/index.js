@@ -14,10 +14,10 @@ const DetailStream = ({ route, theme }) => {
   const { isPortrait } = useScreenSize();
   const resolution = useSelector((state) => state.player.resolution);
 
-  let stream_url = 'rtmp://192.168.1.4/live/test';
+  let stream_url = 'rtmp://103.130.218.62/live/test';
   if (resolution === 'auto') {
     // temporary solution. Need to enhance in future
-    stream_url = 'rtmp://192.168.1.4/live/test';
+    stream_url = 'rtmp://103.130.218.62/live/test';
   } else {
     stream_url += `_${resolution}`;
   }
