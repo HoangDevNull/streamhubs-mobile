@@ -4,6 +4,7 @@ import { Text, withTheme, Colors } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { FlatList } from 'react-native-gesture-handler';
+import { useSelector } from 'react-redux';
 
 const messages = [
   {
@@ -96,24 +97,16 @@ const ChatList = ({ theme }) => {
   const styles = useStyles();
   let chatRef = React.useRef(null);
   const [data, setData] = React.useState(messages);
+  const socket = useSelector((state) => state.socket.socketInstance);
 
   React.useEffect(() => {
-    // const interval = setInterval(() => {
-    //   setData([
-    //     ...data,
-    //     {
-    //       id: Date.now(),
-    //       username: 'last1',
-    //       color: 'blue400',
-    //       message:
-    //         ' Expo extends React Native and gives us all the tools we need',
-    //     },
-    //   ]);
-    // }, 1000);
-    // return () => {
-    //   clearInterval(interval);
-    // };
-  }, [data]);
+    socket.on('newMsgFromServer', (message) => {
+      console.log({ message });
+    });
+    return () => {
+      socket.off('newMsgFromServer');
+    };
+  }, [socket]);
 
   const _renderMessage = ({ item: { username, color, message } }) => (
     <View style={styles.message}>

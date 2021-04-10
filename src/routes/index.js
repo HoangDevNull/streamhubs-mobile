@@ -1,11 +1,13 @@
 import React from 'react';
-import { StatusBar, View } from 'react-native';
+import { StatusBar, View, LogBox } from 'react-native';
 import { ActivityIndicator, Colors, Snackbar } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
+import io from 'socket.io-client';
+import { ROOT_URL } from '../config';
 
 //Navigator
 import AuthStack from './AuthStack';
@@ -14,6 +16,11 @@ import AppStack from './AppStack';
 import { saveLoginInfo } from '../redux/actions/user';
 import { LightTheme, DarkTheme } from '../theme';
 import { setSnackbar } from '../redux/actions/snackbar';
+import { initSocket } from '../redux/actions/socket';
+
+LogBox.ignoreLogs([
+  'Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, `cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?',
+]);
 
 export default () => {
   const styles = useStyles();
@@ -23,10 +30,26 @@ export default () => {
   const { open, text } = useSelector((state) => state.snackbar);
 
   React.useEffect(() => {
+    let socket = null;
     AsyncStorage.getItem('user')
       .then((info) => {
         if (info) {
-          dispatch(saveLoginInfo(JSON.parse(info)));
+          const parseInfo = JSON.parse(info);
+          const socket = io.connect(ROOT_URL);
+          socket.on('connect', () => {
+            socket
+              .emit('authenticate', { token: parseInfo.access_token }) //send the jwt
+              .on('authenticated', () => {
+                dispatch(
+                  initSocket({
+                    socketInstance: socket,
+                    socketAuth: true,
+                  }),
+                );
+              });
+            // .on('unauthorized', (msg) => {});
+          });
+          dispatch(saveLoginInfo(parseInfo));
         }
         setTimeout(() => {
           setIsLoading(false);
@@ -38,6 +61,10 @@ export default () => {
           setIsLoading(false);
         }, 1000);
       });
+
+    return () => {
+      socket && socket?.close();
+    };
   }, [dispatch]);
 
   const _dismissSnackbar = () => {

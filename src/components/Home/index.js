@@ -45,6 +45,7 @@ const Home = ({ navigation, theme }) => {
       { data: suggestChannel },
       { data: followedStreamer },
     ] = await Promise.all([category, subcribeChannel, sugChannel, streamer]);
+
     dispatch(
       initFollowingData({
         categories,
@@ -56,7 +57,6 @@ const Home = ({ navigation, theme }) => {
   }, [access_token, dispatch]);
 
   const onRefresh = React.useCallback(async () => {
-    console.log('run 2');
     setRefreshing(true);
     try {
       await fetchData();

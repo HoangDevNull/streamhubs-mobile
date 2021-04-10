@@ -46,7 +46,8 @@
     "react-redux": "^7.2.2",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "yup": "^0.32.9"
+    "yup": "^0.32.9",
+    "socket.io-client": "2.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
