@@ -67,7 +67,6 @@ const Home = ({ navigation, theme }) => {
   }, [fetchData]);
 
   React.useEffect(() => {
-    console.log('run first');
     (async () => {
       try {
         await fetchData();

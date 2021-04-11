@@ -1,4 +1,4 @@
-const env = 'dev_hoang';
+const env = 'production';
 
 let ROOT_API = null;
 let ROOT_URL = null;

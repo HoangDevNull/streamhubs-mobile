@@ -7,7 +7,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { useScreenSize } from '../../hooks/useScreenSize';
 import { initStreamData } from '../../redux/actions/detailStream';
-import { authRequest, subStatusURL } from '../../services';
 
 import PlayerSetting from './components/PlayerSetting';
 import DismissKeyboard from '../common/DismissKeyboard';
@@ -22,12 +21,20 @@ const DetailStream = ({ route, theme }) => {
   const socket = useSelector((state) => state.socket?.socketInstance);
 
   React.useEffect(() => {
-    if (route?.params && socket) {
-      dispatch(initStreamData(route?.params));
+    const channel = route?.params;
+    if (channel && socket) {
+      dispatch(initStreamData(channel));
       // Join channel using endpoint
-      socket.emit('joinLiveChannel', route?.params?.endPoint);
+      socket.emit('joinLiveChannel', {
+        endPoint: channel?.endPoint,
+        channelID: route.params?.id,
+      });
     }
-  }, [route?.params, socket]);
+
+    return () => {
+      socket.emit('leaveLiveChannel', channel?.endPoint);
+    };
+  }, [route.params, socket, dispatch]);
 
   let stream_url = 'rtmp://103.130.218.62/live/test';
   if (resolution === 'auto') {

@@ -30,3 +30,5 @@ export const suggestChannelURL = '/channel/suggest';
 export const streamerFollowedURL = '/channel/all-subcribed-streamer-profile';
 export const channelURL = '/channel';
 export const subStatusURL = '/channel/subcribed';
+export const subcribeUrl = '/subscribe';
+export const unSubcribeUrl = '/unsubscribe';

@@ -9,16 +9,18 @@ import { useSelector } from 'react-redux';
 const ChatList = ({ theme }) => {
   const styles = useStyles();
   const [messages, setMessages] = React.useState([]);
-  // const socket = useSelector((state) => state.socket.socketInstance);
+  const socket = useSelector((state) => state.socket.socketInstance);
 
-  // React.useEffect(() => {
-  //   socket.on('newMsgFromServer', (message) => {
-  //     console.log({ message });
-  //   });
-  //   return () => {
-  //     socket.off('newMsgFromServer');
-  //   };
-  // }, [socket]);
+  React.useEffect(() => {
+    socket.on('newMessageFS', (message) => {
+      const msgs = [...messages, message];
+      setMessages(msgs);
+    });
+
+    return () => {
+      socket.off('newMessageFS');
+    };
+  }, [socket, messages]);
 
   const _renderMessage = ({ item: { username, color, message } }) => (
     <View style={styles.message}>
@@ -42,14 +44,10 @@ const ChatList = ({ theme }) => {
       </View>
 
       {/* List message  */}
-
       <FlatList
-        ref={(ref) => (chatRef = ref)}
-        // onContentSizeChange={() => chatRef.scrollToEnd({ animated: false })}
         keyExtractor={({ id }) => String(id)}
         data={messages}
         renderItem={_renderMessage}
-        ListFooterComponent={<View style={styles.mb20} />}
         initialNumToRender={8}
         maxToRenderPerBatch={2}
         onEndReachedThreshold={0.5}
@@ -65,15 +63,15 @@ export default withTheme(ChatList);
 const useStyles = makeStyles((theme) => ({
   container: {
     flex: 1,
-    // height: '100%',
   },
   contentContainer: {
     flexDirection: 'column-reverse',
+    paddingHorizontal: 8,
   },
   banner: {
     flexDirection: 'row',
     width: '100%',
-    paddingVertical: 13,
+    paddingVertical: 8,
     borderColor: theme.colors.surface,
     borderBottomWidth: 1,
   },
@@ -84,7 +82,4 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Inter-Bold',
   },
   content: {},
-  mb20: {
-    marginBottom: 20,
-  },
 }));

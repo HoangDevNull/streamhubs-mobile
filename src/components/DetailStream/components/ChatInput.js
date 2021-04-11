@@ -1,13 +1,31 @@
 import React from 'react';
-import { View, TextInput } from 'react-native';
+import { View, TextInput, Keyboard } from 'react-native';
 import { IconButton, withTheme } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import LinearGradient from 'react-native-linear-gradient';
+import { useSelector } from 'react-redux';
 
 const ChatInput = ({ theme }) => {
   const styles = useStyles();
+  const user = useSelector((state) => state.user);
+  const channel = useSelector((state) => state.detailStream);
+  const socket = useSelector((state) => state.socket.socketInstance);
+  const [message, setMessage] = React.useState('');
+
+  const _sendMessage = () => {
+    const payload = {
+      id: Date.now(),
+      username: user?.username,
+      color: user?.userProfile?.color,
+      message,
+      endPoint: channel?.endPoint,
+    };
+    socket.emit('newMessage', payload);
+    setMessage('');
+    Keyboard.dismiss();
+  };
 
   return (
     <View style={styles.container}>
@@ -17,6 +35,8 @@ const ChatInput = ({ theme }) => {
         colors={[theme.colors.disabled, theme.colors.disabled]}
         style={styles.wrapInput}>
         <TextInput
+          value={message}
+          onChangeText={(text) => setMessage(text)}
           placeholderTextColor={theme.colors.placeholder}
           placeholder="Send a message"
           style={styles.input}
@@ -32,7 +52,7 @@ const ChatInput = ({ theme }) => {
         icon={() => <Feather name="send" color="#fff" size={26} />}
         color={theme.colors.primary}
         size={32}
-        onPress={() => console.log('Pressed')}
+        onPress={_sendMessage}
       />
     </View>
   );

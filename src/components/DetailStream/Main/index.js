@@ -43,7 +43,6 @@ class Main extends React.Component {
   }
 
   _handleAppStateChange = (appState) => {
-    console.log({ appState });
     if (appState.match(/inactive|background/)) {
       this.player.pause();
     } else {
@@ -146,7 +145,6 @@ class Main extends React.Component {
                 styles.chatList,
                 {
                   top: isPortrait ? chatListOffset : 0,
-                  bottom: 0,
                   height: isPortrait ? chatListHeight : playerHeight,
                   width: isPortrait ? '100%' : showChatRoom ? '25%' : '0%',
                   zIndex: isPortrait ? 0 : 10,
@@ -186,7 +184,6 @@ const styles = StyleSheet.create({
   chatList: {
     position: 'absolute',
     right: 0,
-    paddingHorizontal: 8,
-    paddingBottom: 10,
+    bottom: 0,
   },
 });

@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 
 import Animated, { Easing } from 'react-native-reanimated';
 
-import { authRequest, subStatusURL } from '../../../services';
+import { authRequest, subcribeUrl, unSubcribeUrl } from '../../../services';
 import { AVATAR_URL } from '../../../config';
 
 import ChipCustom from '../../common/ChipCustom';
@@ -23,21 +23,21 @@ const CollapseInfo = ({ isPortrait, theme }) => {
   const styles = useStyles();
   const { focus, showChatRoom } = useSelector((state) => state.player);
   const channel = useSelector((state) => state.detailStream);
-  const access_token = useSelector((state) => state.user?.access_token);
   const [subscribe, setSubcribed] = React.useState(null);
+  const socket = useSelector((state) => state.socket.socketInstance);
+  const user = useSelector((state) => state.user);
 
   // Get subcribe status
   React.useEffect(() => {
-    if (access_token && channel?.id) {
-      authRequest(`${subStatusURL}/${channel.id}`, 'GET', access_token)
-        .then(({ data }) => {
-          console.log({ data });
-          setSubcribed(data);
-        })
-        .catch((err) => console.log(err));
+    if (socket) {
+      socket.on('getSttSubcribeFS', (subcribed) => setSubcribed(subcribed));
     }
-  }, [access_token, channel]);
+    return () => {
+      socket.off('getSttSubcribeFS');
+    };
+  }, [socket]);
 
+  // Toggel show/hide info
   React.useEffect(() => {
     if (focus) {
       // show
@@ -56,6 +56,18 @@ const CollapseInfo = ({ isPortrait, theme }) => {
     }
   }, [focus]);
 
+  const _toggleSubcribe = async () => {
+    try {
+      const url = subscribe ? unSubcribeUrl : subcribeUrl;
+      const payload = { channelID: channel.id };
+      await authRequest(url, 'PUT', user.access_token, payload);
+      setSubcribed(!subscribe);
+    } catch (error) {
+      console.log({ error });
+    }
+  };
+
+  // Animated variable
   const height = Animated.interpolate(position, {
     inputRange: [0, 1],
     outputRange: [0, 125],
@@ -67,6 +79,7 @@ const CollapseInfo = ({ isPortrait, theme }) => {
     extrapolate: Animated.Extrapolate.CLAMP,
   });
 
+  // UI state variable
   const shouldResize = isPortrait === false && showChatRoom;
   const avatar = channel?.owner?.userProfile?.avatar;
   return (
@@ -99,7 +112,8 @@ const CollapseInfo = ({ isPortrait, theme }) => {
                 labelStyle={styles.subcribeButtonText}
                 uppercase={false}
                 compact
-                mode={subscribe ? 'outlined' : 'contained'}>
+                mode={subscribe ? 'outlined' : 'contained'}
+                onPress={_toggleSubcribe}>
                 {subscribe ? 'Unsubscribe' : 'Subscribe'}
               </Button>
             </View>
