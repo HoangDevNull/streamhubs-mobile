@@ -6,107 +6,19 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { FlatList } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 
-const messages = [
-  {
-    id: 0,
-    username: 'Federal28',
-    color: 'purple400',
-    message: ' Expo extends React Native and gives us all the tools we need',
-  },
-  {
-    id: 1,
-    username: 'Bot',
-    color: 'pink400',
-    message: ' Expo extends React Native and gives us all the tools we need',
-  },
-  {
-    id: 2,
-    username: 'seqhorse',
-    color: 'red400',
-    message: ' Expo extends React Native and gives us all the tools we need',
-  },
-  {
-    id: 3,
-    username: 'emilyydovee',
-    color: 'purple400',
-    message: ' Expo extends React Native and gives us all the tools we need',
-  },
-  {
-    id: 4,
-    username: 'Nasobi_origami',
-    color: 'purple400',
-    message: ' Expo extends React Native and gives us all the tools we need',
-  },
-  {
-    id: 5111412,
-    username: 'Themarcjagger',
-    color: 'blue400',
-    message: ' Expo extends React Native and gives us all the tools we need',
-  },
-  {
-    id: 5132,
-    username: 'Themarcjagger',
-    color: 'blue400',
-    message: ' Expo extends React Native and gives us all the tools we need',
-  },
-  {
-    id: 51244,
-    username: 'Themarcjagger',
-    color: 'blue400',
-    message: ' Expo extends React Native and gives us all the tools we need',
-  },
-  {
-    id: 51322,
-    username: 'Themarcjagger',
-    color: 'blue400',
-    message: ' Expo extends React Native and gives us all the tools we need',
-  },
-  {
-    id: 511,
-    username: 'Themarcjagger',
-    color: 'blue400',
-    message: ' Expo extends React Native and gives us all the tools we need',
-  },
-  {
-    id: 513,
-    username: 'Themarcjagger',
-    color: 'blue400',
-    message: ' Expo extends React Native and gives us all the tools we need',
-  },
-  {
-    id: 5211,
-    username: 'Themarcjagger',
-    color: 'blue400',
-    message: ' Expo extends React Native and gives us all the tools we need',
-  },
-  {
-    id: 2315,
-    username: 'last1',
-    color: 'blue400',
-    message: ' Expo extends React Native and gives us all the tools we need',
-  },
-  {
-    id: 51,
-    username: 'last2',
-    color: 'blue400',
-    message: ' Expo extends React Native and gives us all the tools we need',
-  },
-];
-
 const ChatList = ({ theme }) => {
   const styles = useStyles();
-  let chatRef = React.useRef(null);
-  const [data, setData] = React.useState(messages);
-  const socket = useSelector((state) => state.socket.socketInstance);
+  const [messages, setMessages] = React.useState([]);
+  // const socket = useSelector((state) => state.socket.socketInstance);
 
-  React.useEffect(() => {
-    socket.on('newMsgFromServer', (message) => {
-      console.log({ message });
-    });
-    return () => {
-      socket.off('newMsgFromServer');
-    };
-  }, [socket]);
+  // React.useEffect(() => {
+  //   socket.on('newMsgFromServer', (message) => {
+  //     console.log({ message });
+  //   });
+  //   return () => {
+  //     socket.off('newMsgFromServer');
+  //   };
+  // }, [socket]);
 
   const _renderMessage = ({ item: { username, color, message } }) => (
     <View style={styles.message}>
@@ -125,7 +37,7 @@ const ChatList = ({ theme }) => {
       {/* Banner */}
       <View style={styles.banner}>
         <Text>
-          <Text>Chat Room</Text>{' '}
+          <Text>Chatting</Text>{' '}
         </Text>
       </View>
 
@@ -135,7 +47,7 @@ const ChatList = ({ theme }) => {
         ref={(ref) => (chatRef = ref)}
         // onContentSizeChange={() => chatRef.scrollToEnd({ animated: false })}
         keyExtractor={({ id }) => String(id)}
-        data={data}
+        data={messages}
         renderItem={_renderMessage}
         ListFooterComponent={<View style={styles.mb20} />}
         initialNumToRender={8}

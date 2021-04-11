@@ -6,6 +6,7 @@ import player from './reducers/player';
 import snackbar from './reducers/snackbar';
 import following from './reducers/following';
 import socket from './reducers/socket';
+import detailStream from './reducers/detailStream';
 
 const reducers = combineReducers({
   user,
@@ -14,6 +15,7 @@ const reducers = combineReducers({
   snackbar,
   following,
   socket,
+  detailStream,
 });
 
 export default reducers;

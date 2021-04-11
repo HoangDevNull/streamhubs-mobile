@@ -9,22 +9,35 @@ import { useSelector } from 'react-redux';
 
 import Animated, { Easing } from 'react-native-reanimated';
 
+import { authRequest, subStatusURL } from '../../../services';
+import { AVATAR_URL } from '../../../config';
+
 import ChipCustom from '../../common/ChipCustom';
 import UserAvatar from '../../common/UserAvatar';
 
-const tags = [
-  { id: 1, color: 'pink400', name: 'Chating' },
-  { id: 2, color: 'green400', name: 'Gaming' },
-  { id: 3, color: 'purple400', name: 'MOBA' },
-];
-
+// Animated val
 const { Value } = Animated;
-
 const position = new Value(1);
 
 const CollapseInfo = ({ isPortrait, theme }) => {
   const styles = useStyles();
   const { focus, showChatRoom } = useSelector((state) => state.player);
+  const channel = useSelector((state) => state.detailStream);
+  const access_token = useSelector((state) => state.user?.access_token);
+  const [subscribe, setSubcribed] = React.useState(null);
+
+  // Get subcribe status
+  React.useEffect(() => {
+    if (access_token && channel?.id) {
+      authRequest(`${subStatusURL}/${channel.id}`, 'GET', access_token)
+        .then(({ data }) => {
+          console.log({ data });
+          setSubcribed(data);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [access_token, channel]);
+
   React.useEffect(() => {
     if (focus) {
       // show
@@ -55,6 +68,7 @@ const CollapseInfo = ({ isPortrait, theme }) => {
   });
 
   const shouldResize = isPortrait === false && showChatRoom;
+  const avatar = channel?.owner?.userProfile?.avatar;
   return (
     <>
       <Animated.View
@@ -65,30 +79,36 @@ const CollapseInfo = ({ isPortrait, theme }) => {
           { height: height, opacity },
         ]}>
         <View style={styles.wrapper}>
-          <UserAvatar size={32} />
-
+          <UserAvatar src={avatar ? AVATAR_URL + avatar : null} size={32} />
           <View style={styles.titleWrapper}>
-            <Subheading style={styles.fontBold}>Ninja</Subheading>
-            <Text numberOfLines={2}>Live from Kristin! Happy Monday ⚛️</Text>
+            <Subheading style={styles.fontBold}>
+              {channel?.owner?.username}
+            </Subheading>
+            <Text numberOfLines={2}>{channel?.description}</Text>
           </View>
-
-          <View style={styles.subcribeButton}>
-            <Button
-              icon={() => (
-                <Ionicons name="heart-outline" color="#fff" size={18} />
-              )}
-              labelStyle={styles.subcribeButtonText}
-              uppercase={false}
-              compact
-              mode="contained">
-              Subscribe
-            </Button>
-          </View>
+          {subscribe !== null && (
+            <View style={styles.subcribeButton}>
+              <Button
+                icon={() => (
+                  <Ionicons
+                    name={subscribe ? 'heart' : 'heart-outline'}
+                    color={subscribe ? theme.colors.primary : '#fff'}
+                    size={18}
+                  />
+                )}
+                labelStyle={styles.subcribeButtonText}
+                uppercase={false}
+                compact
+                mode={subscribe ? 'outlined' : 'contained'}>
+                {subscribe ? 'Unsubscribe' : 'Subscribe'}
+              </Button>
+            </View>
+          )}
         </View>
 
         <View style={styles.wrapTag}>
           <FlatList
-            data={tags}
+            data={channel?.category?.tags}
             keyExtractor={({ id }) => String(id)}
             renderItem={({ item: { color, name } }) => (
               <ChipCustom style={styles.chip} color={color} title={name} />

@@ -9,11 +9,11 @@ import Orientation from 'react-native-orientation-locker';
 
 import ViewerCount from './shared/ViewerCount';
 import { openSetting, toggleChatRoom } from '../../../redux/actions/player';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const PlayerAction = ({ isPortrait = true }) => {
   const styles = useStyles();
   const dispatch = useDispatch();
+  // Controll state;
   const { focus, showChatRoom, openSetting: open } = useSelector(
     (state) => state.player,
   );

@@ -1,18 +1,33 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { KeyboardAvoidingView, Platform, View } from 'react-native';
 import { Portal, withTheme } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
+
+import { useSelector, useDispatch } from 'react-redux';
+
+import { useScreenSize } from '../../hooks/useScreenSize';
+import { initStreamData } from '../../redux/actions/detailStream';
+import { authRequest, subStatusURL } from '../../services';
+
+import PlayerSetting from './components/PlayerSetting';
 import DismissKeyboard from '../common/DismissKeyboard';
 import Player from './Main';
 import ChatInput from './components/ChatInput';
-import { useScreenSize } from '../../hooks/useScreenSize';
-import PlayerSetting from './components/PlayerSetting';
-import { useSelector } from 'react-redux';
 
 const DetailStream = ({ route, theme }) => {
+  const dispatch = useDispatch();
   const styles = useStyles();
   const { isPortrait } = useScreenSize();
   const resolution = useSelector((state) => state.player.resolution);
+  const socket = useSelector((state) => state.socket?.socketInstance);
+
+  React.useEffect(() => {
+    if (route?.params && socket) {
+      dispatch(initStreamData(route?.params));
+      // Join channel using endpoint
+      socket.emit('joinLiveChannel', route?.params?.endPoint);
+    }
+  }, [route?.params, socket]);
 
   let stream_url = 'rtmp://103.130.218.62/live/test';
   if (resolution === 'auto') {
@@ -46,7 +61,7 @@ const DetailStream = ({ route, theme }) => {
   );
 };
 
-export default withTheme(DetailStream);
+export default withTheme(memo(DetailStream));
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -59,7 +74,6 @@ const useStyles = makeStyles((theme) => ({
   foot: {
     marginTop: 'auto',
     backgroundColor: theme.colors.background,
-    paddingBottom: 10,
     paddingHorizontal: 8,
   },
   hide: {},

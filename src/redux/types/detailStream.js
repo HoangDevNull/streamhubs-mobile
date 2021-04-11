@@ -1,0 +1,1 @@
+export const INIT_STREAM_DATA = 'INIT_STREAM_DATA';

@@ -23,12 +23,9 @@ const SuggestChannel = () => {
         {channels.map((channel) => (
           <List.Item
             style={styles.item}
-            onPress={() =>
-              navigation.navigate('DetailStream', {
-                id: 1,
-                streamName: 'test',
-              })
-            }
+            onPress={() => {
+              navigation.navigate('DetailStream', channel);
+            }}
             key={channel.id}
             left={() => <LeftItem uri={channel.banner} />}
             right={() => <RigthItem data={channel} />}
