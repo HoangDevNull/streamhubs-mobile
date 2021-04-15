@@ -42,7 +42,7 @@ const CollapseInfo = ({ isPortrait, theme }) => {
     if (focus) {
       // show
       Animated.timing(position, {
-        duration: 50,
+        duration: 250,
         toValue: 1,
         easing: Easing.inOut(Easing.ease),
       }).start();

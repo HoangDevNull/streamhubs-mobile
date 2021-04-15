@@ -148,7 +148,7 @@ class Main extends React.Component {
                   height: isPortrait ? chatListHeight : playerHeight,
                   width: isPortrait ? '100%' : showChatRoom ? '25%' : '0%',
                   zIndex: isPortrait ? 0 : 10,
-                  paddingHorizontal: isPortrait ? 8 : showChatRoom ? 8 : 0,
+                  // paddingHorizontal: isPortrait ? 8 : showChatRoom ? 8 : 0,
                 },
               ]}>
               {/* Chat main */}
@@ -166,7 +166,7 @@ class Main extends React.Component {
 
 const mapStateToProps = (state) => ({ player: state.player });
 
-export default connect(mapStateToProps)(withResize(React.memo(Main)));
+export default React.memo(connect(mapStateToProps)(withResize(Main)));
 
 const styles = StyleSheet.create({
   container: {

@@ -38,8 +38,8 @@ const ChatList = ({ theme }) => {
     <View style={styles.container}>
       {/* Banner */}
       <View style={styles.banner}>
-        <Text>
-          <Text>Chatting</Text>{' '}
+        <Text style={styles.title}>
+          <Text>Wellcome to chat room</Text>{' '}
         </Text>
       </View>
 
@@ -53,6 +53,7 @@ const ChatList = ({ theme }) => {
         onEndReachedThreshold={0.5}
         inverted
         contentContainerStyle={styles.contentContainer}
+        style={styles.flatList}
       />
     </View>
   );
@@ -61,25 +62,18 @@ const ChatList = ({ theme }) => {
 export default withTheme(ChatList);
 
 const useStyles = makeStyles((theme) => ({
-  container: {
-    flex: 1,
-  },
-  contentContainer: {
-    flexDirection: 'column-reverse',
-    paddingHorizontal: 8,
-  },
+  container: { flex: 1 },
+  contentContainer: { flexDirection: 'column-reverse', paddingBottom: 20 },
+  flatList: { marginBottom: 8, marginHorizontal: 8 },
   banner: {
     flexDirection: 'row',
     width: '100%',
-    paddingVertical: 8,
+    paddingVertical: 12,
     borderColor: theme.colors.surface,
     borderBottomWidth: 1,
   },
-  message: {
-    flex: 1,
-  },
-  username: {
-    fontFamily: 'Inter-Bold',
-  },
+  title: { paddingLeft: 8 },
+  message: { flex: 1 },
+  username: { fontFamily: 'Inter-Bold' },
   content: {},
 }));

@@ -42,6 +42,7 @@ const PlayerAction = ({ isPortrait = true }) => {
           !isPortrait && showChatRoom && styles.showChatRoom,
         ]}>
         <IconButton
+          disabled={!focus}
           icon={() => (
             <Ionicons
               name="chevron-down-circle-outline"
@@ -58,6 +59,7 @@ const PlayerAction = ({ isPortrait = true }) => {
         <View style={styles.topRight}>
           {!isPortrait && (
             <IconButton
+              disabled={!focus}
               icon={() => (
                 <Ionicons
                   name={
@@ -75,6 +77,7 @@ const PlayerAction = ({ isPortrait = true }) => {
             />
           )}
           <IconButton
+            disabled={!focus}
             icon={() => (
               <Ionicons name="settings-outline" size={22} color="#fff" />
             )}
@@ -85,6 +88,7 @@ const PlayerAction = ({ isPortrait = true }) => {
         </View>
 
         <IconButton
+          disabled={!focus}
           icon={() => (
             <Ionicons
               name={isPortrait ? 'expand-outline' : 'crop-outline'}
