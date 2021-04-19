@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Image, Dimensions } from 'react-native';
-import { Text } from 'react-native-paper';
+import { View, Image, Dimensions, TouchableHighlight } from 'react-native';
+import { Button, Text } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import { FlatList } from 'react-native-gesture-handler';
 import { getScreen } from '../../../utils/function';
@@ -13,17 +13,18 @@ import Animated, {
 } from 'react-native-reanimated';
 const AnimVal = new Value(0);
 
-const Item = ({ uri }) => {
+const Item = ({ uri, onSelect }) => {
   const styles = useStyles();
+
   return (
-    <View style={styles.item}>
+    <TouchableHighlight onPress={onSelect} style={styles.item}>
       <Image source={{ uri }} style={styles.image} />
-    </View>
+    </TouchableHighlight>
   );
 };
 
 const columnWidth = 60;
-const Emotes = ({ open }) => {
+const Emotes = ({ open, onSelect }) => {
   const styles = useStyles();
 
   React.useEffect(() => {
@@ -34,7 +35,9 @@ const Emotes = ({ open }) => {
     }).start();
   }, [open]);
 
-  const renderItem = ({ item }) => <Item uri={item.uri} />;
+  const renderItem = ({ item }) => (
+    <Item {...item} onSelect={() => onSelect(item)} />
+  );
 
   //   Animation
   const height100 = AnimVal.interpolate({
@@ -62,10 +65,10 @@ const Emotes = ({ open }) => {
         columnWrapperStyle={styles.row}
         style={styles.flatlist}
         keyExtractor={({ id }) => String(id)}
-        data={Array.from(Array(150).keys()).map((i) => ({
+        data={Array.from(Array(50).keys()).map((i) => ({
           uri: `https://static-cdn.jtvnw.net/emoticons/v2/${
             i + 4
-          }/default/light/1.0`,
+          }/default/dark/1.0`,
           id: i,
         }))}
         renderItem={renderItem}

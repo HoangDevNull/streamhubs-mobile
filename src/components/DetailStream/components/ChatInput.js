@@ -7,17 +7,48 @@ import Feather from 'react-native-vector-icons/Feather';
 import LinearGradient from 'react-native-linear-gradient';
 import { useSelector } from 'react-redux';
 import Emote from './Emote';
+import { debounce } from 'lodash';
+
+const initMsgState = {
+  text: '',
+  emotes: [],
+};
 
 const ChatInput = ({ theme }) => {
   const styles = useStyles();
   const user = useSelector((state) => state.user);
   const channel = useSelector((state) => state.detailStream);
   const socket = useSelector((state) => state.socket.socketInstance);
-  const [message, setMessage] = React.useState('');
+  const [message, setMessage] = React.useState(initMsgState);
   const [openEmote, setOpenEmote] = React.useState(false);
 
+  const _handleSelectEmote = (item) => {
+    const { id } = item;
+    const emoteLength = `${id}`.length;
+    let { text, emotes } = Object.assign(message);
+    const msgLength = text.length || 0;
+    emotes = [...emotes, `${id}:${msgLength}-${emoteLength}`];
+    const newMessage = {
+      text: text + id,
+      emotes,
+    };
+    setMessage(newMessage);
+  };
+
+  const _handleChangeText = (x) => {
+    const { emotes } = message;
+
+    setMessage({
+      text: x,
+      emotes,
+    });
+  };
+
   const _sendMessage = () => {
-    if (!message) return;
+    const { text, emotes } = message;
+    if (!text && emotes.length === 0) {
+      return;
+    }
     const payload = {
       id: Date.now(),
       username: user?.username,
@@ -25,11 +56,12 @@ const ChatInput = ({ theme }) => {
       message,
       endPoint: channel?.endPoint,
     };
-    socket.emit('newMessage', payload);
-    setMessage('');
-    Keyboard.dismiss();
-  };
 
+    socket.emit('newMessage', payload);
+    setMessage(initMsgState);
+    Keyboard.dismiss();
+    setOpenEmote(false);
+  };
   return (
     <>
       <View style={styles.container}>
@@ -39,8 +71,8 @@ const ChatInput = ({ theme }) => {
           colors={[theme.colors.disabled, theme.colors.disabled]}
           style={styles.wrapInput}>
           <TextInput
-            value={message}
-            onChangeText={(text) => setMessage(text)}
+            value={message?.text}
+            onChangeText={_handleChangeText}
             placeholderTextColor={theme.colors.placeholder}
             placeholder="Send a message"
             style={styles.input}
@@ -69,7 +101,7 @@ const ChatInput = ({ theme }) => {
           onPress={_sendMessage}
         />
       </View>
-      <Emote open={openEmote} />
+      <Emote open={openEmote} onSelect={_handleSelectEmote} />
     </>
   );
 };
