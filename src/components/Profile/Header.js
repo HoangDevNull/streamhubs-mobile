@@ -6,10 +6,13 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import UserAvatar from '../common/UserAvatar';
 import { useSelector } from 'react-redux';
 
+import { useNavigation } from '@react-navigation/native';
+
 import { AVATAR_URL } from '../../config';
 
 const Header = ({ theme }) => {
   const styles = useStyles();
+  const navigation = useNavigation();
   const { avatar, banner } = useSelector((state) => state.user?.userProfile);
   const { colors } = theme;
   return (
@@ -39,7 +42,7 @@ const Header = ({ theme }) => {
         style={styles.btnLive}
         color={colors.primary}
         size={28}
-        onPress={() => console.log('Pressed')}
+        onPress={() => navigation.navigate('LiveStream')}
       />
     </ImageBackground>
   );

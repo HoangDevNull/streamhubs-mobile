@@ -13,6 +13,8 @@ import DismissKeyboard from '../common/DismissKeyboard';
 import Player from './Main';
 import ChatInput from './components/ChatInput';
 
+import { ROOT_IP } from '../../config';
+
 const DetailStream = ({ route, theme }) => {
   const dispatch = useDispatch();
   const styles = useStyles();
@@ -36,10 +38,10 @@ const DetailStream = ({ route, theme }) => {
     };
   }, [route.params, socket, dispatch]);
 
-  let stream_url = 'rtmp://103.130.218.62/live/test';
+  let stream_url = `rtmp://${ROOT_IP}/live/test`;
   if (resolution === 'auto') {
     // temporary solution. Need to enhance in future
-    stream_url = 'rtmp://103.130.218.62/live/test';
+    stream_url = `rtmp://${ROOT_IP}/live/test`;
   } else {
     stream_url += `_${resolution}`;
   }

@@ -10,6 +10,7 @@ import Header from '../components/Header';
 import Profile from '../components/Profile';
 import DetailStream from '../components/DetailStream';
 import CommingSoon from '../components/CommingSoon';
+import LiveStream from '../components/LiveStream';
 
 const AppStack = createStackNavigator();
 
@@ -28,6 +29,11 @@ export default () => {
         options={{ header: () => null }}
         name="DetailStream"
         component={DetailStream}
+      />
+      <AppStack.Screen
+        options={{ header: () => null }}
+        name="LiveStream"
+        component={LiveStream}
       />
     </AppStack.Navigator>
   );
