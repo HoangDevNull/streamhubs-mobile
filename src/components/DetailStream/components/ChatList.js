@@ -5,10 +5,7 @@ import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import { FlatList } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 import HTML from 'react-native-render-html';
-
-const strSplice = function (str, start, length, replacement) {
-  return str.substr(0, start) + replacement + str.substr(start + length);
-};
+import { format } from 'date-fns';
 
 const htmlStyles = (color, theme) => ({
   div: {
@@ -25,6 +22,7 @@ const htmlStyles = (color, theme) => ({
     width: 25,
     height: 25,
     flexDirection: 'row',
+    marginLeft: 5,
   },
 });
 const ChatList = ({ theme }) => {
@@ -36,7 +34,6 @@ const ChatList = ({ theme }) => {
     socket.on('newMessageFS', (message) => {
       const msg = [...messages];
       msg.push(message);
-      console.log({ msg, message });
       setMessages(msg);
     });
 
@@ -51,24 +48,30 @@ const ChatList = ({ theme }) => {
     const stringReplacements = [];
     if (emotes.length > 0) {
       for (const emote of emotes) {
+        const word = text;
         const [id, position] = emote.split(':');
         const url = `https://static-cdn.jtvnw.net/emoticons/v2/${id}/default/dark/1.0`;
         const pos = position.split('-');
         const start = parseInt(pos[0], 10);
         const emoteLength = parseInt(pos[1], 10);
-        const stringToReplace = text.substr(start, emoteLength);
+        const stringToReplace = word.substr(start, emoteLength);
         stringReplacements.push({
           stringToReplace: stringToReplace,
-          replacement: `<img src="${url}">`,
+          replacement: `<img src='${url}'>`,
         });
       }
+
       content = stringReplacements.reduce(
         (acc, { stringToReplace, replacement }) => {
-          return acc.split(stringToReplace).join(replacement);
+          if (!acc.includes('/' + stringToReplace)) {
+            acc = acc.replace(new RegExp(stringToReplace, 'g'), replacement);
+          }
+          return acc;
         },
         text,
       );
     }
+
     return (
       <View style={styles.message}>
         <HTML

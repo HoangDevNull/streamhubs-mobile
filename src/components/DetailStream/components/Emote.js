@@ -4,6 +4,7 @@ import { Button, Text } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import { FlatList } from 'react-native-gesture-handler';
 import { getScreen } from '../../../utils/function';
+import uuid from 'react-uuid';
 
 import Animated, {
   Extrapolate,
@@ -69,7 +70,7 @@ const Emotes = ({ open, onSelect }) => {
           uri: `https://static-cdn.jtvnw.net/emoticons/v2/${
             i + 4
           }/default/dark/1.0`,
-          id: i,
+          id: i + 4,
         }))}
         renderItem={renderItem}
         numColumns={numOfColumn}

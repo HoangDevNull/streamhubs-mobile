@@ -27,9 +27,9 @@ const ChatInput = ({ theme }) => {
     const emoteLength = `${id}`.length;
     let { text, emotes } = Object.assign(message);
     const msgLength = text.length || 0;
-    emotes = [...emotes, `${id}:${msgLength}-${emoteLength}`];
+    emotes = [...emotes, `${id}:${msgLength}-${emoteLength + 1}`];
     const newMessage = {
-      text: text + id,
+      text: text + id + ` `,
       emotes,
     };
     setMessage(newMessage);
@@ -45,15 +45,23 @@ const ChatInput = ({ theme }) => {
   };
 
   const _sendMessage = () => {
-    const { text, emotes } = message;
-    if (!text && emotes.length === 0) {
+    let { text, emotes } = message;
+    if (!text) {
       return;
+    }
+
+    // Check if have emotes but user already delele it so remove that emote from message
+    if (emotes.length > 0) {
+      emotes = emotes.filter((emote) => {
+        const id = emote.split(':')[0];
+        return text.includes(id);
+      });
     }
     const payload = {
       id: Date.now(),
       username: user?.username,
       color: user?.userProfile?.color,
-      message,
+      message: { text, emotes },
       endPoint: channel?.endPoint,
     };
 
