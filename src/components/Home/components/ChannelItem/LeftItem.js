@@ -10,7 +10,11 @@ const LeftItem = ({ uri, uriFallBack }) => {
     <Card style={styles.card}>
       <View style={[styles.imageContainer]}>
         <Image
-          source={{ uri: imgUri }}
+          source={{
+            uri: imgUri.includes('?')
+              ? imgUri
+              : imgUri + '?time=' + new Date().getTime(),
+          }}
           onError={() => setImgUri(uriFallBack)}
           style={[styles.image]}
         />
