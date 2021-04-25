@@ -15,6 +15,8 @@ import { connect } from 'react-redux';
 import Orientation from 'react-native-orientation-locker';
 import { NodePlayerView } from 'react-native-nodemediaclient';
 
+import { ROOT_IP } from '../../../config';
+
 import withResize from '../../../hoc/withScreenResize';
 
 import PlayerAction from '../components/PlayerAction';
@@ -79,8 +81,9 @@ class Main extends React.Component {
   };
 
   componentDidUpdate(prevProps) {
+    const { resolution } = this.props.player;
     // Restart stream after change resolution
-    if (this.props.url !== prevProps.url) {
+    if (resolution !== prevProps.player.resolution) {
       this.player.stop();
       this.player.start();
     }
@@ -95,10 +98,10 @@ class Main extends React.Component {
   }
 
   render() {
-    const { focus, showChatRoom } = this.props.player;
+    const { focus, showChatRoom, resolution } = this.props.player;
 
     // Props from parent
-    const { screenSize, url } = this.props;
+    const { screenSize, detailStream } = this.props;
     const { isPortrait, height } = screenSize;
 
     // Player
@@ -111,6 +114,18 @@ class Main extends React.Component {
     let chatListHeight = focus
       ? height - (headHeight + 100)
       : height - (playerHeight + 100);
+
+    // Stream
+    let url = `rtmp://${ROOT_IP}/live/${detailStream?.endPoint}`;
+
+    if (resolution === 'auto') {
+      // temporary solution. Need to enhance in future
+      url = `rtmp://${ROOT_IP}/live/${detailStream?.endPoint}`;
+    } else {
+      url += `_${resolution}`;
+    }
+
+    console.log({ url });
 
     return (
       <>
@@ -164,7 +179,10 @@ class Main extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({ player: state.player });
+const mapStateToProps = (state) => ({
+  player: state.player,
+  detailStream: state.detailStream,
+});
 
 export default React.memo(connect(mapStateToProps)(withResize(Main)));
 

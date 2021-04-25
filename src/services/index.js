@@ -24,6 +24,7 @@ export const authRequest = (url, method, access_token, payload = {}) => {
 export const loginUrl = '/login';
 export const logoutUrl = '/logout';
 export const registerURL = '/users';
+export const userURL = '/user';
 export const randomCategoriesURL = '/categories/random';
 export const subChannelURL = '/channel/subcribed';
 export const suggestChannelURL = '/channel/suggest';

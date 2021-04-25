@@ -8,13 +8,12 @@ import { useSelector } from 'react-redux';
 
 import { useNavigation } from '@react-navigation/native';
 
-import { AVATAR_URL } from '../../config';
-
 const Header = ({ theme }) => {
   const styles = useStyles();
   const navigation = useNavigation();
-  const { avatar, banner } = useSelector((state) => state.user?.userProfile);
+  const { userProfile, channel } = useSelector((state) => state.user);
   const { colors } = theme;
+  const { avatar, banner } = userProfile;
   return (
     <ImageBackground
       source={{
@@ -22,11 +21,7 @@ const Header = ({ theme }) => {
       }}
       imageStyle={styles.imageStyle}
       style={styles.container}>
-      <UserAvatar
-        size={70}
-        src={avatar ? AVATAR_URL + avatar : null}
-        onPress={null}
-      />
+      <UserAvatar size={70} src={avatar || null} onPress={null} />
       <View>
         <Text style={styles.textBold}>4.6 K</Text>
         <Caption>Followers</Caption>
@@ -42,7 +37,7 @@ const Header = ({ theme }) => {
         style={styles.btnLive}
         color={colors.primary}
         size={28}
-        onPress={() => navigation.navigate('LiveStream')}
+        onPress={() => navigation.navigate('LiveStream', channel)}
       />
     </ImageBackground>
   );

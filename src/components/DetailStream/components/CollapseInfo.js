@@ -92,7 +92,7 @@ const CollapseInfo = ({ isPortrait, theme }) => {
           { height: height, opacity },
         ]}>
         <View style={styles.wrapper}>
-          <UserAvatar src={avatar ? AVATAR_URL + avatar : null} size={32} />
+          <UserAvatar src={avatar || null} size={32} />
           <View style={styles.titleWrapper}>
             <Subheading style={styles.fontBold}>
               {channel?.owner?.username}

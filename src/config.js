@@ -10,9 +10,9 @@ let AVATAR_URL =
 
 switch (env) {
   case 'dev':
-    ROOT_API = 'http://192.168.1.4:3001/api';
-    ROOT_URL = 'http://192.168.1.4:3001';
-    ROOT_IP = '192.168.1.4';
+    ROOT_API = 'http://192.168.1.7:3001/api';
+    ROOT_URL = 'http://192.168.1.7:3001';
+    ROOT_IP = '192.168.1.7';
     break;
   case 'production':
     ROOT_API = 'http://103.130.218.62:3001/api';

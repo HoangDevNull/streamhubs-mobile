@@ -6,7 +6,6 @@ import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import { LeftItem, RigthItem } from './ChannelItem';
 import { useSelector } from 'react-redux';
 
-import { AVATAR_URL } from '../../../config';
 import UserAvatar from '../../common/UserAvatar';
 
 const ENTRIES1 = [
@@ -74,11 +73,7 @@ const FollowedChannel = () => {
                 icon={() => (
                   <UserAvatar
                     size={42}
-                    src={
-                      userProfile?.avatar
-                        ? AVATAR_URL + userProfile.avatar
-                        : null
-                    }
+                    src={userProfile?.avatar || null}
                     onPress={null}
                   />
                 )}

@@ -6,6 +6,7 @@ import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import { LeftItem, RigthItem } from './ChannelItem';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/core';
+import { ROOT_API } from '../../../config';
 
 const { width: screenWidth } = Dimensions.get('window');
 export const sliderWidth = screenWidth;
@@ -27,7 +28,12 @@ const SuggestChannel = () => {
               navigation.navigate('DetailStream', channel);
             }}
             key={channel.id}
-            left={() => <LeftItem uri={channel.banner} />}
+            left={() => (
+              <LeftItem
+                uriFallBack={channel.banner}
+                uri={ROOT_API + `/thumbnail/${channel.endPoint}.png`}
+              />
+            )}
             right={() => <RigthItem data={channel} />}
           />
         ))}

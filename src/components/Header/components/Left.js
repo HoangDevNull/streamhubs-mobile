@@ -7,8 +7,6 @@ import { useNavigation } from '@react-navigation/native';
 import UserAvatar from '../../common/UserAvatar';
 import { useSelector } from 'react-redux';
 
-import { AVATAR_URL } from '../../../config';
-
 const Left = ({ theme }) => {
   const navigation = useNavigation();
   const { avatar } = useSelector((state) => state.user?.userProfile);
@@ -35,7 +33,7 @@ const Left = ({ theme }) => {
           />
         ) : (
           <UserAvatar
-            src={avatar ? AVATAR_URL + avatar : null}
+            src={avatar || null}
             size={30}
             onPress={_handleGoToSetting}
           />

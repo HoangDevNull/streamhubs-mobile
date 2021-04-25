@@ -1,17 +1,19 @@
 import React from 'react';
-import { View, Dimensions, Image } from 'react-native';
-import { Text, Card, Badge } from 'react-native-paper';
+import { View, Image } from 'react-native';
+import { Card } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import LiveBadge from '../../../common/LiveBadge';
-
-const { width } = Dimensions.get('window');
-
-const LeftItem = ({ uri }) => {
+const LeftItem = ({ uri, uriFallBack }) => {
   const styles = useStyles();
+  const [imgUri, setImgUri] = React.useState(uri);
   return (
     <Card style={styles.card}>
       <View style={[styles.imageContainer]}>
-        <Image source={{ uri }} style={[styles.image]} />
+        <Image
+          source={{ uri: imgUri }}
+          onError={() => setImgUri(uriFallBack)}
+          style={[styles.image]}
+        />
         <LiveBadge backdrop position="bottom" />
       </View>
     </Card>

@@ -38,7 +38,8 @@ const requestCameraPermission = async () => {
 class LiveStream extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { flashEnable: false, isLive: false };
+    const { route } = props;
+    this.state = { flashEnable: false, isLive: false, channel: route.params };
     this.cameraView = null;
   }
 
@@ -72,7 +73,7 @@ class LiveStream extends React.Component {
     Orientation.lockToPortrait();
   }
   render() {
-    const { flashEnable, isLive } = this.state;
+    const { flashEnable, isLive, channel } = this.state;
     return (
       <View style={styles.container}>
         <StatusBar hidden />
@@ -81,7 +82,7 @@ class LiveStream extends React.Component {
           ref={(ref) => {
             this.cameraView = ref;
           }}
-          outputUrl={`rtmp://${ROOT_IP}/live/test`}
+          outputUrl={`rtmp://${ROOT_IP}/live/${channel?.endPoint}`}
           camera={{ cameraId: 0, cameraFrontMirror: true }}
           audio={{ bitrate: 32000, profile: 1, samplerate: 44100 }}
           video={{

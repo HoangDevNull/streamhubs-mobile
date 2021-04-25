@@ -12,6 +12,13 @@ export const saveLoginInfo = (payload) => {
   };
 };
 
+export const updateUserProfile = (payload) => {
+  return {
+    type: SAVE_USER_INFO,
+    payload,
+  };
+};
+
 export const logout = () => {
   return async (dispatch) => {
     await AsyncStorage.removeItem('user');

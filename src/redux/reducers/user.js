@@ -5,6 +5,7 @@ const initState = {
   access_token: null,
   isLoggedIn: false,
   userProfile: null,
+  channel: null,
   theme: 'dark',
 };
 
