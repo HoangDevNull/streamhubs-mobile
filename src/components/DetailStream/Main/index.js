@@ -82,8 +82,12 @@ class Main extends React.Component {
 
   componentDidUpdate(prevProps) {
     const { resolution } = this.props.player;
+    const { detailStream } = this.props;
     // Restart stream after change resolution
-    if (resolution !== prevProps.player.resolution) {
+    const changeRes = resolution !== prevProps.player.resolution;
+    const changeEndPoint =
+      detailStream?.endPoint !== prevProps.detailStream?.endPoint;
+    if (changeRes || changeEndPoint) {
       this.player.stop();
       this.player.start();
     }
@@ -147,6 +151,7 @@ class Main extends React.Component {
               maxBufferTime={1000}
               autoplay={false}
               onStatus={this._onStatus}
+              audioEnable={true}
             />
 
             <PlayerAction

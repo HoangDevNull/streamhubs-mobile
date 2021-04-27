@@ -39,7 +39,7 @@ class LiveStream extends React.Component {
   constructor(props) {
     super(props);
     const { route } = props;
-    this.state = { flashEnable: false, isLive: false, channel: route.params };
+    this.state = { flashEnable: true, isLive: false, channel: route.params };
     this.cameraView = null;
   }
 
@@ -54,8 +54,8 @@ class LiveStream extends React.Component {
 
   toggleFlashLigth = () => {
     const { flashEnable } = this.state;
+    this.cameraView.flashEnable(flashEnable);
     this.setState({ flashEnable: !flashEnable });
-    this.cameraView.flashEnable(this.state.flashEnable);
   };
 
   toggleLiveStream = async () => {
@@ -103,7 +103,7 @@ class LiveStream extends React.Component {
           <IconButton
             icon={() => (
               <Ionicons
-                name={flashEnable ? 'flash-off-outline' : 'flash-outline'}
+                name={!flashEnable ? 'flash-off-outline' : 'flash-outline'}
                 size={25}
                 color="#fff"
               />

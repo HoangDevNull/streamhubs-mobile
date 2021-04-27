@@ -1,5 +1,5 @@
-// const env = 'production';
-const env = 'dev';
+const env = 'production';
+// const env = 'dev';
 
 let ROOT_API = null;
 let ROOT_URL = null;
