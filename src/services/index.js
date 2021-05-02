@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ROOT_API } from '../config';
+import { ROOT_API, IMAGE_UPLOAD_API } from '../config';
 export const request = (url, method, payload = {}) => {
   return axios({
     method: method,
@@ -18,6 +18,20 @@ export const authRequest = (url, method, access_token, payload = {}) => {
       Authorization: access_token,
     },
     // strictSSL: false,
+  });
+};
+
+export const uploadRequest = (file) => {
+  let formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', 'f14nw4lv');
+  return axios({
+    url: IMAGE_UPLOAD_API,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    data: formData,
   });
 };
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Keyboard } from 'react-native';
+import { Keyboard, Image, View, Platform, ScrollView } from 'react-native';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import {
   Button,
@@ -8,40 +8,79 @@ import {
   Portal,
   TextInput,
   Caption,
+  IconButton,
 } from 'react-native-paper';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller } from 'react-hook-form';
 
-import { authRequest, changePasswordUrl } from '../../../services';
+import { launchImageLibrary } from 'react-native-image-picker';
+
+import { authRequest, uploadRequest } from '../../../services';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSnackbar } from '../../../redux/actions/snackbar';
 
 const schema = yup.object().shape({
   username: yup
     .string()
-    .min(4, 'Username must be 4-16 characters')
-    .required('Username is required'),
-  newPassword: yup.string(),
+    .required('Username is required')
+    .min(4, 'Username must be 4-16 characters'),
+  description: yup.string().required(),
 });
 
 const UpdateUserProfile = ({ open, onClose }) => {
   const styles = useStyles();
   const dispatch = useDispatch();
-  const access_token = useSelector((state) => state.user.access_token);
+  const { access_token, username, userProfile } = useSelector(
+    (state) => state.user,
+  );
+  const [avatar, setAvatar] = React.useState({
+    uri: userProfile.avatar || null,
+  });
+  const [banner, setBanner] = React.useState({
+    uri: userProfile.banner || null,
+  });
+
   const { control, handleSubmit, errors } = useForm({
     resolver: yupResolver(schema),
   });
 
+  const handleChoosePhoto = (key) => {
+    launchImageLibrary({ noData: true }, async (response) => {
+      const { didCancel, uri, type, fileName } = response;
+      if (didCancel) return;
+      if (uri) {
+        const data = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
+        const source = { uri: data, type, name: fileName };
+        if (key === 'avatar') {
+          setAvatar(source);
+        } else {
+          setBanner(source);
+        }
+      }
+    });
+  };
+
   const _submit = async (payload) => {
     Keyboard.dismiss();
-    delete payload.confirmPassword;
     try {
-      await authRequest(changePasswordUrl, 'POST', access_token, payload);
+      let bannerUrl = banner.uri;
+      let avatarUrl = avatar.uri;
+      if (banner.name) {
+        const res = await uploadRequest(banner);
+        bannerUrl = res.data.secure_url;
+      }
+      if (avatar.name) {
+        const res = await uploadRequest(avatar);
+        avatarUrl = res.data.secure_url;
+      }
+      payload.banner = bannerUrl;
+      payload.avatar = avatarUrl;
+
       dispatch(
         setSnackbar({
           open: true,
-          text: 'Password update successfully',
+          text: 'Update new profile successfully',
         }),
       );
       onClose();
@@ -49,7 +88,7 @@ const UpdateUserProfile = ({ open, onClose }) => {
       dispatch(
         setSnackbar({
           open: true,
-          text: 'Your current password is invalid',
+          text: 'Something gone wrong. Please try it later',
         }),
       );
     }
@@ -67,16 +106,14 @@ const UpdateUserProfile = ({ open, onClose }) => {
               <TextInput
                 dense
                 mode="outlined"
-                left={<TextInput.Icon name="lock-outline" />}
                 onChangeText={(text) => onChange(text)}
                 style={styles.textInput}
-                secureTextEntry
                 value={value}
                 error={errors.password}
               />
             )}
             name="username"
-            defaultValue=""
+            defaultValue={username}
           />
 
           {errors.username && (
@@ -90,18 +127,18 @@ const UpdateUserProfile = ({ open, onClose }) => {
             control={control}
             render={({ onChange, onBlur, value }) => (
               <TextInput
+                multiline
+                numberOfLines={3}
                 dense
                 mode="outlined"
-                left={<TextInput.Icon name="lock" />}
                 onChangeText={(text) => onChange(text)}
                 style={styles.textInput}
-                secureTextEntry
                 value={value}
                 error={errors.description}
               />
             )}
             name="description"
-            defaultValue=""
+            defaultValue={userProfile?.description}
           />
 
           {errors.description && (
@@ -111,7 +148,37 @@ const UpdateUserProfile = ({ open, onClose }) => {
           )}
 
           <Subheading style={styles.label}>Avatar:</Subheading>
+          <View style={styles.row}>
+            {avatar && (
+              <Image
+                source={{ uri: avatar.uri }}
+                style={{ width: 60, height: 60 }}
+                resizeMode="contain"
+              />
+            )}
+            <IconButton
+              style
+              icon="image-edit"
+              size={25}
+              onPress={() => handleChoosePhoto('avatar')}
+            />
+          </View>
           <Subheading style={styles.label}>Banner:</Subheading>
+          <View style={styles.row}>
+            {banner && (
+              <Image
+                source={{ uri: banner.uri }}
+                style={{ width: '100%', height: 60 }}
+                resizeMode="contain"
+              />
+            )}
+          </View>
+          <IconButton
+            style={styles.center}
+            icon="image-edit"
+            size={25}
+            onPress={() => handleChoosePhoto('banner')}
+          />
         </Dialog.Content>
         <Dialog.Actions>
           <Button
@@ -139,6 +206,10 @@ const UpdateUserProfile = ({ open, onClose }) => {
 export default UpdateUserProfile;
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    width: '100%',
+    height: '100%',
+  },
   label: {
     marginTop: 15,
     marginBottom: 5,
@@ -151,5 +222,12 @@ const useStyles = makeStyles((theme) => ({
   },
   mr_10: {
     marginRight: 10,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  center: {
+    alignSelf: 'center',
   },
 }));

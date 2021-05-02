@@ -26,4 +26,7 @@ switch (env) {
     break;
 }
 
-export { ROOT_API, ROOT_URL, AVATAR_URL, ROOT_IP };
+const IMAGE_UPLOAD_API =
+  'https://api.cloudinary.com/v1_1/dlkjqfrze/image/upload';
+
+export { ROOT_API, ROOT_URL, AVATAR_URL, ROOT_IP, IMAGE_UPLOAD_API };

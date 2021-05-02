@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.imagepicker.ImagePickerPackage;
 import org.wonday.orientation.OrientationPackage;
 import org.wonday.orientation.OrientationActivityLifecycle;
 import com.cmcewen.blurview.BlurViewPackage;
