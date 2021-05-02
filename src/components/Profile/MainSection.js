@@ -7,10 +7,16 @@ import Prime from './components/Prime';
 import SurfaceButton from '../common/SurfaceButton';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/core';
+
+import SubcribedUser from './components/SubcribedUser';
+
 const MainSection = ({ theme }) => {
   const navigate = useNavigation();
   const styles = useStyles();
   const userProfile = useSelector((state) => state.user?.userProfile);
+
+  const [openSubcribedUser, setOpenSubcribedUser] = React.useState(false);
+
   return (
     <>
       <View style={styles.container}>
@@ -57,7 +63,7 @@ const MainSection = ({ theme }) => {
         <View style={styles.mt10}>
           <Surface style={styles.wrappButtonSurface}>
             <SurfaceButton
-              onPress={() => console.log('pressed')}
+              onPress={() => setOpenSubcribedUser(true)}
               icon="notifications-outline"
               title="Subcribed"
             />
@@ -65,7 +71,7 @@ const MainSection = ({ theme }) => {
 
           <Surface style={styles.wrappButtonSurface}>
             <SurfaceButton
-              onPress={() => console.log('pressed')}
+              onPress={() => navigate.navigate('CommingSoon')}
               icon="barcode-outline"
               title="Drops"
             />
@@ -73,7 +79,7 @@ const MainSection = ({ theme }) => {
 
           <Surface style={styles.wrappButtonSurface}>
             <SurfaceButton
-              onPress={() => console.log('pressed')}
+              onPress={() => navigate.navigate('CommingSoon')}
               icon="people-outline"
               title="Friends"
             />
@@ -87,6 +93,11 @@ const MainSection = ({ theme }) => {
             />
           </Surface>
         </View>
+
+        <SubcribedUser
+          open={openSubcribedUser}
+          closeModal={() => setOpenSubcribedUser(false)}
+        />
       </View>
     </>
   );

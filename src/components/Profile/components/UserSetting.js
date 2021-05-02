@@ -6,7 +6,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { openUserSetting } from '../../../redux/actions/gui';
 import { Modalize } from 'react-native-modalize';
 import { logout, setTheme } from '../../../redux/actions/user';
-import { Dimensions } from 'react-native';
+
+import Security from './Security';
+import UpdateUserProfile from './UpdateUserProfile';
 
 const DATA = [
   {
@@ -36,8 +38,6 @@ const DATA = [
   },
 ];
 
-const { width } = Dimensions.get('window');
-
 const UserSetting = () => {
   const styles = useStyles();
   const dispatch = useDispatch();
@@ -46,6 +46,10 @@ const UserSetting = () => {
     theme: state.user.theme,
   }));
   const containerRef = React.useRef(null);
+  const [openSecurity, setOpenSecurity] = React.useState(false);
+  const [openUpdateProfile, setOpenUpdateProfile] = React.useState(false);
+  const [openUpdateChatColor, setOpenUpdateChatColor] = React.useState(false);
+
   React.useEffect(() => {
     if (open) {
       containerRef.current?.open();
@@ -59,14 +63,16 @@ const UserSetting = () => {
   const _handleSettingPress = (action) => {
     switch (action) {
       case 'Security':
-        dispatch(openUserSetting(false));
+        // dispatch(openUserSetting(false));
+        setOpenSecurity(true);
         break;
       case 'Toggle theme':
         dispatch(setTheme(theme.includes('dark') ? 'light' : 'dark'));
         dispatch(openUserSetting(false));
         break;
       case 'Update user profile':
-        dispatch(openUserSetting(false));
+        // dispatch(openUserSetting(false));
+        setOpenUpdateProfile(true);
         break;
       case 'Logout':
         dispatch(logout());
@@ -101,6 +107,18 @@ const UserSetting = () => {
           renderItem: renderItem,
           keyExtractor: (item) => item.id,
           showsVerticalScrollIndicator: false,
+          ListHeaderComponent: (
+            <>
+              <Security
+                open={openSecurity}
+                onClose={() => setOpenSecurity(false)}
+              />
+              <UpdateUserProfile
+                open={openUpdateProfile}
+                onClose={() => setOpenUpdateProfile(false)}
+              />
+            </>
+          ),
         }}
       />
     </Portal>
