@@ -48,3 +48,5 @@ export const subStatusURL = '/channel/subcribed';
 export const subcribeUrl = '/subscribe';
 export const unSubcribeUrl = '/unsubscribe';
 export const changePasswordUrl = '/users/change-password';
+export const updateUserUrl = '/user/profile';
+export const checkNameUrl = '/check/username';

@@ -16,9 +16,19 @@ import { useForm, Controller } from 'react-hook-form';
 
 import { launchImageLibrary } from 'react-native-image-picker';
 
-import { authRequest, uploadRequest } from '../../../services';
+import {
+  authRequest,
+  request,
+  userURL,
+  updateUserUrl,
+  checkNameUrl,
+  uploadRequest,
+} from '../../../services';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSnackbar } from '../../../redux/actions/snackbar';
+import { updateUserProfile } from '../../../redux/actions/user';
+
+import { debounce } from 'lodash';
 
 const schema = yup.object().shape({
   username: yup
@@ -28,7 +38,7 @@ const schema = yup.object().shape({
   description: yup.string().required(),
 });
 
-const UpdateUserProfile = ({ open, onClose }) => {
+const ProfileUpdate = ({ open, onClose }) => {
   const styles = useStyles();
   const dispatch = useDispatch();
   const { access_token, username, userProfile } = useSelector(
@@ -41,7 +51,9 @@ const UpdateUserProfile = ({ open, onClose }) => {
     uri: userProfile.banner || null,
   });
 
-  const { control, handleSubmit, errors } = useForm({
+  const [loading, setLoading] = React.useState(false);
+
+  const { control, handleSubmit, errors, clearErrors, setError } = useForm({
     resolver: yupResolver(schema),
   });
 
@@ -62,6 +74,7 @@ const UpdateUserProfile = ({ open, onClose }) => {
   };
 
   const _submit = async (payload) => {
+    setLoading(true);
     Keyboard.dismiss();
     try {
       let bannerUrl = banner.uri;
@@ -77,14 +90,20 @@ const UpdateUserProfile = ({ open, onClose }) => {
       payload.banner = bannerUrl;
       payload.avatar = avatarUrl;
 
+      await authRequest(updateUserUrl, 'PUT', access_token, payload);
+
+      const { data } = await authRequest(userURL, 'GET', access_token);
+      dispatch(updateUserProfile({ ...data }));
       dispatch(
         setSnackbar({
           open: true,
           text: 'Update new profile successfully',
         }),
       );
+      setLoading(false);
       onClose();
     } catch (err) {
+      setLoading(false);
       dispatch(
         setSnackbar({
           open: true,
@@ -94,94 +113,123 @@ const UpdateUserProfile = ({ open, onClose }) => {
     }
   };
 
+  const checkName = debounce(async (username) => {
+    const length = username.trim().length;
+    if (length === 0) return;
+    if (length < 4) {
+      setError('username', {
+        type: 'manual',
+        message: 'Username must be 4-16 characters',
+      });
+      return;
+    }
+    try {
+      await request(checkNameUrl, 'POST', { username });
+      if (errors.username?.message) {
+        clearErrors('username');
+      }
+    } catch (err) {
+      console.log({ err });
+      setError('username', {
+        type: 'manual',
+        message: 'Username is conflict',
+      });
+    }
+  }, 500);
   return (
     <Portal>
       <Dialog visible={open} dismissable>
         <Dialog.Title>Update your profile</Dialog.Title>
         <Dialog.Content>
-          <Subheading style={styles.label}>Username:</Subheading>
-          <Controller
-            control={control}
-            render={({ onChange, onBlur, value }) => (
-              <TextInput
-                dense
-                mode="outlined"
-                onChangeText={(text) => onChange(text)}
-                style={styles.textInput}
-                value={value}
-                error={errors.password}
-              />
+          <ScrollView>
+            <Subheading style={styles.label}>Username:</Subheading>
+            <Controller
+              control={control}
+              render={({ onChange, onBlur, value }) => (
+                <TextInput
+                  dense
+                  mode="outlined"
+                  onChangeText={(text) => {
+                    checkName(text);
+                    onChange(text);
+                  }}
+                  style={styles.textInput}
+                  value={value}
+                  error={errors.username}
+                />
+              )}
+              name="username"
+              defaultValue={username}
+            />
+
+            {errors.username && (
+              <Caption style={styles.errorText}>
+                {errors?.username?.message}
+              </Caption>
             )}
-            name="username"
-            defaultValue={username}
-          />
 
-          {errors.username && (
-            <Caption style={styles.errorText}>
-              {errors?.username?.message}
-            </Caption>
-          )}
+            <Subheading style={styles.label}>Description:</Subheading>
+            <Controller
+              control={control}
+              render={({ onChange, onBlur, value }) => (
+                <TextInput
+                  multiline
+                  numberOfLines={3}
+                  dense
+                  mode="outlined"
+                  onChangeText={(text) => onChange(text)}
+                  style={styles.textInput}
+                  value={value}
+                  error={errors.description}
+                />
+              )}
+              name="description"
+              defaultValue={userProfile?.description}
+            />
 
-          <Subheading style={styles.label}>Description:</Subheading>
-          <Controller
-            control={control}
-            render={({ onChange, onBlur, value }) => (
-              <TextInput
-                multiline
-                numberOfLines={3}
-                dense
-                mode="outlined"
-                onChangeText={(text) => onChange(text)}
-                style={styles.textInput}
-                value={value}
-                error={errors.description}
-              />
+            {errors.description && (
+              <Caption style={styles.errorText}>
+                {errors?.description?.message}
+              </Caption>
             )}
-            name="description"
-            defaultValue={userProfile?.description}
-          />
 
-          {errors.description && (
-            <Caption style={styles.errorText}>
-              {errors?.description?.message}
-            </Caption>
-          )}
-
-          <Subheading style={styles.label}>Avatar:</Subheading>
-          <View style={styles.row}>
-            {avatar && (
-              <Image
-                source={{ uri: avatar.uri }}
-                style={{ width: 60, height: 60 }}
-                resizeMode="contain"
-              />
-            )}
+            <Subheading style={styles.label}>Avatar:</Subheading>
+            <View style={styles.row}>
+              {avatar && (
+                <Image
+                  source={{ uri: avatar.uri }}
+                  style={{ width: '100%', height: 60 }}
+                  resizeMode="contain"
+                />
+              )}
+            </View>
             <IconButton
-              style
+              style={styles.center}
               icon="image-edit"
               size={25}
               onPress={() => handleChoosePhoto('avatar')}
             />
-          </View>
-          <Subheading style={styles.label}>Banner:</Subheading>
-          <View style={styles.row}>
-            {banner && (
-              <Image
-                source={{ uri: banner.uri }}
-                style={{ width: '100%', height: 60 }}
-                resizeMode="contain"
-              />
-            )}
-          </View>
-          <IconButton
-            style={styles.center}
-            icon="image-edit"
-            size={25}
-            onPress={() => handleChoosePhoto('banner')}
-          />
+            <Subheading style={styles.label}>Banner:</Subheading>
+            <View style={styles.row}>
+              {banner && (
+                <Image
+                  source={{ uri: banner.uri }}
+                  style={{ width: '100%', height: 60 }}
+                  resizeMode="contain"
+                />
+              )}
+            </View>
+            <IconButton
+              style={styles.center}
+              icon="image-edit"
+              size={25}
+              onPress={() => handleChoosePhoto('banner')}
+            />
+          </ScrollView>
         </Dialog.Content>
         <Dialog.Actions>
           <Button
+            disabled={loading}
             uppercase={false}
             style={styles.mr_10}
             mode="text"
@@ -192,6 +240,8 @@ const UpdateUserProfile = ({ open, onClose }) => {
             Cancel
           </Button>
           <Button
+            loading={loading}
+            disabled={loading}
             uppercase={false}
             mode="contained"
             onPress={handleSubmit(_submit)}>
@@ -203,7 +253,7 @@ const UpdateUserProfile = ({ open, onClose }) => {
   );
 };
 
-export default UpdateUserProfile;
+export default ProfileUpdate;
 
 const useStyles = makeStyles((theme) => ({
   container: {
