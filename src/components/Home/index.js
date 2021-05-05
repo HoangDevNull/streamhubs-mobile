@@ -30,10 +30,10 @@ const Home = ({ navigation, theme }) => {
   const fetchData = React.useCallback(async () => {
     const category = authRequest(randomCategoriesURL, 'POST', access_token);
     const subcribeChannel = authRequest(subChannelURL, 'POST', access_token, {
-      channelStatus: 0,
+      channelStatus: [0, 1],
     });
     const sugChannel = authRequest(suggestChannelURL, 'POST', access_token, {
-      channelStatus: 0,
+      channelStatus: [0, 1],
     });
     const streamer = authRequest(streamerFollowedURL, 'POST', access_token, {
       page: 0,

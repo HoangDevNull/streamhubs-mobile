@@ -11,6 +11,7 @@ import Profile from '../components/Profile';
 import DetailStream from '../components/DetailStream';
 import CommingSoon from '../components/CommingSoon';
 import LiveStream from '../components/LiveStream';
+import DetailCategory from '../components/DetailCategory';
 
 const AppStack = createStackNavigator();
 
@@ -25,6 +26,7 @@ export default () => {
       <AppStack.Screen name="Main" component={AppTabs} />
       <AppStack.Screen name="Profile" component={Profile} />
       <AppStack.Screen name="CommingSoon" component={CommingSoon} />
+      <AppStack.Screen name="DetailCategory" component={DetailCategory} />
       <AppStack.Screen
         options={{ header: () => null }}
         name="DetailStream"

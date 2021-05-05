@@ -2,11 +2,10 @@ import React from 'react';
 import { View, Image } from 'react-native';
 import { Card, Text, Title } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
-import ChipCustom from '../../common/ChipCustom';
+import ChipCustom from './ChipCustom';
 
-const CategoryBanner = ({ navigation }) => {
+const CategoryBanner = ({ data }) => {
   const styles = useStyles();
-
   return (
     <Card elevation={0} style={styles.container}>
       <Card.Content style={styles.wrapper}>
@@ -14,28 +13,31 @@ const CategoryBanner = ({ navigation }) => {
           <Image
             style={styles.image}
             source={{
-              uri:
-                'https://static-cdn.jtvnw.net/ttv-boxart/Apex%20Legends-244x292.jpg',
+              uri: data?.banner,
             }}
           />
         </View>
 
         <View style={styles.rightWrapper}>
-          <Title style={styles.fontBold}>Apex Legend</Title>
-          <Text numberOfLines={2}>
+          <Title style={styles.fontBold}>{data?.name}</Title>
+          <View style={styles.viewerWrapper}>
+            <Text style={styles.fontBold}>{data?.follower} Followers</Text>
+          </View>
+          <Text style={styles.description} numberOfLines={4}>
             Apex Legends is a free-to-play Battle Royale game where legendary
             competitors battle for glory, fame, and fortune on the fringes of
             the Frontier.
+            {data?.description}
           </Text>
-          <View style={styles.viewerWrapper}>
-            <Text style={styles.fontBold}>29.3K Viewers</Text>
-            <Text style={styles.fontBold}>1.6m Followers</Text>
-          </View>
 
           <View style={styles.tagWrapper}>
-            <ChipCustom title="Gaming" color="green400" />
-            <ChipCustom title="Esport" color="pink400" />
-            <ChipCustom title="MOBA" color="purple400" />
+            {data?.tags?.map((item) => (
+              <ChipCustom
+                key={`item_${item?.id}`}
+                title={item.name}
+                color={item?.color}
+              />
+            ))}
           </View>
         </View>
       </Card.Content>
@@ -65,14 +67,18 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
     marginLeft: 15,
   },
+  description: {
+    minHeight: 50,
+  },
   viewerWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 18,
+    marginBottom: 5,
     maxWidth: 230,
   },
   tagWrapper: {
     flexDirection: 'row',
+    marginTop: 8,
   },
   image: {
     height: '100%',

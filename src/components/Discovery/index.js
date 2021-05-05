@@ -1,12 +1,12 @@
 import React from 'react';
-import { SafeAreaView, View, Image, TouchableHighlight } from 'react-native';
+import { SafeAreaView, View, Image } from 'react-native';
 import { Headline, Text, withTheme } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 
 import HeadSlider from './components/HeadSlider';
-import CategoryBanner from './components/CategoryBanner';
+import CategoryBanner from '../common/CategoryBanner';
 import { useScreenSize } from '../../hooks/useScreenSize';
 
 const DATA = [
