@@ -1,5 +1,5 @@
-// const env = 'production';
-const env = 'dev';
+const env = 'production';
+// const env = 'dev';
 
 let ROOT_API = null;
 let ROOT_URL = null;
@@ -15,14 +15,14 @@ switch (env) {
     ROOT_IP = '192.168.1.7';
     break;
   case 'production':
-    ROOT_API = 'http://103.130.218.62:3001/api';
-    ROOT_URL = 'http://103.130.218.62:3001';
-    ROOT_IP = '103.130.218.62';
+    ROOT_API = 'http://103.90.228.225:3001/api';
+    ROOT_URL = 'http://103.90.228.225:3001';
+    ROOT_IP = '103.90.228.225';
     break;
   default:
-    ROOT_API = 'http://103.130.218.62:3001/api';
-    ROOT_URL = 'http://103.130.218.62:3001';
-    ROOT_IP = '103.130.218.62';
+    ROOT_API = 'http://103.90.228.225:3001/api';
+    ROOT_URL = 'http://103.90.228.225:3001';
+    ROOT_IP = '103.90.228.225';
     break;
 }
 

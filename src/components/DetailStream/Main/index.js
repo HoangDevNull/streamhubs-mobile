@@ -149,7 +149,7 @@ class Main extends React.Component {
               scaleMode={isPortrait ? 'ScaleAspectFill' : 'ScaleAspectFit'}
               bufferTime={300}
               maxBufferTime={1000}
-              autoplay={false}
+              autoplay={true}
               onStatus={this._onStatus}
               audioEnable={true}
             />
