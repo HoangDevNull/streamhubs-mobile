@@ -128,9 +128,6 @@ class Main extends React.Component {
     } else {
       url += `_${resolution}`;
     }
-
-    console.log({ url });
-
     return (
       <>
         <TouchableWithoutFeedback onPress={this.toggleFocus}>

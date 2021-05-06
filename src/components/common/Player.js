@@ -12,7 +12,7 @@ import { useNavigation } from '@react-navigation/core';
 const Player = ({ channel }) => {
   const navigation = useNavigation();
   const [imgUri, setImgUri] = React.useState(
-    ROOT_API + `/thumbnail/${channel.endPoint}.png`,
+    ROOT_API + `/thumbnail/${channel?.endPoint}.png`,
   );
 
   return (
@@ -40,9 +40,9 @@ const Player = ({ channel }) => {
         />
         <View style={styles.textWrapper}>
           <Subheading style={styles.fontBold}>
-            {channel.owner.username}
+            {channel?.owner?.username}
           </Subheading>
-          <Paragraph numberOfLines={1}>{channel.description}</Paragraph>
+          <Paragraph numberOfLines={1}>{channel?.description}</Paragraph>
         </View>
       </Card.Actions>
     </Card>

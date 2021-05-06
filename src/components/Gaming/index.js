@@ -1,19 +1,42 @@
 import React from 'react';
 import { SafeAreaView, View } from 'react-native';
-import { Headline, Text, withTheme } from 'react-native-paper';
+import { Text, withTheme } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 
+import { useSelector } from 'react-redux';
 import { FlatList } from 'react-native-gesture-handler';
 
 import Player from '../common/Player';
+import { authRequest, filterChannelUrl } from '../../services';
 
 const columnWidth = 110;
 
 const Gaming = ({ navigation, theme }) => {
   const styles = useStyles();
+  const access_token = useSelector((state) => state.user.access_token);
+  const [data, setData] = React.useState([]);
+  const [pages, setPages] = React.useState({
+    page: 0,
+    total: 0,
+  });
+  React.useEffect(() => {
+    if (!access_token) {
+      return;
+    }
+    const payload = { tags: [], orderBy: 4, page: 0, offset: 10 };
+    authRequest(filterChannelUrl, 'POST', access_token, payload)
+      .then(({ data: { results, total } }) => {
+        setData(results);
+        setPages({
+          page: 0,
+          total: total,
+        });
+      })
+      .catch((err) => console.log(err));
+  }, [access_token]);
 
   const _renderItem = ({ item, i }) => {
-    return <Player />;
+    return <Player channel={item} />;
   };
   return (
     <SafeAreaView>
@@ -29,8 +52,8 @@ const Gaming = ({ navigation, theme }) => {
             </View>
           </>
         }
-        data={[1, 2, 3]}
-        keyExtractor={(id) => String(id)}
+        data={data}
+        keyExtractor={({ id }) => String(id)}
         renderItem={_renderItem}
       />
     </SafeAreaView>
