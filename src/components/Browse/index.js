@@ -1,17 +1,19 @@
-import React from 'react';
-import { Dimensions, SafeAreaView } from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { Dimensions, SafeAreaView, View } from 'react-native';
 import { FAB, Text, withTheme } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import { TabView, SceneMap } from 'react-native-tab-view';
-
+import { Modalize } from 'react-native-modalize';
+import Animated, { Easing, timing } from 'react-native-reanimated';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import ListCategory from './components/ListCategory';
 import ListChannel from './components/ListChannel';
 import Tabs from './components/Tabs';
+import FilterPanelHeader from './components/FilterPanelHeader';
+import FilterPanelContent from './components/FilterPanelContent';
 
 const initialLayout = { width: Dimensions.get('window').width };
-import Animated, { Easing, timing } from 'react-native-reanimated';
 
 const { Value } = Animated;
 
@@ -25,6 +27,9 @@ const Browse = ({ theme }) => {
     { key: 'first', title: 'Categories' },
     { key: 'second', title: 'Channel' },
   ]);
+  const modalizeRef = useRef(null);
+  const [filterPanelVisible, setFilterPanelVisible] = useState(true);
+  const [data, setData] = useState(null);
 
   const onTabChange = (i) => {
     setIndex(i);
@@ -35,6 +40,28 @@ const Browse = ({ theme }) => {
     }).start();
   };
 
+  const onFilterPanelOpened = () => {
+    setFilterPanelVisible(false);
+  };
+
+  const onFilterPanelClosed = () => {
+    setFilterPanelVisible(true);
+  };
+
+  const renderScene = ({ route }) => {
+    switch (route.key) {
+      case 'first':
+        return <ListCategory data={data} />;
+      case 'second':
+        return <ListChannel data={data} />;
+      default:
+        return null;
+    }
+  };
+  useEffect(() => {
+    data && console.log(data);
+  }, [data]);
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={[styles.headText]}>
@@ -43,10 +70,7 @@ const Browse = ({ theme }) => {
 
       <TabView
         navigationState={{ index, routes }}
-        renderScene={SceneMap({
-          first: ListCategory,
-          second: ListChannel,
-        })}
+        renderScene={renderScene}
         onIndexChange={onTabChange}
         renderTabBar={(props) => (
           <Tabs {...props} onPress={onTabChange} tabOffset={tabOffset} />
@@ -55,6 +79,7 @@ const Browse = ({ theme }) => {
       />
 
       <FAB
+        visible={filterPanelVisible}
         style={styles.fab}
         icon={({ color, size }) => (
           <Ionicons name="options-outline" color={color} size={size} />
@@ -62,9 +87,19 @@ const Browse = ({ theme }) => {
         label="Filter And Sort"
         animated={false}
         uppercase={false}
-        onPress={() => console.log('Pressed')}
+        onPress={() => modalizeRef.current?.open()}
         color={theme.colors.text}
       />
+      <Modalize
+        ref={modalizeRef}
+        modalStyle={styles.filterPanel}
+        childrenStyle={styles.childrenFilterPanel}
+        HeaderComponent={<FilterPanelHeader />}
+        onOpen={onFilterPanelOpened}
+        onClose={onFilterPanelClosed}
+        modalHeight={300}>
+        <FilterPanelContent tabIndex={index} onDataBinding={setData} />
+      </Modalize>
     </SafeAreaView>
   );
 };
@@ -97,5 +132,13 @@ const useStyles = makeStyles((theme) => ({
   primaryText: {
     fontFamily: 'Inter-Black',
     color: theme.colors.primary,
+  },
+  filterPanel: {
+    backgroundColor: theme.colors.surface,
+    justifyContent: 'center',
+    // flex: 1,
+  },
+  childrenFilterPanel: {
+    flex: 1,
   },
 }));

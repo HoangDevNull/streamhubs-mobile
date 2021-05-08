@@ -50,3 +50,5 @@ export const unSubcribeUrl = '/unsubscribe';
 export const changePasswordUrl = '/users/change-password';
 export const updateUserUrl = '/user/profile';
 export const checkNameUrl = '/check/username';
+export const channelFilter = '/channel/filter';
+export const categoryFilter = '/category/filter';
