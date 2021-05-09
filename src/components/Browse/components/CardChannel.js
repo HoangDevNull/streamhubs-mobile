@@ -6,8 +6,9 @@ import LiveBadge from '../../common/LiveBadge';
 import ViewerBadge from '../../common/ViewerBadge';
 import UserAvatar from '../../common/UserAvatar';
 
-const CardCategory = ({ navigation }) => {
+const CardCategory = ({ navigation, dataItem }) => {
   const styles = useStyles();
+  const { banner, owner, follower, viewers, description } = dataItem;
 
   return (
     <Card
@@ -19,8 +20,8 @@ const CardCategory = ({ navigation }) => {
           <Image
             style={styles.image}
             source={{
-              uri:
-                'https://static-cdn.jtvnw.net/previews-ttv/live_user_esl_csgo-440x248.jpg',
+              uri: banner,
+              // 'https://static-cdn.jtvnw.net/previews-ttv/live_user_esl_csgo-440x248.jpg',
             }}
           />
           <LiveBadge position="top" />
@@ -28,11 +29,13 @@ const CardCategory = ({ navigation }) => {
         </View>
       </Card.Content>
       <Card.Actions style={styles.cardAction}>
-        <UserAvatar size={40} />
+        <UserAvatar size={40} src={owner.userProfile.avatar} />
         <View style={styles.textWrapper}>
-          <Subheading style={styles.fontBold}>Ninja</Subheading>
+          <Subheading style={styles.fontBold}>
+            {owner.username || '#Noname'}
+          </Subheading>
 
-          <Paragraph numberOfLines={1}>Follow us on social now !!!</Paragraph>
+          <Paragraph numberOfLines={1}>{description}</Paragraph>
         </View>
       </Card.Actions>
     </Card>

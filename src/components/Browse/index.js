@@ -6,6 +6,8 @@ import { TabView, SceneMap } from 'react-native-tab-view';
 import { Modalize } from 'react-native-modalize';
 import Animated, { Easing, timing } from 'react-native-reanimated';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useSelector } from 'react-redux';
+import { authRequest, channelFilter, categoryFilter } from '../../services';
 
 import ListCategory from './components/ListCategory';
 import ListChannel from './components/ListChannel';
@@ -19,9 +21,25 @@ const { Value } = Animated;
 
 const tabOffset = new Value(0);
 
+const defaultSortedPayload = {
+  tags: [],
+  orderBy: 1,
+  page: 0,
+  // offset: 10,
+};
+
+const filterAndSortAPI = async (accessToken, tabIndex, bodyData) => {
+  const url = tabIndex === 1 ? channelFilter : categoryFilter;
+  const payload = { ...defaultSortedPayload, ...bodyData };
+  console.log('PAYLOAD: ', payload);
+  console.log('Access token: ', accessToken);
+  console.log('URL: ', url);
+  return await authRequest(url, 'POST', accessToken, payload);
+};
+
 const Browse = ({ theme }) => {
   const styles = useStyles();
-
+  const accessToken = useSelector((state) => state.user?.access_token);
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: 'first', title: 'Categories' },
@@ -29,7 +47,14 @@ const Browse = ({ theme }) => {
   ]);
   const modalizeRef = useRef(null);
   const [filterPanelVisible, setFilterPanelVisible] = useState(true);
-  const [data, setData] = useState(null);
+  const [categoriesData, setCategoriesData] = useState(null);
+  const [channelsData, setChannelsData] = useState(null);
+  const [sortedCategoryValue, setSortedCategoryValue] = useState(1);
+  const [sortedChannelValue, setSortedChannelValue] = useState(1);
+
+  const setDatas = [setCategoriesData, setChannelsData];
+  const sortedValues = [sortedCategoryValue, sortedChannelValue];
+  const setSortedValues = [setSortedCategoryValue, setSortedChannelValue];
 
   const onTabChange = (i) => {
     setIndex(i);
@@ -48,19 +73,34 @@ const Browse = ({ theme }) => {
     setFilterPanelVisible(true);
   };
 
+  useEffect(() => {
+    // console.log('Chay vo day');
+    console.log('ACCESS TOKEN: ', accessToken);
+    (async () => {
+      const bodyData = { orderBy: sortedValues[index] };
+      await filterAndSortAPI(accessToken, index, bodyData)
+        .then((response) => {
+          // if (index === 0) setCategoriesData(response.data.results);
+          // if (index === 1) setChannelsData(response.data.results);
+          setDatas[index](response.data.results);
+        })
+        .catch((error) => {
+          console.log('Filter & sort ERROR: ', JSON.stringify(error));
+          alert('Somethings wrong!!!');
+        });
+    })();
+  }, [sortedValues, index]);
+
   const renderScene = ({ route }) => {
     switch (route.key) {
       case 'first':
-        return <ListCategory data={data} />;
+        return <ListCategory dataItems={categoriesData} />;
       case 'second':
-        return <ListChannel data={data} />;
+        return <ListChannel dataItems={channelsData} />;
       default:
         return null;
     }
   };
-  useEffect(() => {
-    data && console.log(data);
-  }, [data]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -69,6 +109,7 @@ const Browse = ({ theme }) => {
       </Text>
 
       <TabView
+        lazy
         navigationState={{ index, routes }}
         renderScene={renderScene}
         onIndexChange={onTabChange}
@@ -98,7 +139,11 @@ const Browse = ({ theme }) => {
         onOpen={onFilterPanelOpened}
         onClose={onFilterPanelClosed}
         modalHeight={300}>
-        <FilterPanelContent tabIndex={index} onDataBinding={setData} />
+        <FilterPanelContent
+          tabIndex={index}
+          sortedValue={sortedValues[index]}
+          setSortedValue={setSortedValues[index]}
+        />
       </Modalize>
     </SafeAreaView>
   );

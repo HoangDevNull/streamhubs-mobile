@@ -11,8 +11,9 @@ import {
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import ChipCustom from '../../common/ChipCustom';
 
-const CardCategory = ({ navigation }) => {
+const CardCategory = ({ navigation, dataItem }) => {
   const styles = useStyles();
+  const { banner, name, follower, tags } = dataItem;
 
   return (
     <Card
@@ -24,23 +25,29 @@ const CardCategory = ({ navigation }) => {
           <Image
             style={styles.image}
             source={{
-              uri:
-                'https://static-cdn.jtvnw.net/ttv-boxart/Apex%20Legends-244x292.jpg',
+              uri: banner,
+              // 'https://static-cdn.jtvnw.net/ttv-boxart/Apex%20Legends-244x292.jpg',
             }}
           />
         </View>
 
         <View style={styles.rightWrapper}>
-          <Subheading style={styles.fontBold}>Apex Legend</Subheading>
+          <Subheading style={styles.fontBold}>
+            {/*Apex Legend*/ name}
+          </Subheading>
           <View style={styles.viewerWrapper}>
-            <Paragraph style={styles.fontBold}>29.3K Viewers</Paragraph>
-            <Paragraph style={styles.fontBold}>1.6m Followers</Paragraph>
+            <Paragraph style={styles.fontBold}>NaN Viewers</Paragraph>
+            <Paragraph style={styles.fontBold}>{follower} Followers</Paragraph>
           </View>
 
           <View style={styles.tagWrapper}>
-            <ChipCustom title="Gaming" color="green400" />
+            {tags &&
+              tags.map((tag) => (
+                <ChipCustom key={tag.id} title={tag.name} color={tag.color} />
+              ))}
+            {/*             
             <ChipCustom title="Esport" color="pink400" />
-            <ChipCustom title="MOBA" color="purple400" />
+            <ChipCustom title="MOBA" color="purple400" /> */}
           </View>
         </View>
       </Card.Content>

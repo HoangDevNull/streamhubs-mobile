@@ -6,69 +6,68 @@ import { FlatList } from 'react-native-gesture-handler';
 import CardCategory from './CardCategory';
 const DATA = [
   {
-    id: 1,
-    image:
-      'https://images.contentstack.io/v3/assets/blt0eb2a2986b796d29/blt5abbad4f1d1da663/602457cff4a7946af0338221/LOL_Key_Art_2021_318x428_RiotBar.jpg??&format=pjpg&quality=85',
-  },
-  {
     id: 2,
-    image:
-      'https://images.contentstack.io/v3/assets/blt0eb2a2986b796d29/bltfb12cd79b2ec9643/5f5c2534806bc7495596e2e6/TFT_Fates_GameCard_v4.jpg??&format=pjpg&quality=85',
+    name: 'Grand Theft Auto V',
+    description: '',
+    banner:
+      'https://cdn2.unrealengine.com/Diesel%2Fproductv2%2Fgrand-theft-auto-v%2Fhome%2FGTAV_EGS_Artwork_1920x1080_Hero-Carousel_V06-1920x1080-1503e4b1320d5652dd4f57466c8bcb79424b3fc0.jpg?h=1080&resize=1&w=1920',
+    follower: 210,
+    createdAt: '2021-05-05T04:16:50.853Z',
+    updatedAt: '2021-05-05T04:16:50.853Z',
+    tags: [
+      {
+        id: 0,
+        name: 'Gaming',
+        color: 'pink400',
+      },
+      {
+        id: 2,
+        name: 'Moba',
+        color: 'teal400',
+      },
+    ],
   },
   {
-    id: 3,
-    image:
-      'https://images.contentstack.io/v3/assets/blt0eb2a2986b796d29/blt3e7d3ffb580f8d00/5fd816d7752123476ba04b32/Riot_Bar_Application_Switcher_Game_Card.jpg??&format=pjpg&quality=85',
-  },
-  {
-    id: 4,
-    image:
-      'https://images.contentstack.io/v3/assets/blt0eb2a2986b796d29/blt5abbad4f1d1da663/602457cff4a7946af0338221/LOL_Key_Art_2021_318x428_RiotBar.jpg??&format=pjpg&quality=85',
-  },
-  {
-    id: 5,
-    image:
-      'https://images.contentstack.io/v3/assets/blt0eb2a2986b796d29/bltfb12cd79b2ec9643/5f5c2534806bc7495596e2e6/TFT_Fates_GameCard_v4.jpg??&format=pjpg&quality=85',
-  },
-  {
-    id: 6,
-    image:
-      'https://images.contentstack.io/v3/assets/blt0eb2a2986b796d29/blt3e7d3ffb580f8d00/5fd816d7752123476ba04b32/Riot_Bar_Application_Switcher_Game_Card.jpg??&format=pjpg&quality=85',
-  },
-  {
-    id: 7,
-    image:
-      'https://images.contentstack.io/v3/assets/blt0eb2a2986b796d29/blt5abbad4f1d1da663/602457cff4a7946af0338221/LOL_Key_Art_2021_318x428_RiotBar.jpg??&format=pjpg&quality=85',
-  },
-  {
-    id: 8,
-    image:
-      'https://images.contentstack.io/v3/assets/blt0eb2a2986b796d29/bltfb12cd79b2ec9643/5f5c2534806bc7495596e2e6/TFT_Fates_GameCard_v4.jpg??&format=pjpg&quality=85',
-  },
-  {
-    id: 9,
-    image:
-      'https://images.contentstack.io/v3/assets/blt0eb2a2986b796d29/blt3e7d3ffb580f8d00/5fd816d7752123476ba04b32/Riot_Bar_Application_Switcher_Game_Card.jpg??&format=pjpg&quality=85',
+    id: 0,
+    name: 'Just Chatting',
+    description: '',
+    banner:
+      'https://static-cdn.jtvnw.net/ttv-boxart/Just%20Chatting-285x380.jpg',
+    follower: 200,
+    createdAt: '2021-05-05T04:16:50.853Z',
+    updatedAt: '2021-05-05T04:16:50.853Z',
+    tags: [
+      {
+        id: 0,
+        name: 'Gaming',
+        color: 'pink400',
+      },
+      {
+        id: 1,
+        name: 'Esport',
+        color: 'green400',
+      },
+    ],
   },
 ];
 
 const columnWidth = 110;
 
-const Category = () => {
+const ListCategory = ({ dataItems }) => {
   const styles = useStyles();
   const _renderItem = ({ item, i }) => {
-    return <CardCategory />;
+    return <CardCategory dataItem={item} />;
   };
 
   return (
     <FlatList
-      data={DATA}
+      data={dataItems}
       keyExtractor={({ id }) => String(id)}
       renderItem={_renderItem}
     />
   );
 };
 
-export default withTheme(Category);
+export default withTheme(ListCategory);
 
 const useStyles = makeStyles((theme) => ({}));
