@@ -14,6 +14,7 @@ import ListChannel from './components/ListChannel';
 import Tabs from './components/Tabs';
 import FilterPanelHeader from './components/FilterPanelHeader';
 import FilterPanelContent from './components/FilterPanelContent';
+import axios from 'axios';
 
 const initialLayout = { width: Dimensions.get('window').width };
 
@@ -28,13 +29,17 @@ const defaultSortedPayload = {
   // offset: 10,
 };
 
-const filterAndSortAPI = async (accessToken, tabIndex, bodyData) => {
+let source = null;
+
+const filterAndSortAPI = async (
+  accessToken,
+  tabIndex,
+  bodyData,
+  tokenSource = null,
+) => {
   const url = tabIndex === 1 ? channelFilter : categoryFilter;
   const payload = { ...defaultSortedPayload, ...bodyData };
-  console.log('PAYLOAD: ', payload);
-  console.log('Access token: ', accessToken);
-  console.log('URL: ', url);
-  return await authRequest(url, 'POST', accessToken, payload);
+  return await authRequest(url, 'POST', accessToken, payload, tokenSource);
 };
 
 const Browse = ({ theme }) => {
@@ -55,14 +60,28 @@ const Browse = ({ theme }) => {
   const setDatas = [setCategoriesData, setChannelsData];
   const sortedValues = [sortedCategoryValue, sortedChannelValue];
   const setSortedValues = [setSortedCategoryValue, setSortedChannelValue];
+  const CancelToken = axios.CancelToken;
 
-  const onTabChange = (i) => {
+  const onTabChange = async (i) => {
     setIndex(i);
     timing(tabOffset, {
       duration: 400,
       toValue: i,
       easing: Easing.inOut(Easing.ease),
     }).start();
+
+    source && source?.cancel('canceled previous request');
+    source = CancelToken.source();
+    const bodyData = { orderBy: sortedValues[i] };
+    await filterAndSortAPI(accessToken, i, bodyData, source.token)
+      .then((response) => {
+        if (i === 0) setCategoriesData(response.data.results);
+        if (i === 1) setChannelsData(response.data.results);
+      })
+      .catch((error) => {
+        console.log('Filter & sort ERROR: ', JSON.stringify(error));
+        alert('Somethings wrong!!!');
+      });
   };
 
   const onFilterPanelOpened = () => {
@@ -74,14 +93,13 @@ const Browse = ({ theme }) => {
   };
 
   useEffect(() => {
-    // console.log('Chay vo day');
     console.log('ACCESS TOKEN: ', accessToken);
     (async () => {
+      source && source?.cancel('canceled previous request');
+      source = CancelToken.source();
       const bodyData = { orderBy: sortedValues[index] };
-      await filterAndSortAPI(accessToken, index, bodyData)
+      await filterAndSortAPI(accessToken, index, bodyData, source.token)
         .then((response) => {
-          // if (index === 0) setCategoriesData(response.data.results);
-          // if (index === 1) setChannelsData(response.data.results);
           setDatas[index](response.data.results);
         })
         .catch((error) => {
@@ -89,7 +107,7 @@ const Browse = ({ theme }) => {
           alert('Somethings wrong!!!');
         });
     })();
-  }, [sortedValues, index]);
+  }, sortedValues);
 
   const renderScene = ({ route }) => {
     switch (route.key) {
