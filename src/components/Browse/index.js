@@ -1,38 +1,127 @@
-import React from 'react';
-import { Dimensions, SafeAreaView } from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { Dimensions, SafeAreaView, View } from 'react-native';
 import { FAB, Text, withTheme } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import { TabView, SceneMap } from 'react-native-tab-view';
-
+import { Modalize } from 'react-native-modalize';
+import Animated, { Easing, timing } from 'react-native-reanimated';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useSelector } from 'react-redux';
+import {
+  authRequest,
+  filterChannelUrl,
+  categoryFilterUrl,
+} from '../../services';
 
 import ListCategory from './components/ListCategory';
 import ListChannel from './components/ListChannel';
 import Tabs from './components/Tabs';
+import FilterPanelHeader from './components/FilterPanelHeader';
+import FilterPanelContent from './components/FilterPanelContent';
+import axios from 'axios';
 
 const initialLayout = { width: Dimensions.get('window').width };
-import Animated, { Easing, timing } from 'react-native-reanimated';
 
 const { Value } = Animated;
 
 const tabOffset = new Value(0);
 
+const defaultSortedPayload = {
+  tags: [],
+  orderBy: 1,
+  page: 0,
+  // offset: 10,
+};
+
+let source = null;
+
+const filterAndSortAPI = async (
+  accessToken,
+  tabIndex,
+  bodyData,
+  tokenSource = null,
+) => {
+  const url = tabIndex === 1 ? filterChannelUrl : categoryFilterUrl;
+  const payload = { ...defaultSortedPayload, ...bodyData };
+  return await authRequest(url, 'POST', accessToken, payload, tokenSource);
+};
+
 const Browse = ({ theme }) => {
   const styles = useStyles();
-
+  const accessToken = useSelector((state) => state.user?.access_token);
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: 'first', title: 'Categories' },
     { key: 'second', title: 'Channel' },
   ]);
+  const modalizeRef = useRef(null);
+  const [filterPanelVisible, setFilterPanelVisible] = useState(true);
+  const [categoriesData, setCategoriesData] = useState(null);
+  const [channelsData, setChannelsData] = useState(null);
+  const [sortedCategoryValue, setSortedCategoryValue] = useState(1);
+  const [sortedChannelValue, setSortedChannelValue] = useState(1);
 
-  const onTabChange = (i) => {
+  const setDatas = [setCategoriesData, setChannelsData];
+  const sortedValues = [sortedCategoryValue, sortedChannelValue];
+  const setSortedValues = [setSortedCategoryValue, setSortedChannelValue];
+  const CancelToken = axios.CancelToken;
+
+  const onTabChange = async (i) => {
     setIndex(i);
     timing(tabOffset, {
       duration: 400,
       toValue: i,
       easing: Easing.inOut(Easing.ease),
     }).start();
+
+    source && source.cancel('Canceled previous request');
+    source = CancelToken.source();
+    const bodyData = { orderBy: sortedValues[i] };
+    await filterAndSortAPI(accessToken, i, bodyData, source.token)
+      .then((response) => {
+        if (i === 0) setCategoriesData(response.data.results);
+        if (i === 1) setChannelsData(response.data.results);
+      })
+      .catch((error) => {
+        console.log('Filter & sort ERROR: ', JSON.stringify(error));
+        alert('Somethings wrong!!!');
+      });
+  };
+
+  const onFilterPanelOpened = () => {
+    setFilterPanelVisible(false);
+  };
+
+  const onFilterPanelClosed = () => {
+    setFilterPanelVisible(true);
+  };
+
+  useEffect(() => {
+    console.log('ACCESS TOKEN: ', accessToken);
+    (async () => {
+      source && source?.cancel('canceled previous request');
+      source = CancelToken.source();
+      const bodyData = { orderBy: sortedValues[index] };
+      await filterAndSortAPI(accessToken, index, bodyData, source.token)
+        .then((response) => {
+          setDatas[index](response.data.results);
+        })
+        .catch((error) => {
+          console.log('Filter & sort ERROR: ', JSON.stringify(error));
+          alert('Somethings wrong!!!');
+        });
+    })();
+  }, sortedValues);
+
+  const renderScene = ({ route }) => {
+    switch (route.key) {
+      case 'first':
+        return <ListCategory dataItems={categoriesData} />;
+      case 'second':
+        return <ListChannel dataItems={channelsData} />;
+      default:
+        return null;
+    }
   };
 
   return (
@@ -42,11 +131,9 @@ const Browse = ({ theme }) => {
       </Text>
 
       <TabView
+        lazy
         navigationState={{ index, routes }}
-        renderScene={SceneMap({
-          first: ListCategory,
-          second: ListChannel,
-        })}
+        renderScene={renderScene}
         onIndexChange={onTabChange}
         renderTabBar={(props) => (
           <Tabs {...props} onPress={onTabChange} tabOffset={tabOffset} />
@@ -55,6 +142,7 @@ const Browse = ({ theme }) => {
       />
 
       <FAB
+        visible={filterPanelVisible}
         style={styles.fab}
         icon={({ color, size }) => (
           <Ionicons name="options-outline" color={color} size={size} />
@@ -62,9 +150,23 @@ const Browse = ({ theme }) => {
         label="Filter And Sort"
         animated={false}
         uppercase={false}
-        onPress={() => console.log('Pressed')}
+        onPress={() => modalizeRef.current?.open()}
         color={theme.colors.text}
       />
+      <Modalize
+        ref={modalizeRef}
+        modalStyle={styles.filterPanel}
+        childrenStyle={styles.childrenFilterPanel}
+        HeaderComponent={<FilterPanelHeader />}
+        onOpen={onFilterPanelOpened}
+        onClose={onFilterPanelClosed}
+        modalHeight={300}>
+        <FilterPanelContent
+          tabIndex={index}
+          sortedValue={sortedValues[index]}
+          setSortedValue={setSortedValues[index]}
+        />
+      </Modalize>
     </SafeAreaView>
   );
 };
@@ -97,5 +199,13 @@ const useStyles = makeStyles((theme) => ({
   primaryText: {
     fontFamily: 'Inter-Black',
     color: theme.colors.primary,
+  },
+  filterPanel: {
+    backgroundColor: theme.colors.surface,
+    justifyContent: 'center',
+    // flex: 1,
+  },
+  childrenFilterPanel: {
+    flex: 1,
   },
 }));

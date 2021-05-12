@@ -2,9 +2,11 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Caption, Colors } from 'react-native-paper';
 
-const ChipCustom = ({ color, title, style }) => {
+const ChipCustom = ({ color, title, style, ...props }) => {
   return (
-    <View style={[styles.category, style, { backgroundColor: Colors[color] }]}>
+    <View
+      style={[styles.category, style, { backgroundColor: Colors[color] }]}
+      {...props}>
       <Caption style={styles.categoryText}>#{title}</Caption>
     </View>
   );

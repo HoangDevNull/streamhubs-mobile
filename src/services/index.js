@@ -9,7 +9,13 @@ export const request = (url, method, payload = {}) => {
   });
 };
 
-export const authRequest = (url, method, access_token, payload = {}) => {
+export const authRequest = (
+  url,
+  method,
+  access_token,
+  payload = {},
+  cancel_token = null,
+) => {
   return axios({
     method: method,
     url: `${ROOT_API}${url}`,
@@ -17,6 +23,7 @@ export const authRequest = (url, method, access_token, payload = {}) => {
     headers: {
       Authorization: access_token,
     },
+    cancelToken: cancel_token,
     // strictSSL: false,
   });
 };
@@ -53,3 +60,5 @@ export const checkNameUrl = '/check/username';
 export const channelByCatUrl = '/category-channel';
 export const allCategoryUrl = '/categories';
 export const filterChannelUrl = '/channel/filter';
+export const categoryFilterUrl = '/category/filter';
+export const searchUrl = '/search';

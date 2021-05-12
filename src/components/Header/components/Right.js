@@ -6,11 +6,16 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useRoute } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { openUserSetting } from '../../../redux/actions/gui';
+import { useNavigation } from '@react-navigation/native';
 const Right = ({ theme: { colors } }) => {
   const { name } = useRoute();
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
-  const _handleSearch = () => console.log('Searching');
+  const _handleSearch = () => {
+    navigation.navigate('Search');
+    console.log('Searching');
+  };
 
   const _handleMore = () => console.log('Shown more');
   const _openUserSetting = () => {
