@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0, 0.5)',
     position: 'absolute',
     right: 0,
-    width: width / 3,
+    width: width / 2,
     height: '100%',
   },
 });

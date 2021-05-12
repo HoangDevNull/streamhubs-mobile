@@ -111,7 +111,8 @@ const Browse = ({ theme }) => {
           alert('Somethings wrong!!!');
         });
     })();
-  }, sortedValues);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sortedValues]);
 
   const renderScene = ({ route }) => {
     switch (route.key) {

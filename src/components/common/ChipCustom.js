@@ -7,7 +7,9 @@ const ChipCustom = ({ color, title, style, ...props }) => {
     <View
       style={[styles.category, style, { backgroundColor: Colors[color] }]}
       {...props}>
-      <Caption style={styles.categoryText}>#{title}</Caption>
+      <Caption style={styles.categoryText} numberOfLines={1}>
+        #{title}
+      </Caption>
     </View>
   );
 };
