@@ -7,7 +7,11 @@ import { Modalize } from 'react-native-modalize';
 import Animated, { Easing, timing } from 'react-native-reanimated';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useSelector } from 'react-redux';
-import { authRequest, channelFilter, categoryFilter } from '../../services';
+import {
+  authRequest,
+  filterChannelUrl,
+  categoryFilterUrl,
+} from '../../services';
 
 import ListCategory from './components/ListCategory';
 import ListChannel from './components/ListChannel';
@@ -37,7 +41,7 @@ const filterAndSortAPI = async (
   bodyData,
   tokenSource = null,
 ) => {
-  const url = tabIndex === 1 ? channelFilter : categoryFilter;
+  const url = tabIndex === 1 ? filterChannelUrl : categoryFilterUrl;
   const payload = { ...defaultSortedPayload, ...bodyData };
   return await authRequest(url, 'POST', accessToken, payload, tokenSource);
 };

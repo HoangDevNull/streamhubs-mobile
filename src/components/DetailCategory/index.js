@@ -1,17 +1,19 @@
 import React from 'react';
 import { SafeAreaView, View } from 'react-native';
-import { Text, withTheme } from 'react-native-paper';
+import { withTheme } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 
-import { useSelector } from 'react-redux';
 import { FlatList } from 'react-native-gesture-handler';
 
+import { authRequest, channelByCatUrl } from '../../services';
+
 import Player from '../common/Player';
-import { authRequest, filterChannelUrl } from '../../services';
+import CategoryBanner from '../common/CategoryBanner';
+import { useSelector } from 'react-redux';
 
 const columnWidth = 110;
 
-const Gaming = ({ navigation, theme }) => {
+const DetailCategory = ({ route, navigation, theme }) => {
   const styles = useStyles();
   const access_token = useSelector((state) => state.user.access_token);
   const [data, setData] = React.useState([]);
@@ -19,36 +21,40 @@ const Gaming = ({ navigation, theme }) => {
     page: 0,
     total: 0,
   });
-  React.useEffect(() => {
-    if (!access_token) {
-      return;
-    }
-    const payload = { tags: [], orderBy: 4, page: 0, offset: 10 };
-    authRequest(filterChannelUrl, 'POST', access_token, payload)
-      .then(({ data: { results, total } }) => {
-        setData(results);
-        setPages({
-          page: 0,
-          total: total,
-        });
-      })
-      .catch((err) => console.log(err));
-  }, [access_token]);
 
-  const _renderItem = ({ item, i }) => {
+  React.useEffect(() => {
+    if (route.params) {
+      const payload = {
+        categoryID: route.params.id,
+        page: 0,
+        offset: 10,
+      };
+      authRequest(channelByCatUrl, 'POST', access_token, payload)
+        .then(({ data: { results, total } }) => {
+          setData(results);
+          setPages({
+            page: 0,
+            total: total,
+          });
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [route.params, access_token]);
+
+  const _renderItem = ({ item }) => {
     return <Player channel={item} />;
   };
+
+  const category = route.params;
   return (
     <SafeAreaView>
       <FlatList
         ListHeaderComponent={
           <>
             <View style={styles.container}>
-              <Text style={[styles.grid, styles.headText]}>
-                Gam<Text style={styles.primaryText}>i</Text>ng
-              </Text>
-
-              {/* Main */}
+              <View style={[styles.grid]}>
+                <CategoryBanner data={category} />
+              </View>
             </View>
           </>
         }
@@ -60,7 +66,7 @@ const Gaming = ({ navigation, theme }) => {
   );
 };
 
-export default withTheme(Gaming);
+export default withTheme(DetailCategory);
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -69,7 +75,6 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
   },
   grid: {
-    marginTop: 15,
     paddingHorizontal: 15,
   },
   headText: {

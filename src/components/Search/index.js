@@ -5,7 +5,7 @@ import SearchBar from './components/SearchBar';
 import ItemResult from './components/ItemResult';
 import axios from 'axios';
 import { FlatList } from 'react-native-gesture-handler';
-import { authRequest, search } from '../../services';
+import { authRequest, searchUrl } from '../../services';
 import { useSelector } from 'react-redux';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 
@@ -17,7 +17,13 @@ const searchAPI = async (query, accessToken, tokenSource) => {
     page: 0,
     // "offset": 10
   };
-  return await authRequest(search, 'POST', accessToken, payload, tokenSource);
+  return await authRequest(
+    searchUrl,
+    'POST',
+    accessToken,
+    payload,
+    tokenSource,
+  );
 };
 
 const Search = () => {
