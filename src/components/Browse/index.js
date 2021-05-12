@@ -70,7 +70,7 @@ const Browse = ({ theme }) => {
       easing: Easing.inOut(Easing.ease),
     }).start();
 
-    source && source?.cancel('canceled previous request');
+    source && source.cancel('Canceled previous request');
     source = CancelToken.source();
     const bodyData = { orderBy: sortedValues[i] };
     await filterAndSortAPI(accessToken, i, bodyData, source.token)

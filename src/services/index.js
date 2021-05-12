@@ -59,3 +59,4 @@ export const updateUserUrl = '/user/profile';
 export const checkNameUrl = '/check/username';
 export const channelFilter = '/channel/filter';
 export const categoryFilter = '/category/filter';
+export const search = '/search';

@@ -20,6 +20,8 @@ const useStyles = makeStyles((theme) => ({
   searchBar: {
     backgroundColor: 'transparent',
     borderColor: theme.colors.primary,
-    margin: 20,
+    marginHorizontal: 20,
+    marginTop: 20,
+    marginBottom: 10,
   },
 }));
