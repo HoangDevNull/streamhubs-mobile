@@ -17,8 +17,10 @@ import {
   subChannelURL,
   suggestChannelURL,
   streamerFollowedURL,
+  tagsUrl,
 } from '../../services';
 import { initFollowingData } from '../../redux/actions/following';
+import { setTags } from '../../redux/actions/user';
 
 const Home = ({ navigation, theme }) => {
   const styles = useStyles();
@@ -39,6 +41,9 @@ const Home = ({ navigation, theme }) => {
       page: 0,
       offset: 10,
     });
+    const getTags = authRequest(tagsUrl, 'POST', access_token, {
+      page: 0,
+    });
     const [
       { data: categories },
       { data: liveChannel },
@@ -54,6 +59,12 @@ const Home = ({ navigation, theme }) => {
         followedStreamer,
       }),
     );
+
+    await getTags
+      .then((result) => {
+        dispatch(setTags(result.data.results));
+      })
+      .catch((error) => console.log('Get Tags at Home.js Error', error));
   }, [access_token, dispatch]);
 
   const onRefresh = React.useCallback(async () => {

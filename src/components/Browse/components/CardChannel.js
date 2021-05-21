@@ -1,44 +1,52 @@
 import React from 'react';
 import { View, Image } from 'react-native';
-import { Card, Paragraph, Subheading, Text } from 'react-native-paper';
+import {
+  Card,
+  Paragraph,
+  Subheading,
+  TouchableRipple,
+  useTheme,
+} from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import LiveBadge from '../../common/LiveBadge';
 import ViewerBadge from '../../common/ViewerBadge';
 import UserAvatar from '../../common/UserAvatar';
+import { useNavigation } from '@react-navigation/native';
 
-const CardCategory = ({ navigation, dataItem }) => {
+const CardCategory = ({ dataItem }) => {
   const styles = useStyles();
+  const theme = useTheme();
   const { banner, owner, follower, viewers, description } = dataItem;
+  const navigation = useNavigation();
 
   return (
-    <Card
-      onPress={() => console.log('prest')}
-      elevation={0}
-      style={styles.container}>
-      <Card.Content style={styles.wrapper}>
-        <View>
-          <Image
-            style={styles.image}
-            source={{
-              uri: banner,
-              // 'https://static-cdn.jtvnw.net/previews-ttv/live_user_esl_csgo-440x248.jpg',
-            }}
-          />
-          <LiveBadge position="top" />
-          <ViewerBadge backdrop position="bottom" count="8,222" />
-        </View>
-      </Card.Content>
-      <Card.Actions style={styles.cardAction}>
-        <UserAvatar size={40} src={owner.userProfile.avatar} />
-        <View style={styles.textWrapper}>
-          <Subheading style={styles.fontBold}>
-            {owner.username || '#Noname'}
-          </Subheading>
-
-          <Paragraph numberOfLines={1}>{description}</Paragraph>
-        </View>
-      </Card.Actions>
-    </Card>
+    <TouchableRipple
+      onPress={() => navigation.navigate('DetailStream', dataItem)}
+      rippleColor={theme.colors.ripple}>
+      <Card elevation={0} style={styles.container}>
+        <Card.Content style={styles.wrapper}>
+          <View>
+            <Image
+              style={styles.image}
+              source={{
+                uri: banner,
+              }}
+            />
+            <LiveBadge position="top" />
+            <ViewerBadge backdrop position="bottom" count="8,222" />
+          </View>
+        </Card.Content>
+        <Card.Actions style={styles.cardAction}>
+          <UserAvatar size={40} src={owner.userProfile.avatar} />
+          <View style={styles.textWrapper}>
+            <Subheading style={styles.fontBold}>
+              {owner.username || '#Noname'}
+            </Subheading>
+            <Paragraph numberOfLines={1}>{description}</Paragraph>
+          </View>
+        </Card.Actions>
+      </Card>
+    </TouchableRipple>
   );
 };
 
@@ -48,7 +56,8 @@ const useStyles = makeStyles((theme) => ({
   container: {
     paddingVertical: 10,
     paddingHorizontal: 15,
-    backgroundColor: theme.colors.background,
+    // backgroundColor: theme.colors.background,
+    backgroundColor: 'transparent',
   },
   wrapper: {
     flex: 1,
