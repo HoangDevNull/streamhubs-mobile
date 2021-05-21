@@ -1,63 +1,112 @@
 import React, { useEffect, useState } from 'react';
 import { View, SafeAreaView } from 'react-native';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
-import { withTheme, RadioButton, Caption, useTheme } from 'react-native-paper';
-import { ScrollView } from 'react-native-gesture-handler';
+import {
+  withTheme,
+  Caption,
+  useTheme,
+  Button,
+  Colors,
+} from 'react-native-paper';
+import { Picker } from '@react-native-picker/picker';
+import { useSelector } from 'react-redux';
 
-const filterOrderbyValues = [
-  { label: 'Descending', value: 1 },
-  { label: 'Ascending', value: 2 },
-  { label: 'Suggestion', value: 3 },
-];
-const channelOrderbyValues = [
-  { label: 'Descending', value: 1 },
-  { label: 'Ascending', value: 2 },
-  { label: 'Newest', value: 3 },
-  { label: 'Suggestion', value: 4 },
-];
+const defaultTags = (length, existTags) =>
+  Array(length)
+    .fill(false)
+    .map((it, id) => existTags.includes(id));
 
-const FilterPanelContent = ({ tabIndex, sortedValue, setSortedValue }) => {
+const FilterPanelContent = ({ pickerItems, payload, setPayload, onClose }) => {
   const styles = useStyles();
   const theme = useTheme();
-  const [radios, setRadios] = useState(filterOrderbyValues);
+  const tags = useSelector((state) => state.user.tags);
 
-  const onValueSortedChange = (newValue) => {
-    setSortedValue(newValue);
+  const [tagsMode, setTagsMode] = useState(
+    defaultTags(tags.length || 0, payload.tags || []),
+  );
+  const [selectedPayload, setSelectedPayload] = useState(payload);
+
+  const onPickerChange = (itemValue, itemIndex) => {
+    setSelectedPayload((prev) => ({ ...prev, orderBy: itemValue }));
+  };
+
+  const onTagPress = (id) => {
+    let tags = tagsMode;
+    tags[id] = !tags[id];
+    setTagsMode([...tags]);
+  };
+
+  const onApply = () => {
+    setPayload(selectedPayload);
+    onClose();
+  };
+
+  const onClear = () => {
+    setPayload({ tags: [], orderBy: 1, page: 0 });
+    onClose();
   };
 
   useEffect(() => {
-    if (tabIndex === 0) setRadios(filterOrderbyValues);
-    if (tabIndex === 1) setRadios(channelOrderbyValues);
-  }, [tabIndex]);
+    setSelectedPayload((prev) => ({
+      ...prev,
+      tags: tagsMode.flatMap((it, id) => (it === true ? id : [])),
+    }));
+  }, [tagsMode]);
 
-  const radioButtonGroup = React.useMemo(
+  const PickerItem = React.useCallback(
     () => (
-      <RadioButton.Group
-        onValueChange={onValueSortedChange}
-        value={sortedValue}>
-        <View style={styles.radioGroup}>
-          {radios.map((item) => (
-            <RadioButton.Item
-              key={item.value}
-              label={item.label}
-              value={item.value}
-              style={styles.radioItem}
-              labelStyle={styles.radioItemLabel}
-              color={theme.colors.primary}
-            />
-          ))}
-        </View>
-      </RadioButton.Group>
+      <Picker
+        selectedValue={selectedPayload.orderBy}
+        onValueChange={onPickerChange}
+        style={styles.pickerParent}
+        dropdownIconColor={theme.colors.text}>
+        {pickerItems.map((item) => (
+          <Picker.Item
+            key={item.value}
+            label={item.label}
+            value={item.value}
+            style={styles.pickerItem}
+          />
+        ))}
+      </Picker>
     ),
-    [sortedValue, tabIndex],
+    [],
+  );
+
+  const TagItem = React.useCallback(
+    () =>
+      tags.map((tag) => (
+        <Button
+          key={tag.id}
+          mode={tagsMode[tag.id] ? 'contained' : 'outlined'}
+          compact
+          onPress={() => onTagPress(tag.id)}
+          color={Colors[tag.color]}
+          style={styles.tagItem}>
+          <Caption style={styles.categoryText} numberOfLines={1}>
+            #{tag.name}
+          </Caption>
+        </Button>
+      )),
+    [tagsMode],
   );
 
   return (
     <SafeAreaView style={styles.container}>
       <Caption style={styles.sortHeader}>Sort by</Caption>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {radioButtonGroup}
-      </ScrollView>
+      <View style={styles.viewPicker}>
+        <PickerItem />
+      </View>
+      <Caption style={styles.sortHeader}>Filter by tags</Caption>
+      <View style={styles.tagsContainer}>
+        <TagItem />
+      </View>
+      <Button mode="contained" onPress={onApply} style={styles.buttonApply}>
+        Apply
+      </Button>
+      <Button mode="outlined" onPress={onClear} style={styles.buttonClear}>
+        Clear
+      </Button>
     </SafeAreaView>
   );
 };
@@ -67,23 +116,39 @@ export default withTheme(React.memo(FilterPanelContent));
 const useStyles = makeStyles((theme) => ({
   container: {
     backgroundColor: theme.colors.surface,
-  },
-  radioGroup: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  radioItem: {
-    marginHorizontal: 2,
-    flexDirection: 'row-reverse',
-    width: 150,
-    borderRadius: 10,
-    borderColor: theme.colors.primary,
-    borderWidth: 1,
-  },
-  radioItemLabel: {
-    fontSize: 12,
-  },
-  sortHeader: {
     paddingHorizontal: 10,
   },
+  viewPicker: {
+    borderColor: theme.colors.primary,
+    borderWidth: 2,
+    borderRadius: 4,
+  },
+  pickerParent: {
+    color: theme.colors.text,
+  },
+  sortHeader: {
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  tagsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  tagItem: {
+    marginRight: 10,
+    marginBottom: 10,
+    borderRadius: 4,
+    paddingVertical: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  categoryText: {
+    alignSelf: 'center',
+    color: '#fff',
+    textAlign: 'center',
+  },
+  buttonApply: {
+    marginVertical: 20,
+  },
+  buttonClear: {},
 }));

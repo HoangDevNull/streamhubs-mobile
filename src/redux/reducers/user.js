@@ -1,4 +1,4 @@
-import { SAVE_USER_INFO, LOGOUT, SET_THEME } from '../types/user';
+import { SAVE_USER_INFO, LOGOUT, SET_THEME, SET_TAGS } from '../types/user';
 
 const initState = {
   email: null,
@@ -7,6 +7,7 @@ const initState = {
   userProfile: null,
   channel: null,
   theme: 'dark',
+  tags: [],
 };
 
 const userReducer = (state = initState, action) => {
@@ -28,6 +29,11 @@ const userReducer = (state = initState, action) => {
       return {
         ...state,
         theme: action.payload,
+      };
+    case SET_TAGS:
+      return {
+        ...state,
+        tags: action.payload,
       };
     default:
       return state;

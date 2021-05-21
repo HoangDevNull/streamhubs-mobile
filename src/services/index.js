@@ -62,3 +62,4 @@ export const allCategoryUrl = '/categories';
 export const filterChannelUrl = '/channel/filter';
 export const categoryFilterUrl = '/category/filter';
 export const searchUrl = '/search';
+export const tagsUrl = '/tags';

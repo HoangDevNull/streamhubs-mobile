@@ -1,8 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Dimensions, SafeAreaView, View } from 'react-native';
+import { Dimensions, SafeAreaView } from 'react-native';
 import { FAB, Text, withTheme } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
-import { TabView, SceneMap } from 'react-native-tab-view';
+import { TabView } from 'react-native-tab-view';
 import { Modalize } from 'react-native-modalize';
 import Animated, { Easing, timing } from 'react-native-reanimated';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -26,12 +26,28 @@ const { Value } = Animated;
 
 const tabOffset = new Value(0);
 
-const defaultSortedPayload = {
+const defaultFilterPayload = {
   tags: [],
   orderBy: 1,
   page: 0,
-  // offset: 10,
 };
+
+const defaultRoutes = [
+  { key: 'first', title: 'Categories' },
+  { key: 'second', title: 'Channel' },
+];
+
+const categoryOrderbyValues = [
+  { label: 'Descending', value: 1 },
+  { label: 'Ascending', value: 2 },
+  { label: 'Suggestion', value: 3 },
+];
+const channelOrderbyValues = [
+  { label: 'Descending', value: 1 },
+  { label: 'Ascending', value: 2 },
+  { label: 'Newest', value: 3 },
+  { label: 'Suggestion', value: 4 },
+];
 
 let source = null;
 
@@ -42,7 +58,8 @@ const filterAndSortAPI = async (
   tokenSource = null,
 ) => {
   const url = tabIndex === 1 ? filterChannelUrl : categoryFilterUrl;
-  const payload = { ...defaultSortedPayload, ...bodyData };
+  const payload = { ...defaultFilterPayload, ...bodyData };
+  console.log('Query data', payload);
   return await authRequest(url, 'POST', accessToken, payload, tokenSource);
 };
 
@@ -50,20 +67,23 @@ const Browse = ({ theme }) => {
   const styles = useStyles();
   const accessToken = useSelector((state) => state.user?.access_token);
   const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    { key: 'first', title: 'Categories' },
-    { key: 'second', title: 'Channel' },
-  ]);
+  const [routes] = React.useState(defaultRoutes);
   const modalizeRef = useRef(null);
   const [filterPanelVisible, setFilterPanelVisible] = useState(true);
   const [categoriesData, setCategoriesData] = useState(null);
   const [channelsData, setChannelsData] = useState(null);
-  const [sortedCategoryValue, setSortedCategoryValue] = useState(1);
-  const [sortedChannelValue, setSortedChannelValue] = useState(1);
+  const [paramsQueryCategory, setParamsQueryCategory] = useState(
+    defaultFilterPayload,
+  );
+  const [paramsQueryChannel, setParamsQueryChannel] = useState(
+    defaultFilterPayload,
+  );
 
+  const paramsQuery = [paramsQueryCategory, paramsQueryChannel];
   const setDatas = [setCategoriesData, setChannelsData];
-  const sortedValues = [sortedCategoryValue, sortedChannelValue];
-  const setSortedValues = [setSortedCategoryValue, setSortedChannelValue];
+  const setParamsQuery = [setParamsQueryCategory, setParamsQueryChannel];
+  const pickerItems = [categoryOrderbyValues, channelOrderbyValues];
+
   const CancelToken = axios.CancelToken;
 
   const onTabChange = async (i) => {
@@ -76,8 +96,8 @@ const Browse = ({ theme }) => {
 
     source && source.cancel('Canceled previous request');
     source = CancelToken.source();
-    const bodyData = { orderBy: sortedValues[i] };
-    await filterAndSortAPI(accessToken, i, bodyData, source.token)
+
+    await filterAndSortAPI(accessToken, i, paramsQuery[i], source.token)
       .then((response) => {
         if (i === 0) setCategoriesData(response.data.results);
         if (i === 1) setChannelsData(response.data.results);
@@ -96,13 +116,21 @@ const Browse = ({ theme }) => {
     setFilterPanelVisible(true);
   };
 
+  const onClose = () => {
+    modalizeRef.current?.close();
+  };
+
   useEffect(() => {
     console.log('ACCESS TOKEN: ', accessToken);
     (async () => {
       source && source?.cancel('canceled previous request');
       source = CancelToken.source();
-      const bodyData = { orderBy: sortedValues[index] };
-      await filterAndSortAPI(accessToken, index, bodyData, source.token)
+      await filterAndSortAPI(
+        accessToken,
+        index,
+        paramsQuery[index],
+        source.token,
+      )
         .then((response) => {
           setDatas[index](response.data.results);
         })
@@ -111,8 +139,7 @@ const Browse = ({ theme }) => {
           alert('Somethings wrong!!!');
         });
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sortedValues]);
+  }, [paramsQueryCategory, paramsQueryChannel]);
 
   const renderScene = ({ route }) => {
     switch (route.key) {
@@ -161,11 +188,12 @@ const Browse = ({ theme }) => {
         HeaderComponent={<FilterPanelHeader />}
         onOpen={onFilterPanelOpened}
         onClose={onFilterPanelClosed}
-        modalHeight={300}>
+        modalHeight={500}>
         <FilterPanelContent
-          tabIndex={index}
-          sortedValue={sortedValues[index]}
-          setSortedValue={setSortedValues[index]}
+          pickerItems={pickerItems[index]}
+          payload={paramsQuery[index]}
+          setPayload={setParamsQuery[index]}
+          onClose={onClose}
         />
       </Modalize>
     </SafeAreaView>
