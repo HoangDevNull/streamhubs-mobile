@@ -1,57 +1,56 @@
 import React from 'react';
 import { View, Image } from 'react-native';
 import {
-  Caption,
+  TouchableRipple,
   Card,
   Paragraph,
   Subheading,
-  Text,
-  Title,
+  useTheme,
 } from 'react-native-paper';
 import { makeStyles } from '@blackbox-vision/react-native-paper-use-styles';
 import ChipCustom from '../../common/ChipCustom';
+import { useNavigation } from '@react-navigation/native';
 
-const CardCategory = ({ navigation, dataItem }) => {
+const CardCategory = ({ dataItem }) => {
   const styles = useStyles();
+  const theme = useTheme();
+  const navigation = useNavigation();
   const { banner, name, follower, tags } = dataItem;
 
   return (
-    <Card
-      onPress={() => console.log('prest')}
-      elevation={0}
-      style={styles.container}>
-      <Card.Content style={styles.wrapper}>
-        <View style={styles.leftWrapper}>
-          <Image
-            style={styles.image}
-            source={{
-              uri: banner,
-              // 'https://static-cdn.jtvnw.net/ttv-boxart/Apex%20Legends-244x292.jpg',
-            }}
-          />
-        </View>
-
-        <View style={styles.rightWrapper}>
-          <Subheading style={styles.fontBold}>
-            {/*Apex Legend*/ name}
-          </Subheading>
-          <View style={styles.viewerWrapper}>
-            <Paragraph style={styles.fontBold}>NaN Viewers</Paragraph>
-            <Paragraph style={styles.fontBold}>{follower} Followers</Paragraph>
+    <TouchableRipple
+      onPress={() => navigation.navigate('DetailStream', dataItem)}
+      rippleColor={theme.colors.ripple}>
+      <Card elevation={0} style={styles.container}>
+        <Card.Content style={styles.wrapper}>
+          <View style={styles.leftWrapper}>
+            <Image
+              style={styles.image}
+              source={{
+                uri: banner,
+              }}
+            />
           </View>
 
-          <View style={styles.tagWrapper}>
-            {tags &&
-              tags.map((tag) => (
-                <ChipCustom key={tag.id} title={tag.name} color={tag.color} />
-              ))}
-            {/*             
-            <ChipCustom title="Esport" color="pink400" />
-            <ChipCustom title="MOBA" color="purple400" /> */}
+          <View style={styles.rightWrapper}>
+            <Subheading style={styles.fontBold}>{name}</Subheading>
+            <View style={styles.viewerWrapper}>
+              <Paragraph style={styles.fontBold}>NaN Viewers</Paragraph>
+              <Paragraph style={styles.fontBold}>
+                {follower} Followers
+              </Paragraph>
+            </View>
+
+            <View style={styles.tagWrapper}>
+              {tags &&
+                tags.map((tag) => (
+                  <ChipCustom key={tag.id} title={tag.name} color={tag.color} />
+                ))}
+            </View>
           </View>
-        </View>
-      </Card.Content>
-    </Card>
+        </Card.Content>
+      </Card>
+    </TouchableRipple>
   );
 };
 
@@ -61,7 +60,8 @@ const useStyles = makeStyles((theme) => ({
   container: {
     paddingVertical: 20,
     paddingHorizontal: 15,
-    backgroundColor: theme.colors.backgroundColor,
+    // backgroundColor: theme.colors.backgroundColor,
+    backgroundColor: 'transparent',
   },
   wrapper: {
     flex: 1,

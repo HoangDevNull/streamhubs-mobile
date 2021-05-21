@@ -30,6 +30,7 @@ export const DarkTheme = {
     surface: '#212121',
     text: '#F9F9F9',
     contrast: '#F9F9F9',
+    ripple: 'rgba(255, 255, 255, 0.38)',
   },
   fonts: configureFonts(fontConfig),
 };
@@ -50,5 +51,6 @@ export const LightTheme = {
     surface: '#ffffff',
     text: '#000000',
     contrast: '#F9F9F9',
+    ripple: 'rgba(0, 0, 0, 0.38)',
   },
 };
