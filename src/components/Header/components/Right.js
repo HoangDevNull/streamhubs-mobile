@@ -14,10 +14,8 @@ const Right = ({ theme: { colors } }) => {
 
   const _handleSearch = () => {
     navigation.navigate('Search');
-    console.log('Searching');
   };
 
-  const _handleMore = () => console.log('Shown more');
   const _openUserSetting = () => {
     dispatch(openUserSetting(true));
   };
@@ -38,20 +36,12 @@ const Right = ({ theme: { colors } }) => {
     );
   }
   return (
-    <>
-      <Appbar.Action
-        icon={({ size }) => (
-          <Ionicons name="search-outline" size={size} color={mainColor} />
-        )}
-        onPress={_handleSearch}
-      />
-      <Appbar.Action
-        icon={({ size }) => (
-          <Ionicons name="mail-unread-outline" size={size} color={mainColor} />
-        )}
-        onPress={_handleMore}
-      />
-    </>
+    <Appbar.Action
+      icon={({ size }) => (
+        <Ionicons name="search-outline" size={size} color={mainColor} />
+      )}
+      onPress={_handleSearch}
+    />
   );
 };
 

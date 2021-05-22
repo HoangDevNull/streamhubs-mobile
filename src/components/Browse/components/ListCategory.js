@@ -1,7 +1,9 @@
 import React from 'react';
-import { withTheme } from 'react-native-paper';
+import { Title, withTheme } from 'react-native-paper';
 import { FlatList } from 'react-native-gesture-handler';
 import CardCategory from './CardCategory';
+import { View } from 'react-native';
+import NoResultFound from './NoResultFound';
 
 const ListCategory = ({ dataItems }) => {
   const _renderItem = ({ item, i }) => {
@@ -13,6 +15,7 @@ const ListCategory = ({ dataItems }) => {
       data={dataItems}
       keyExtractor={({ id }) => String(id)}
       renderItem={_renderItem}
+      ListEmptyComponent={<NoResultFound />}
     />
   );
 };

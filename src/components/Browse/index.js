@@ -59,7 +59,6 @@ const filterAndSortAPI = async (
 ) => {
   const url = tabIndex === 1 ? filterChannelUrl : categoryFilterUrl;
   const payload = { ...defaultFilterPayload, ...bodyData };
-  console.log('Query data', payload);
   return await authRequest(url, 'POST', accessToken, payload, tokenSource);
 };
 
@@ -99,12 +98,15 @@ const Browse = ({ theme }) => {
 
     await filterAndSortAPI(accessToken, i, paramsQuery[i], source.token)
       .then((response) => {
-        if (i === 0) setCategoriesData(response.data.results);
-        if (i === 1) setChannelsData(response.data.results);
+        if (i === 0) {
+          setCategoriesData(response.data.results);
+        }
+        if (i === 1) {
+          setChannelsData(response.data.results);
+        }
       })
       .catch((error) => {
         console.log('Filter & sort ERROR: ', JSON.stringify(error));
-        alert('Somethings wrong!!!');
       });
   };
 
@@ -121,7 +123,6 @@ const Browse = ({ theme }) => {
   };
 
   useEffect(() => {
-    console.log('ACCESS TOKEN: ', accessToken);
     (async () => {
       source && source?.cancel('canceled previous request');
       source = CancelToken.source();
@@ -136,9 +137,9 @@ const Browse = ({ theme }) => {
         })
         .catch((error) => {
           console.log('Filter & sort ERROR: ', JSON.stringify(error));
-          alert('Somethings wrong!!!');
         });
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paramsQueryCategory, paramsQueryChannel]);
 
   const renderScene = ({ route }) => {

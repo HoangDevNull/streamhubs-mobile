@@ -31,9 +31,9 @@ const FilterPanelContent = ({ pickerItems, payload, setPayload, onClose }) => {
   };
 
   const onTagPress = (id) => {
-    let tags = tagsMode;
-    tags[id] = !tags[id];
-    setTagsMode([...tags]);
+    let currentTags = tagsMode;
+    currentTags[id] = !currentTags[id];
+    setTagsMode([...currentTags]);
   };
 
   const onApply = () => {
@@ -70,6 +70,7 @@ const FilterPanelContent = ({ pickerItems, payload, setPayload, onClose }) => {
         ))}
       </Picker>
     ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
 
@@ -88,6 +89,7 @@ const FilterPanelContent = ({ pickerItems, payload, setPayload, onClose }) => {
           </Caption>
         </Button>
       )),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [tagsMode],
   );
 
